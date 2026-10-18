@@ -43,3 +43,7 @@ results.txt
 /python/tests/fixtures/pool descriptives/
 /python/tests/descriptiv tests/
 /python/validate_selfplay.py
+
+# Wheel/build outputs from local packaging checks
+/python/build/
+/python/dist/
