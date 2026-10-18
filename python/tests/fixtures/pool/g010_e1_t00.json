@@ -1,0 +1,223 @@
+{
+  "game": {
+    "clockwise": true,
+    "era": 1,
+    "turn": 0
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 0,
+        "guild": 0,
+        "manufactured_goods": 0,
+        "military": 0,
+        "raw_material": 0,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "East Trading Post",
+        "Press",
+        "Timber Yard",
+        "Barracks",
+        "Scriptorium",
+        "Workshop",
+        "Altar"
+      ],
+      "cards_hand_id": [
+        32,
+        17,
+        8,
+        44,
+        56,
+        55,
+        18
+      ],
+      "cards_playable": [
+        "East Trading Post",
+        "Press",
+        "Timber Yard",
+        "Altar"
+      ],
+      "cards_playable_id": [
+        32,
+        17,
+        8,
+        18
+      ],
+      "cards_played": [],
+      "points": {
+        "civilian": 0,
+        "commercial": 1,
+        "guild": 0,
+        "military": 0,
+        "scientific": 0,
+        "total": 1,
+        "wonder": 0
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 3,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 0,
+        "ore": 0,
+        "papyrus": 0,
+        "shields": 0,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 2,
+      "wonder_name": "Olympia A",
+      "wonder_stage": 0
+    },
+    "1": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 0,
+        "guild": 0,
+        "manufactured_goods": 0,
+        "military": 0,
+        "raw_material": 0,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "West Trading Post",
+        "Stone Pit",
+        "Baths",
+        "Clay Pool",
+        "Apothecary",
+        "Glassworks",
+        "Loom"
+      ],
+      "cards_hand_id": [
+        33,
+        2,
+        21,
+        3,
+        54,
+        16,
+        15
+      ],
+      "cards_playable": [
+        "West Trading Post",
+        "Stone Pit",
+        "Clay Pool",
+        "Glassworks",
+        "Loom"
+      ],
+      "cards_playable_id": [
+        33,
+        2,
+        3,
+        16,
+        15
+      ],
+      "cards_played": [],
+      "points": {
+        "civilian": 0,
+        "commercial": 1,
+        "guild": 0,
+        "military": 0,
+        "scientific": 0,
+        "total": 1,
+        "wonder": 0
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 3,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 0,
+        "ore": 1,
+        "papyrus": 0,
+        "shields": 0,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 3,
+      "wonder_name": "Rhodos A",
+      "wonder_stage": 0
+    },
+    "2": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 0,
+        "guild": 0,
+        "manufactured_goods": 0,
+        "military": 0,
+        "raw_material": 0,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Stockade",
+        "Marketplace",
+        "Lumber Yard",
+        "Ore Vein",
+        "Theater",
+        "Guard Tower",
+        "Clay Pit"
+      ],
+      "cards_hand_id": [
+        43,
+        34,
+        1,
+        4,
+        19,
+        45,
+        7
+      ],
+      "cards_playable": [
+        "Marketplace",
+        "Lumber Yard",
+        "Ore Vein",
+        "Theater",
+        "Clay Pit"
+      ],
+      "cards_playable_id": [
+        34,
+        1,
+        4,
+        19,
+        7
+      ],
+      "cards_played": [],
+      "points": {
+        "civilian": 0,
+        "commercial": 1,
+        "guild": 0,
+        "military": 0,
+        "scientific": 0,
+        "total": 1,
+        "wonder": 0
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 3,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 0,
+        "ore": 0,
+        "papyrus": 1,
+        "shields": 0,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 11,
+      "wonder_name": "Ephesos B",
+      "wonder_stage": 0
+    }
+  }
+}

@@ -1,0 +1,3458 @@
+{
+  "1": {
+    "id": 1,
+    "name": "Lumber Yard",
+    "id_name": "lumber_yard",
+    "type": "materials",
+    "color": "brown",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": "wood",
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "2": {
+    "id": 2,
+    "name": "Stone Pit",
+    "id_name": "stone_pit",
+    "type": "materials",
+    "color": "brown",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": "stone",
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "3": {
+    "id": 3,
+    "name": "Clay Pool",
+    "id_name": "clay_pool",
+    "type": "materials",
+    "color": "brown",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": "clay",
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "4": {
+    "id": 4,
+    "name": "Ore Vein",
+    "id_name": "ore_vein",
+    "type": "materials",
+    "color": "brown",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": "ore",
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "5": {
+    "id": 5,
+    "name": "Tree Farm",
+    "id_name": "tree_farm",
+    "type": "materials",
+    "color": "brown",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 1
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": [
+        "wood",
+        "clay"
+      ],
+      "choice_tradable": true,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "6": {
+    "id": 6,
+    "name": "Excavation",
+    "id_name": "excavation",
+    "type": "materials",
+    "color": "brown",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 1
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": [
+        "stone",
+        "clay"
+      ],
+      "choice_tradable": true,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "7": {
+    "id": 7,
+    "name": "Clay Pit",
+    "id_name": "clay_pit",
+    "type": "materials",
+    "color": "brown",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 1
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": [
+        "clay",
+        "ore"
+      ],
+      "choice_tradable": true,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "8": {
+    "id": 8,
+    "name": "Timber Yard",
+    "id_name": "timber_yard",
+    "type": "materials",
+    "color": "brown",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 1
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": [
+        "stone",
+        "wood"
+      ],
+      "choice_tradable": true,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "9": {
+    "id": 9,
+    "name": "Forest Cave",
+    "id_name": "forest_cave",
+    "type": "materials",
+    "color": "brown",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 1
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 0,
+        "3": 0,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": [
+        "wood",
+        "ore"
+      ],
+      "choice_tradable": true,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "10": {
+    "id": 10,
+    "name": "Mine",
+    "id_name": "mine",
+    "type": "materials",
+    "color": "brown",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 1
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": [
+        "stone",
+        "ore"
+      ],
+      "choice_tradable": true,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "11": {
+    "id": 11,
+    "name": "Sawmill",
+    "id_name": "sawmill",
+    "type": "materials",
+    "color": "brown",
+    "eras": [
+      2
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 1
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": "wood",
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "12": {
+    "id": 12,
+    "name": "Quarry",
+    "id_name": "quarry",
+    "type": "materials",
+    "color": "brown",
+    "eras": [
+      2
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 1
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": "stone",
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "13": {
+    "id": 13,
+    "name": "Brickyard",
+    "id_name": "brickyard",
+    "type": "materials",
+    "color": "brown",
+    "eras": [
+      2
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 1
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": "clay",
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "14": {
+    "id": 14,
+    "name": "Foundry",
+    "id_name": "foundry",
+    "type": "materials",
+    "color": "brown",
+    "eras": [
+      2
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 1
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": "ore",
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "15": {
+    "id": 15,
+    "name": "Loom",
+    "id_name": "loom",
+    "type": "manufactured",
+    "color": "grey",
+    "eras": [
+      1,
+      2
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "2": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": "loom",
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "16": {
+    "id": 16,
+    "name": "Glassworks",
+    "id_name": "glassworks",
+    "type": "manufactured",
+    "color": "grey",
+    "eras": [
+      1,
+      2
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "2": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": "glass",
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "17": {
+    "id": 17,
+    "name": "Press",
+    "id_name": "press",
+    "type": "manufactured",
+    "color": "grey",
+    "eras": [
+      1,
+      2
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      },
+      "2": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": "papyrus",
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "18": {
+    "id": 18,
+    "name": "Altar",
+    "id_name": "altar",
+    "type": "civilian",
+    "color": "blue",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 2,
+      "conditional": null
+    }
+  },
+  "19": {
+    "id": 19,
+    "name": "Theater",
+    "id_name": "theater",
+    "type": "civilian",
+    "color": "blue",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 2,
+      "conditional": null
+    }
+  },
+  "20": {
+    "id": 20,
+    "name": "Pawnshop",
+    "id_name": "pawnshop",
+    "type": "civilian",
+    "color": "blue",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 3,
+      "conditional": null
+    }
+  },
+  "21": {
+    "id": 21,
+    "name": "Baths",
+    "id_name": "baths",
+    "type": "civilian",
+    "color": "blue",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 1,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 3,
+      "conditional": null
+    }
+  },
+  "22": {
+    "id": 22,
+    "name": "Temple",
+    "id_name": "temple",
+    "type": "civilian",
+    "color": "blue",
+    "eras": [
+      2
+    ],
+    "chain_from": 18,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 1,
+      "ore": 0,
+      "clay": 1,
+      "stone": 0,
+      "loom": 0,
+      "glass": 1,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 3,
+      "conditional": null
+    }
+  },
+  "23": {
+    "id": 23,
+    "name": "Courthouse",
+    "id_name": "courthouse",
+    "type": "civilian",
+    "color": "blue",
+    "eras": [
+      2
+    ],
+    "chain_from": 56,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 2,
+      "stone": 0,
+      "loom": 1,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 4,
+      "conditional": null
+    }
+  },
+  "24": {
+    "id": 24,
+    "name": "Statue",
+    "id_name": "statue",
+    "type": "civilian",
+    "color": "blue",
+    "eras": [
+      2
+    ],
+    "chain_from": 19,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 1,
+      "ore": 2,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 4,
+      "conditional": null
+    }
+  },
+  "25": {
+    "id": 25,
+    "name": "Aqueduct",
+    "id_name": "aqueduct",
+    "type": "civilian",
+    "color": "blue",
+    "eras": [
+      2
+    ],
+    "chain_from": 21,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 3,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 5,
+      "conditional": null
+    }
+  },
+  "26": {
+    "id": 26,
+    "name": "Gardens",
+    "id_name": "gardens",
+    "type": "civilian",
+    "color": "blue",
+    "eras": [
+      3
+    ],
+    "chain_from": 24,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 1,
+      "ore": 0,
+      "clay": 2,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 5,
+      "conditional": null
+    }
+  },
+  "27": {
+    "id": 27,
+    "name": "Town Hall",
+    "id_name": "town_hall",
+    "type": "civilian",
+    "color": "blue",
+    "eras": [
+      3
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 1,
+      "clay": 0,
+      "stone": 2,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 1,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 3
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 6,
+      "conditional": null
+    }
+  },
+  "28": {
+    "id": 28,
+    "name": "Senate",
+    "id_name": "senate",
+    "type": "civilian",
+    "color": "blue",
+    "eras": [
+      3
+    ],
+    "chain_from": 59,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 2,
+      "ore": 1,
+      "clay": 0,
+      "stone": 1,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 6,
+      "conditional": null
+    }
+  },
+  "29": {
+    "id": 29,
+    "name": "Pantheon",
+    "id_name": "pantheon",
+    "type": "civilian",
+    "color": "blue",
+    "eras": [
+      3
+    ],
+    "chain_from": 22,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 1,
+      "clay": 2,
+      "stone": 0,
+      "loom": 1,
+      "glass": 1,
+      "papyrus": 1,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 7,
+      "conditional": null
+    }
+  },
+  "30": {
+    "id": 30,
+    "name": "Palace",
+    "id_name": "palace",
+    "type": "civilian",
+    "color": "blue",
+    "eras": [
+      3
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 1,
+      "ore": 1,
+      "clay": 1,
+      "stone": 1,
+      "loom": 1,
+      "glass": 1,
+      "papyrus": 1,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 8,
+      "conditional": null
+    }
+  },
+  "31": {
+    "id": 31,
+    "name": "Tavern",
+    "id_name": "tavern",
+    "type": "commercial",
+    "color": "yellow",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 0,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 5,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "32": {
+    "id": 32,
+    "name": "East Trading Post",
+    "id_name": "east_trading_post",
+    "type": "commercial",
+    "color": "yellow",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [
+        "raw_cheap_east"
+      ],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "33": {
+    "id": 33,
+    "name": "West Trading Post",
+    "id_name": "west_trading_post",
+    "type": "commercial",
+    "color": "yellow",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [
+        "raw_cheap_west"
+      ],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "34": {
+    "id": 34,
+    "name": "Marketplace",
+    "id_name": "marketplace",
+    "type": "commercial",
+    "color": "yellow",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [
+        "manuf_cheap"
+      ],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "35": {
+    "id": 35,
+    "name": "Forum",
+    "id_name": "forum",
+    "type": "commercial",
+    "color": "yellow",
+    "eras": [
+      2
+    ],
+    "chain_from": null,
+    "chain_from_any": [
+      "east_trading_post",
+      "west_trading_post"
+    ],
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 2,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": [
+        "loom",
+        "glass",
+        "papyrus"
+      ],
+      "choice_tradable": false,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": [
+        "manuf_extra"
+      ]
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "36": {
+    "id": 36,
+    "name": "Caravansery",
+    "id_name": "caravansery",
+    "type": "commercial",
+    "color": "yellow",
+    "eras": [
+      2
+    ],
+    "chain_from": 34,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 2,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 3
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": [
+        "wood",
+        "ore",
+        "clay",
+        "stone"
+      ],
+      "choice_tradable": false,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": [
+        "raw_extra"
+      ]
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "37": {
+    "id": 37,
+    "name": "Vineyard",
+    "id_name": "vineyard",
+    "type": "commercial",
+    "color": "yellow",
+    "eras": [
+      2
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 1,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "38": {
+    "id": 38,
+    "name": "Bazar",
+    "id_name": "bazar",
+    "type": "commercial",
+    "color": "yellow",
+    "eras": [
+      2
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 2,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "39": {
+    "id": 39,
+    "name": "Haven",
+    "id_name": "haven",
+    "type": "commercial",
+    "color": "yellow",
+    "eras": [
+      3
+    ],
+    "chain_from": 35,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 1,
+      "ore": 1,
+      "clay": 0,
+      "stone": 0,
+      "loom": 1,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 1,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": {
+        "type": "per_card_type",
+        "card_type": "materials",
+        "vp_per": 1,
+        "target": "self"
+      }
+    }
+  },
+  "40": {
+    "id": 40,
+    "name": "Lighthouse",
+    "id_name": "lighthouse",
+    "type": "commercial",
+    "color": "yellow",
+    "eras": [
+      3
+    ],
+    "chain_from": 36,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 1,
+      "loom": 0,
+      "glass": 1,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 1,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": {
+        "type": "per_card_type",
+        "card_type": "commercial",
+        "vp_per": 1,
+        "target": "self"
+      }
+    }
+  },
+  "41": {
+    "id": 41,
+    "name": "Chamber of Commerce",
+    "id_name": "chamber_of_commerce",
+    "type": "commercial",
+    "color": "yellow",
+    "eras": [
+      3
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 2,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 1,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 2,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": {
+        "type": "per_card_type",
+        "card_type": "manufactured",
+        "vp_per": 2,
+        "target": "self"
+      }
+    }
+  },
+  "42": {
+    "id": 42,
+    "name": "Arena",
+    "id_name": "arena",
+    "type": "commercial",
+    "color": "yellow",
+    "eras": [
+      3
+    ],
+    "chain_from": 57,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 1,
+      "clay": 0,
+      "stone": 2,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 3,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": {
+        "type": "per_wonder_stage",
+        "vp_per": 1,
+        "target": "self"
+      }
+    }
+  },
+  "43": {
+    "id": 43,
+    "name": "Stockade",
+    "id_name": "stockade",
+    "type": "military",
+    "color": "red",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 1,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 1,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "44": {
+    "id": 44,
+    "name": "Barracks",
+    "id_name": "barracks",
+    "type": "military",
+    "color": "red",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 1,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 1,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "45": {
+    "id": 45,
+    "name": "Guard Tower",
+    "id_name": "guard_tower",
+    "type": "military",
+    "color": "red",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 1,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 1,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "46": {
+    "id": 46,
+    "name": "Walls",
+    "id_name": "walls",
+    "type": "military",
+    "color": "red",
+    "eras": [
+      2
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 3,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 2,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "47": {
+    "id": 47,
+    "name": "Training Ground",
+    "id_name": "training_ground",
+    "type": "military",
+    "color": "red",
+    "eras": [
+      2
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 1,
+      "ore": 2,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 0,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 2,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "48": {
+    "id": 48,
+    "name": "Stables",
+    "id_name": "stables",
+    "type": "military",
+    "color": "red",
+    "eras": [
+      2
+    ],
+    "chain_from": 54,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 1,
+      "ore": 1,
+      "clay": 1,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 2,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "49": {
+    "id": 49,
+    "name": "Archery Range",
+    "id_name": "archery_range",
+    "type": "military",
+    "color": "red",
+    "eras": [
+      2
+    ],
+    "chain_from": 55,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 2,
+      "ore": 1,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 2,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "50": {
+    "id": 50,
+    "name": "Fortifications",
+    "id_name": "fortifications",
+    "type": "military",
+    "color": "red",
+    "eras": [
+      3
+    ],
+    "chain_from": 46,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 3,
+      "clay": 0,
+      "stone": 1,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 3,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "51": {
+    "id": 51,
+    "name": "Circus",
+    "id_name": "circus",
+    "type": "military",
+    "color": "red",
+    "eras": [
+      3
+    ],
+    "chain_from": 47,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 1,
+      "clay": 0,
+      "stone": 3,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 0,
+        "3": 1,
+        "4": 2,
+        "5": 3
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 3,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "52": {
+    "id": 52,
+    "name": "Arsenal",
+    "id_name": "arsenal",
+    "type": "military",
+    "color": "red",
+    "eras": [
+      3
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 2,
+      "ore": 1,
+      "clay": 0,
+      "stone": 0,
+      "loom": 1,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 3,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "53": {
+    "id": 53,
+    "name": "Siege Workshop",
+    "id_name": "siege_workshop",
+    "type": "military",
+    "color": "red",
+    "eras": [
+      3
+    ],
+    "chain_from": 58,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 1,
+      "ore": 0,
+      "clay": 3,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 3,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "54": {
+    "id": 54,
+    "name": "Apothecary",
+    "id_name": "apothecary",
+    "type": "scientific",
+    "color": "green",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 1,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": [
+        "compass"
+      ],
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "55": {
+    "id": 55,
+    "name": "Workshop",
+    "id_name": "workshop",
+    "type": "scientific",
+    "color": "green",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 1,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": [
+        "gear"
+      ],
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "56": {
+    "id": 56,
+    "name": "Scriptorium",
+    "id_name": "scriptorium",
+    "type": "scientific",
+    "color": "green",
+    "eras": [
+      1
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 1,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "1": {
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": [
+        "tablet"
+      ],
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "57": {
+    "id": 57,
+    "name": "Dispensary",
+    "id_name": "dispensary",
+    "type": "scientific",
+    "color": "green",
+    "eras": [
+      2
+    ],
+    "chain_from": 54,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 2,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 1,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 2,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": [
+        "compass"
+      ],
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "58": {
+    "id": 58,
+    "name": "Laboratory",
+    "id_name": "laboratory",
+    "type": "scientific",
+    "color": "green",
+    "eras": [
+      2
+    ],
+    "chain_from": 55,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 2,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 1,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": [
+        "gear"
+      ],
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "59": {
+    "id": 59,
+    "name": "Library",
+    "id_name": "library",
+    "type": "scientific",
+    "color": "green",
+    "eras": [
+      2
+    ],
+    "chain_from": 56,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 2,
+      "loom": 1,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": [
+        "tablet"
+      ],
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "60": {
+    "id": 60,
+    "name": "School",
+    "id_name": "school",
+    "type": "scientific",
+    "color": "green",
+    "eras": [
+      2
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 1,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 1,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "2": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": [
+        "tablet"
+      ],
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "61": {
+    "id": 61,
+    "name": "Lodge",
+    "id_name": "lodge",
+    "type": "scientific",
+    "color": "green",
+    "eras": [
+      3
+    ],
+    "chain_from": 57,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 2,
+      "stone": 0,
+      "loom": 1,
+      "glass": 0,
+      "papyrus": 1,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": [
+        "compass"
+      ],
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "62": {
+    "id": 62,
+    "name": "Observatory",
+    "id_name": "observatory",
+    "type": "scientific",
+    "color": "green",
+    "eras": [
+      3
+    ],
+    "chain_from": 58,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 2,
+      "clay": 0,
+      "stone": 0,
+      "loom": 1,
+      "glass": 1,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": [
+        "gear"
+      ],
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "63": {
+    "id": 63,
+    "name": "University",
+    "id_name": "university",
+    "type": "scientific",
+    "color": "green",
+    "eras": [
+      3
+    ],
+    "chain_from": 59,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 2,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 1,
+      "papyrus": 1,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": [
+        "tablet"
+      ],
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "64": {
+    "id": 64,
+    "name": "Academy",
+    "id_name": "academy",
+    "type": "scientific",
+    "color": "green",
+    "eras": [
+      3
+    ],
+    "chain_from": 60,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 3,
+      "loom": 0,
+      "glass": 1,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": [
+        "compass"
+      ],
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "65": {
+    "id": 65,
+    "name": "Study",
+    "id_name": "study",
+    "type": "scientific",
+    "color": "green",
+    "eras": [
+      3
+    ],
+    "chain_from": 60,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 1,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 1,
+      "glass": 0,
+      "papyrus": 1,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 1,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": [
+        "gear"
+      ],
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": null
+    }
+  },
+  "66": {
+    "id": 66,
+    "name": "Workers Guild",
+    "id_name": "workers",
+    "type": "guild",
+    "color": "purple",
+    "eras": [
+      3
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 1,
+      "ore": 2,
+      "clay": 1,
+      "stone": 1,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": {
+        "type": "per_card_type",
+        "card_type": "materials",
+        "vp_per": 1,
+        "target": "neighbors"
+      }
+    }
+  },
+  "67": {
+    "id": 67,
+    "name": "Craftmens Guild",
+    "id_name": "craftsmens",
+    "type": "guild",
+    "color": "purple",
+    "eras": [
+      3
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 2,
+      "clay": 0,
+      "stone": 2,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": {
+        "type": "per_card_type",
+        "card_type": "manufactured",
+        "vp_per": 2,
+        "target": "neighbors"
+      }
+    }
+  },
+  "68": {
+    "id": 68,
+    "name": "Traders Guild",
+    "id_name": "traders",
+    "type": "guild",
+    "color": "purple",
+    "eras": [
+      3
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 1,
+      "glass": 1,
+      "papyrus": 1,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": {
+        "type": "per_card_type",
+        "card_type": "commercial",
+        "vp_per": 1,
+        "target": "neighbors"
+      }
+    }
+  },
+  "69": {
+    "id": 69,
+    "name": "Philosophers Guild",
+    "id_name": "philosophers",
+    "type": "guild",
+    "color": "purple",
+    "eras": [
+      3
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 3,
+      "stone": 0,
+      "loom": 1,
+      "glass": 0,
+      "papyrus": 1,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": {
+        "type": "per_card_type",
+        "card_type": "scientific",
+        "vp_per": 1,
+        "target": "neighbors"
+      }
+    }
+  },
+  "70": {
+    "id": 70,
+    "name": "Spies Guild",
+    "id_name": "spies",
+    "type": "guild",
+    "color": "purple",
+    "eras": [
+      3
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 3,
+      "stone": 0,
+      "loom": 0,
+      "glass": 1,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": {
+        "type": "per_card_type",
+        "card_type": "military",
+        "vp_per": 1,
+        "target": "neighbors"
+      }
+    }
+  },
+  "71": {
+    "id": 71,
+    "name": "Magistrates Guild",
+    "id_name": "magistrates",
+    "type": "guild",
+    "color": "purple",
+    "eras": [
+      3
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 3,
+      "ore": 0,
+      "clay": 0,
+      "stone": 1,
+      "loom": 1,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": {
+        "type": "per_card_type",
+        "card_type": "civilian",
+        "vp_per": 1,
+        "target": "neighbors"
+      }
+    }
+  },
+  "72": {
+    "id": 72,
+    "name": "Shipowners Guild",
+    "id_name": "shipowners",
+    "type": "guild",
+    "color": "purple",
+    "eras": [
+      3
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 3,
+      "ore": 0,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 1,
+      "papyrus": 1,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": {
+        "type": "per_card_type_multi",
+        "card_types": [
+          "materials",
+          "manufactured",
+          "guild"
+        ],
+        "vp_per": 1,
+        "target": "self"
+      }
+    }
+  },
+  "73": {
+    "id": 73,
+    "name": "Strategists Guild",
+    "id_name": "strategists",
+    "type": "guild",
+    "color": "purple",
+    "eras": [
+      3
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 2,
+      "clay": 0,
+      "stone": 1,
+      "loom": 1,
+      "glass": 0,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": {
+        "type": "per_defeat_token",
+        "vp_per": 1,
+        "target": "neighbors"
+      }
+    }
+  },
+  "74": {
+    "id": 74,
+    "name": "Scientists Guild",
+    "id_name": "scientists",
+    "type": "guild",
+    "color": "purple",
+    "eras": [
+      3
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 2,
+      "ore": 2,
+      "clay": 0,
+      "stone": 0,
+      "loom": 0,
+      "glass": 0,
+      "papyrus": 1,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": [
+        "sci_extra"
+      ],
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": [],
+      "science_wildcard": true
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": {
+        "type": "science_wildcard"
+      }
+    }
+  },
+  "75": {
+    "id": 75,
+    "name": "Builders Guild",
+    "id_name": "builders",
+    "type": "guild",
+    "color": "purple",
+    "eras": [
+      3
+    ],
+    "chain_from": null,
+    "chain_from_any": null,
+    "cost": {
+      "wood": 0,
+      "ore": 0,
+      "clay": 2,
+      "stone": 2,
+      "loom": 0,
+      "glass": 1,
+      "papyrus": 0,
+      "coins": 0
+    },
+    "amount_per_player_by_era": {
+      "3": {
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0
+      }
+    },
+    "effects": {
+      "produces_fixed": null,
+      "produces_choice": null,
+      "choice_tradable": null,
+      "science": null,
+      "shields": 0,
+      "gain_coins": 0,
+      "discount_flags": [],
+      "extra_flags": []
+    },
+    "vp": {
+      "fixed": 0,
+      "conditional": {
+        "type": "per_wonder_stage",
+        "vp_per": 1,
+        "target": "all"
+      }
+    }
+  }
+}

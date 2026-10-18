@@ -1,0 +1,200 @@
+{
+  "game": {
+    "clockwise": false,
+    "era": 2,
+    "turn": 13
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 2,
+        "guild": 0,
+        "manufactured_goods": 2,
+        "military": 0,
+        "raw_material": 2,
+        "scientific": 2
+      },
+      "can_build_hand_free": true,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Stables"
+      ],
+      "cards_hand_id": [
+        48
+      ],
+      "cards_playable": [
+        "Stables"
+      ],
+      "cards_playable_id": [
+        48
+      ],
+      "cards_played": [
+        "Glassworks",
+        "Press",
+        "Clay Pit",
+        "West Trading Post",
+        "Scriptorium",
+        "Quarry",
+        "Library",
+        "Temple",
+        "Forum"
+      ],
+      "points": {
+        "civilian": 3,
+        "commercial": 0,
+        "guild": 0,
+        "military": -1,
+        "scientific": 4,
+        "total": 16,
+        "wonder": 10
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 1,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 0,
+        "ore": 0,
+        "papyrus": 1,
+        "shields": 0,
+        "stone": 2,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 2,
+      "wonder_name": "Olympia A",
+      "wonder_stage": 3
+    },
+    "1": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 2,
+        "guild": 0,
+        "manufactured_goods": 1,
+        "military": 3,
+        "raw_material": 3,
+        "scientific": 2
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": true,
+      "cards_hand": [
+        "Statue"
+      ],
+      "cards_hand_id": [
+        24
+      ],
+      "cards_playable": [
+        "Statue"
+      ],
+      "cards_playable_id": [
+        24
+      ],
+      "cards_played": [
+        "Theater",
+        "Marketplace",
+        "Stockade",
+        "Workshop",
+        "Stone Pit",
+        "East Trading Post",
+        "Glassworks",
+        "Brickyard",
+        "Laboratory",
+        "Foundry",
+        "Walls",
+        "Archery Range"
+      ],
+      "points": {
+        "civilian": 2,
+        "commercial": 2,
+        "guild": 0,
+        "military": 2,
+        "scientific": 4,
+        "total": 10,
+        "wonder": 0
+      },
+      "resources": {
+        "clay": 2,
+        "coins": 7,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 0,
+        "ore": 3,
+        "papyrus": 0,
+        "shields": 5,
+        "stone": 1,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 3,
+      "wonder_name": "Rhodos A",
+      "wonder_stage": 0
+    },
+    "2": {
+      "amount": {
+        "civilian": 3,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 2,
+        "military": 0,
+        "raw_material": 3,
+        "scientific": 2
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": true,
+      "cards_hand": [
+        "Aqueduct"
+      ],
+      "cards_hand_id": [
+        25
+      ],
+      "cards_playable": [
+        "Aqueduct"
+      ],
+      "cards_playable_id": [
+        25
+      ],
+      "cards_played": [
+        "Altar",
+        "Timber Yard",
+        "Baths",
+        "Ore Vein",
+        "Loom",
+        "Vineyard",
+        "Press",
+        "School",
+        "Dispensary",
+        "Courthouse",
+        "Sawmill"
+      ],
+      "points": {
+        "civilian": 9,
+        "commercial": 0,
+        "guild": 0,
+        "military": -1,
+        "scientific": 2,
+        "total": 13,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 0,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 1,
+        "ore": 1,
+        "papyrus": 2,
+        "shields": 0,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 2
+      },
+      "wonder_id": 4,
+      "wonder_name": "Ephesos A",
+      "wonder_stage": 1
+    }
+  }
+}

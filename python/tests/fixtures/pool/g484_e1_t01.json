@@ -1,0 +1,221 @@
+{
+  "game": {
+    "clockwise": true,
+    "era": 1,
+    "turn": 1
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 0,
+        "military": 0,
+        "raw_material": 0,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Barracks",
+        "Workshop",
+        "Press",
+        "Theater",
+        "Altar",
+        "Stone Pit"
+      ],
+      "cards_hand_id": [
+        44,
+        55,
+        17,
+        19,
+        18,
+        2
+      ],
+      "cards_playable": [
+        "Press",
+        "Theater",
+        "Altar",
+        "Stone Pit"
+      ],
+      "cards_playable_id": [
+        17,
+        19,
+        18,
+        2
+      ],
+      "cards_played": [
+        "East Trading Post"
+      ],
+      "points": {
+        "civilian": 0,
+        "commercial": 1,
+        "guild": 0,
+        "military": 0,
+        "scientific": 0,
+        "total": 1,
+        "wonder": 0
+      },
+      "resources": {
+        "clay": 1,
+        "coins": 3,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 0,
+        "ore": 0,
+        "papyrus": 0,
+        "shields": 0,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 1,
+      "wonder_name": "Babylon A",
+      "wonder_stage": 0
+    },
+    "1": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 0,
+        "guild": 0,
+        "manufactured_goods": 0,
+        "military": 0,
+        "raw_material": 1,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": true,
+      "cards_hand": [
+        "Apothecary",
+        "Baths",
+        "Glassworks",
+        "Marketplace",
+        "Scriptorium",
+        "Guard Tower"
+      ],
+      "cards_hand_id": [
+        54,
+        21,
+        16,
+        34,
+        56,
+        45
+      ],
+      "cards_playable": [
+        "Baths",
+        "Glassworks",
+        "Marketplace"
+      ],
+      "cards_playable_id": [
+        21,
+        16,
+        34
+      ],
+      "cards_played": [
+        "Timber Yard"
+      ],
+      "points": {
+        "civilian": 0,
+        "commercial": 0,
+        "guild": 0,
+        "military": 0,
+        "scientific": 0,
+        "total": 0,
+        "wonder": 0
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 2,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 0,
+        "ore": 0,
+        "papyrus": 0,
+        "shields": 0,
+        "stone": 1,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 0,
+      "wonder_name": "Gizah A",
+      "wonder_stage": 0
+    },
+    "2": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 0,
+        "military": 0,
+        "raw_material": 0,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": true,
+      "cards_hand": [
+        "Clay Pit",
+        "Lumber Yard",
+        "Loom",
+        "Stockade",
+        "Clay Pool",
+        "Ore Vein"
+      ],
+      "cards_hand_id": [
+        7,
+        1,
+        15,
+        43,
+        3,
+        4
+      ],
+      "cards_playable": [
+        "Clay Pit",
+        "Lumber Yard",
+        "Loom",
+        "Stockade",
+        "Clay Pool",
+        "Ore Vein"
+      ],
+      "cards_playable_id": [
+        7,
+        1,
+        15,
+        43,
+        3,
+        4
+      ],
+      "cards_played": [
+        "West Trading Post"
+      ],
+      "points": {
+        "civilian": 0,
+        "commercial": 1,
+        "guild": 0,
+        "military": 0,
+        "scientific": 0,
+        "total": 1,
+        "wonder": 0
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 3,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 0,
+        "ore": 0,
+        "papyrus": 0,
+        "shields": 0,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 2,
+      "wonder_name": "Olympia A",
+      "wonder_stage": 0
+    }
+  }
+}

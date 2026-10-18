@@ -1,0 +1,255 @@
+{
+  "game": {
+    "clockwise": true,
+    "era": 3,
+    "turn": 15
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 4,
+        "commercial": 0,
+        "guild": 0,
+        "manufactured_goods": 2,
+        "military": 0,
+        "raw_material": 4,
+        "scientific": 2
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Lodge",
+        "Senate",
+        "Academy",
+        "Workers Guild",
+        "Pantheon",
+        "Siege Workshop"
+      ],
+      "cards_hand_id": [
+        61,
+        28,
+        64,
+        66,
+        29,
+        53
+      ],
+      "cards_playable": [
+        "Senate",
+        "Academy",
+        "Workers Guild",
+        "Pantheon"
+      ],
+      "cards_playable_id": [
+        28,
+        64,
+        66,
+        29
+      ],
+      "cards_played": [
+        "Baths",
+        "Glassworks",
+        "Lumber Yard",
+        "Scriptorium",
+        "Clay Pit",
+        "Temple",
+        "Aqueduct",
+        "Library",
+        "Foundry",
+        "Loom",
+        "Quarry",
+        "Palace"
+      ],
+      "points": {
+        "civilian": 19,
+        "commercial": 1,
+        "guild": 0,
+        "military": -2,
+        "scientific": 4,
+        "total": 25,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 3,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 1,
+        "ore": 2,
+        "papyrus": 0,
+        "shields": 0,
+        "stone": 3,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 0,
+      "wonder_name": "Gizah A",
+      "wonder_stage": 1
+    },
+    "1": {
+      "amount": {
+        "civilian": 3,
+        "commercial": 4,
+        "guild": 0,
+        "manufactured_goods": 2,
+        "military": 0,
+        "raw_material": 1,
+        "scientific": 2
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": true,
+      "cards_hand": [
+        "Philosophers Guild",
+        "Scientists Guild",
+        "Magistrates Guild",
+        "Town Hall",
+        "Haven",
+        "University"
+      ],
+      "cards_hand_id": [
+        69,
+        74,
+        71,
+        27,
+        39,
+        63
+      ],
+      "cards_playable": [
+        "Philosophers Guild",
+        "Scientists Guild",
+        "Magistrates Guild",
+        "Town Hall",
+        "Haven",
+        "University"
+      ],
+      "cards_playable_id": [
+        69,
+        74,
+        71,
+        27,
+        39,
+        63
+      ],
+      "cards_played": [
+        "West Trading Post",
+        "Timber Yard",
+        "Workshop",
+        "Loom",
+        "East Trading Post",
+        "Theater",
+        "Glassworks",
+        "School",
+        "Vineyard",
+        "Courthouse",
+        "Statue",
+        "Caravansery"
+      ],
+      "points": {
+        "civilian": 10,
+        "commercial": 1,
+        "guild": 0,
+        "military": -2,
+        "scientific": 2,
+        "total": 14,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 5,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 1,
+        "ore": 1,
+        "papyrus": 0,
+        "shields": 1,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 10,
+      "wonder_name": "Rhodos B",
+      "wonder_stage": 1
+    },
+    "2": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 1,
+        "military": 2,
+        "raw_material": 3,
+        "scientific": 2
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Arena",
+        "Gardens",
+        "Observatory",
+        "Shipowners Guild",
+        "Arsenal",
+        "Lighthouse"
+      ],
+      "cards_hand_id": [
+        42,
+        26,
+        62,
+        72,
+        52,
+        40
+      ],
+      "cards_playable": [
+        "Arena",
+        "Gardens",
+        "Observatory",
+        "Arsenal",
+        "Lighthouse"
+      ],
+      "cards_playable_id": [
+        42,
+        26,
+        62,
+        52,
+        40
+      ],
+      "cards_played": [
+        "Ore Vein",
+        "Barracks",
+        "Apothecary",
+        "Press",
+        "Marketplace",
+        "Stone Pit",
+        "Brickyard",
+        "Stables",
+        "Study"
+      ],
+      "points": {
+        "civilian": 0,
+        "commercial": 2,
+        "guild": 0,
+        "military": 8,
+        "scientific": 2,
+        "total": 15,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 2,
+        "coins": 7,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 1,
+        "ore": 1,
+        "papyrus": 1,
+        "shields": 3,
+        "stone": 1,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 13,
+      "wonder_name": "Halikarnassos B",
+      "wonder_stage": 3
+    }
+  }
+}

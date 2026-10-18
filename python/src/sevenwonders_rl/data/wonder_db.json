@@ -1,0 +1,527 @@
+{
+  "0": {
+    "id": 0,
+    "id_name": "gizah_a",
+    "name": "Gizah A",
+    "starting_resource": "stone",
+    "stages": [
+      {
+        "cost": {
+          "stone": 2
+        },
+        "vp": 3,
+        "effects": []
+      },
+      {
+        "cost": {
+          "wood": 3
+        },
+        "vp": 5,
+        "effects": []
+      },
+      {
+        "cost": {
+          "stone": 4
+        },
+        "vp": 7,
+        "effects": []
+      }
+    ]
+  },
+  "1": {
+    "id": 1,
+    "id_name": "babylon_a",
+    "name": "Babylon A",
+    "starting_resource": "clay",
+    "stages": [
+      {
+        "cost": {
+          "clay": 2
+        },
+        "vp": 3,
+        "effects": []
+      },
+      {
+        "cost": {
+          "wood": 3
+        },
+        "vp": 0,
+        "effects": [
+          {
+            "type": "add_science"
+          }
+        ]
+      },
+      {
+        "cost": {
+          "clay": 4
+        },
+        "vp": 7,
+        "effects": []
+      }
+    ]
+  },
+  "2": {
+    "id": 2,
+    "id_name": "olympia_a",
+    "name": "Olympia A",
+    "starting_resource": "wood",
+    "stages": [
+      {
+        "cost": {
+          "wood": 2
+        },
+        "vp": 3,
+        "effects": []
+      },
+      {
+        "cost": {
+          "stone": 2
+        },
+        "vp": 0,
+        "effects": [
+          {
+            "type": "hand_build_for_free"
+          }
+        ]
+      },
+      {
+        "cost": {
+          "ore": 2
+        },
+        "vp": 7,
+        "effects": []
+      }
+    ]
+  },
+  "3": {
+    "id": 3,
+    "id_name": "rhodos_a",
+    "name": "Rhodos A",
+    "starting_resource": "ore",
+    "stages": [
+      {
+        "cost": {
+          "wood": 2
+        },
+        "vp": 3,
+        "effects": []
+      },
+      {
+        "cost": {
+          "clay": 3
+        },
+        "vp": 0,
+        "effects": [
+          {
+            "type": "add_shields",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "cost": {
+          "ore": 4
+        },
+        "vp": 7,
+        "effects": []
+      }
+    ]
+  },
+  "4": {
+    "id": 4,
+    "id_name": "ephesos_a",
+    "name": "Ephesos A",
+    "starting_resource": "papyrus",
+    "stages": [
+      {
+        "cost": {
+          "stone": 2
+        },
+        "vp": 3,
+        "effects": []
+      },
+      {
+        "cost": {
+          "wood": 2
+        },
+        "vp": 0,
+        "effects": [
+          {
+            "type": "add_coins",
+            "amount": 9
+          }
+        ]
+      },
+      {
+        "cost": {
+          "papyrus": 2
+        },
+        "vp": 7,
+        "effects": []
+      }
+    ]
+  },
+  "5": {
+    "id": 5,
+    "id_name": "alexandria_a",
+    "name": "Alexandria A",
+    "starting_resource": "glass",
+    "stages": [
+      {
+        "cost": {
+          "stone": 2
+        },
+        "vp": 3,
+        "effects": []
+      },
+      {
+        "cost": {
+          "ore": 2
+        },
+        "vp": 0,
+        "effects": [
+          {
+            "type": "choose_raw_nontradable"
+          }
+        ]
+      },
+      {
+        "cost": {
+          "glass": 2
+        },
+        "vp": 7,
+        "effects": []
+      }
+    ]
+  },
+  "6": {
+    "id": 6,
+    "id_name": "halikarnassos_a",
+    "name": "Halikarnassos A",
+    "starting_resource": "loom",
+    "stages": [
+      {
+        "cost": {
+          "clay": 2
+        },
+        "vp": 3,
+        "effects": []
+      },
+      {
+        "cost": {
+          "ore": 3
+        },
+        "vp": 0,
+        "effects": [
+          {
+            "type": "discard_build_for_free"
+          }
+        ]
+      },
+      {
+        "cost": {
+          "loom": 2
+        },
+        "vp": 7,
+        "effects": []
+      }
+    ]
+  },
+  "7": {
+    "id": 7,
+    "id_name": "gizah_b",
+    "name": "Gizah B",
+    "starting_resource": "stone",
+    "stages": [
+      {
+        "cost": {
+          "wood": 2
+        },
+        "vp": 3,
+        "effects": []
+      },
+      {
+        "cost": {
+          "stone": 3
+        },
+        "vp": 5,
+        "effects": []
+      },
+      {
+        "cost": {
+          "clay": 3
+        },
+        "vp": 5,
+        "effects": []
+      },
+      {
+        "cost": {
+          "stone": 4,
+          "papyrus": 1
+        },
+        "vp": 7,
+        "effects": []
+      }
+    ]
+  },
+  "8": {
+    "id": 8,
+    "id_name": "babylon_b",
+    "name": "Babylon B",
+    "starting_resource": "clay",
+    "stages": [
+      {
+        "cost": {
+          "clay": 1,
+          "loom": 1
+        },
+        "vp": 3,
+        "effects": []
+      },
+      {
+        "cost": {
+          "glass": 1,
+          "wood": 2
+        },
+        "vp": 0,
+        "effects": [
+          {
+            "type": "play_seventh_card"
+          }
+        ]
+      },
+      {
+        "cost": {
+          "clay": 3,
+          "papyrus": 1
+        },
+        "vp": 0,
+        "effects": [
+          {
+            "type": "add_science"
+          }
+        ]
+      }
+    ]
+  },
+  "9": {
+    "id": 9,
+    "id_name": "olympia_b",
+    "name": "Olympia B",
+    "starting_resource": "wood",
+    "stages": [
+      {
+        "cost": {
+          "wood": 2
+        },
+        "vp": 0,
+        "effects": [
+          {
+            "type": "buy_raw_cheap"
+          }
+        ]
+      },
+      {
+        "cost": {
+          "stone": 2
+        },
+        "vp": 5,
+        "effects": []
+      },
+      {
+        "cost": {
+          "ore": 2,
+          "loom": 1
+        },
+        "vp": 0,
+        "effects": [
+          {
+            "type": "copy_guild"
+          }
+        ]
+      }
+    ]
+  },
+  "10": {
+    "id": 10,
+    "id_name": "rhodos_b",
+    "name": "Rhodos B",
+    "starting_resource": "ore",
+    "stages": [
+      {
+        "cost": {
+          "stone": 3
+        },
+        "vp": 3,
+        "effects": [
+          {
+            "type": "add_shields",
+            "amount": 1
+          },
+          {
+            "type": "add_coins",
+            "amount": 3
+          },
+          {
+            "type": "add_shield_vp_coin"
+          }
+        ]
+      },
+      {
+        "cost": {
+          "ore": 4
+        },
+        "vp": 4,
+        "effects": [
+          {
+            "type": "add_shields",
+            "amount": 1
+          },
+          {
+            "type": "add_coins",
+            "amount": 4
+          },
+          {
+            "type": "add_shield_vp_coin"
+          }
+        ]
+      }
+    ]
+  },
+  "11": {
+    "id": 11,
+    "id_name": "ephesos_b",
+    "name": "Ephesos B",
+    "starting_resource": "papyrus",
+    "stages": [
+      {
+        "cost": {
+          "stone": 2
+        },
+        "vp": 2,
+        "effects": [
+          {
+            "type": "add_coins",
+            "amount": 4
+          },
+          {
+            "type": "add_vp_coin"
+          }
+        ]
+      },
+      {
+        "cost": {
+          "wood": 2
+        },
+        "vp": 3,
+        "effects": [
+          {
+            "type": "add_coins",
+            "amount": 4
+          },
+          {
+            "type": "add_vp_coin"
+          }
+        ]
+      },
+      {
+        "cost": {
+          "glass": 1,
+          "loom": 1,
+          "papyrus": 1
+        },
+        "vp": 5,
+        "effects": [
+          {
+            "type": "add_coins",
+            "amount": 4
+          },
+          {
+            "type": "add_vp_coin"
+          }
+        ]
+      }
+    ]
+  },
+  "12": {
+    "id": 12,
+    "id_name": "alexandria_b",
+    "name": "Alexandria B",
+    "starting_resource": "glass",
+    "stages": [
+      {
+        "cost": {
+          "clay": 2
+        },
+        "vp": 0,
+        "effects": [
+          {
+            "type": "choose_raw_nontradable"
+          }
+        ]
+      },
+      {
+        "cost": {
+          "wood": 2
+        },
+        "vp": 0,
+        "effects": [
+          {
+            "type": "choose_manuf_nontradable"
+          }
+        ]
+      },
+      {
+        "cost": {
+          "stone": 3
+        },
+        "vp": 7,
+        "effects": []
+      }
+    ]
+  },
+  "13": {
+    "id": 13,
+    "id_name": "halikarnassos_b",
+    "name": "Halikarnassos B",
+    "starting_resource": "loom",
+    "stages": [
+      {
+        "cost": {
+          "ore": 2
+        },
+        "vp": 2,
+        "effects": [
+          {
+            "type": "add_vp_discard"
+          }
+        ]
+      },
+      {
+        "cost": {
+          "clay": 3
+        },
+        "vp": 1,
+        "effects": [
+          {
+            "type": "add_vp_discard"
+          }
+        ]
+      },
+      {
+        "cost": {
+          "glass": 1,
+          "loom": 1,
+          "papyrus": 1
+        },
+        "vp": 0,
+        "effects": [
+          {
+            "type": "discard_build_for_free"
+          }
+        ]
+      }
+    ]
+  }
+}

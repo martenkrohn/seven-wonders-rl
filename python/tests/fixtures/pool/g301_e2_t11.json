@@ -1,0 +1,218 @@
+{
+  "game": {
+    "clockwise": false,
+    "era": 2,
+    "turn": 11
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 2,
+        "guild": 0,
+        "manufactured_goods": 2,
+        "military": 1,
+        "raw_material": 3,
+        "scientific": 2
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Library",
+        "Walls",
+        "Courthouse"
+      ],
+      "cards_hand_id": [
+        59,
+        46,
+        23
+      ],
+      "cards_playable": [
+        "Library",
+        "Courthouse"
+      ],
+      "cards_playable_id": [
+        59,
+        23
+      ],
+      "cards_played": [
+        "East Trading Post",
+        "Scriptorium",
+        "West Trading Post",
+        "Clay Pit",
+        "Loom",
+        "Barracks",
+        "Brickyard",
+        "Press",
+        "Foundry",
+        "Dispensary"
+      ],
+      "points": {
+        "civilian": 0,
+        "commercial": 0,
+        "guild": 0,
+        "military": 0,
+        "scientific": 2,
+        "total": 2,
+        "wonder": 0
+      },
+      "resources": {
+        "clay": 2,
+        "coins": 2,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 1,
+        "ore": 2,
+        "papyrus": 2,
+        "shields": 1,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 4,
+      "wonder_name": "Ephesos A",
+      "wonder_stage": 0
+    },
+    "1": {
+      "amount": {
+        "civilian": 2,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 1,
+        "military": 1,
+        "raw_material": 3,
+        "scientific": 1
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Stables",
+        "Archery Range",
+        "Loom"
+      ],
+      "cards_hand_id": [
+        48,
+        49,
+        15
+      ],
+      "cards_playable": [
+        "Stables",
+        "Archery Range",
+        "Loom"
+      ],
+      "cards_playable_id": [
+        48,
+        49,
+        15
+      ],
+      "cards_played": [
+        "Lumber Yard",
+        "Clay Pool",
+        "Guard Tower",
+        "Glassworks",
+        "Workshop",
+        "Statue",
+        "Sawmill",
+        "Temple",
+        "Forum"
+      ],
+      "points": {
+        "civilian": 7,
+        "commercial": 1,
+        "guild": 0,
+        "military": 0,
+        "scientific": 1,
+        "total": 9,
+        "wonder": 0
+      },
+      "resources": {
+        "clay": 1,
+        "coins": 5,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 0,
+        "ore": 0,
+        "papyrus": 0,
+        "shields": 1,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 4
+      },
+      "wonder_id": 9,
+      "wonder_name": "Olympia B",
+      "wonder_stage": 1
+    },
+    "2": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 3,
+        "guild": 0,
+        "manufactured_goods": 1,
+        "military": 1,
+        "raw_material": 1,
+        "scientific": 2
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "School",
+        "Glassworks",
+        "Quarry"
+      ],
+      "cards_hand_id": [
+        60,
+        16,
+        12
+      ],
+      "cards_playable": [
+        "School",
+        "Glassworks",
+        "Quarry"
+      ],
+      "cards_playable_id": [
+        60,
+        16,
+        12
+      ],
+      "cards_played": [
+        "Altar",
+        "Ore Vein",
+        "Stockade",
+        "Marketplace",
+        "Apothecary",
+        "Press",
+        "Vineyard",
+        "Caravansery",
+        "Laboratory"
+      ],
+      "points": {
+        "civilian": 2,
+        "commercial": 1,
+        "guild": 0,
+        "military": 0,
+        "scientific": 2,
+        "total": 7,
+        "wonder": 2
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 3,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 1,
+        "ore": 1,
+        "papyrus": 1,
+        "shields": 1,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 13,
+      "wonder_name": "Halikarnassos B",
+      "wonder_stage": 1
+    }
+  }
+}

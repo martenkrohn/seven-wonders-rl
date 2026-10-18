@@ -1,0 +1,185 @@
+{
+  "game": {
+    "clockwise": true,
+    "era": 1,
+    "turn": 6
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 0,
+        "guild": 0,
+        "manufactured_goods": 1,
+        "military": 0,
+        "raw_material": 4,
+        "scientific": 1
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": true,
+      "cards_hand": [
+        "Marketplace"
+      ],
+      "cards_hand_id": [
+        34
+      ],
+      "cards_playable": [
+        "Marketplace"
+      ],
+      "cards_playable_id": [
+        34
+      ],
+      "cards_played": [
+        "Clay Pool",
+        "Loom",
+        "Workshop",
+        "Lumber Yard",
+        "Stone Pit",
+        "Timber Yard"
+      ],
+      "points": {
+        "civilian": 0,
+        "commercial": 1,
+        "guild": 0,
+        "military": 0,
+        "scientific": 1,
+        "total": 2,
+        "wonder": 0
+      },
+      "resources": {
+        "clay": 1,
+        "coins": 4,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 1,
+        "ore": 0,
+        "papyrus": 0,
+        "shields": 0,
+        "stone": 1,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 5,
+      "wonder_name": "Alexandria A",
+      "wonder_stage": 0
+    },
+    "1": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 0,
+        "military": 1,
+        "raw_material": 1,
+        "scientific": 1
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Theater"
+      ],
+      "cards_hand_id": [
+        19
+      ],
+      "cards_playable": [
+        "Theater"
+      ],
+      "cards_playable_id": [
+        19
+      ],
+      "cards_played": [
+        "Clay Pit",
+        "Altar",
+        "Guard Tower",
+        "East Trading Post",
+        "Apothecary"
+      ],
+      "points": {
+        "civilian": 2,
+        "commercial": 0,
+        "guild": 0,
+        "military": 0,
+        "scientific": 1,
+        "total": 5,
+        "wonder": 2
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 0,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 1,
+        "ore": 0,
+        "papyrus": 0,
+        "shields": 1,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 13,
+      "wonder_name": "Halikarnassos B",
+      "wonder_stage": 1
+    },
+    "2": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 0,
+        "military": 2,
+        "raw_material": 1,
+        "scientific": 1
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": true,
+      "cards_hand": [
+        "Glassworks"
+      ],
+      "cards_hand_id": [
+        16
+      ],
+      "cards_playable": [
+        "Glassworks"
+      ],
+      "cards_playable_id": [
+        16
+      ],
+      "cards_played": [
+        "West Trading Post",
+        "Ore Vein",
+        "Scriptorium",
+        "Barracks",
+        "Stockade",
+        "Baths"
+      ],
+      "points": {
+        "civilian": 3,
+        "commercial": 1,
+        "guild": 0,
+        "military": 0,
+        "scientific": 1,
+        "total": 5,
+        "wonder": 0
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 3,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 0,
+        "ore": 1,
+        "papyrus": 1,
+        "shields": 2,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 4,
+      "wonder_name": "Ephesos A",
+      "wonder_stage": 0
+    }
+  }
+}

@@ -1,0 +1,234 @@
+{
+  "game": {
+    "clockwise": true,
+    "era": 3,
+    "turn": 17
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 3,
+        "commercial": 2,
+        "guild": 1,
+        "manufactured_goods": 2,
+        "military": 1,
+        "raw_material": 3,
+        "scientific": 1
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Lodge",
+        "Scientists Guild",
+        "Gardens",
+        "Senate"
+      ],
+      "cards_hand_id": [
+        61,
+        74,
+        26,
+        28
+      ],
+      "cards_playable": [
+        "Senate"
+      ],
+      "cards_playable_id": [
+        28
+      ],
+      "cards_played": [
+        "Lumber Yard",
+        "Marketplace",
+        "Ore Vein",
+        "Baths",
+        "Glassworks",
+        "Library",
+        "Aqueduct",
+        "Loom",
+        "Sawmill",
+        "Caravansery",
+        "Magistrates Guild",
+        "Arsenal",
+        "Town Hall"
+      ],
+      "points": {
+        "civilian": 14,
+        "commercial": 0,
+        "guild": 1,
+        "military": -4,
+        "scientific": 1,
+        "total": 20,
+        "wonder": 8
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 0,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 1,
+        "ore": 1,
+        "papyrus": 0,
+        "shields": 3,
+        "stone": 1,
+        "tablet": 0,
+        "wood": 3
+      },
+      "wonder_id": 0,
+      "wonder_name": "Gizah A",
+      "wonder_stage": 2
+    },
+    "1": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 3,
+        "guild": 0,
+        "manufactured_goods": 2,
+        "military": 2,
+        "raw_material": 1,
+        "scientific": 3
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Pantheon",
+        "Haven",
+        "Study",
+        "Craftmens Guild"
+      ],
+      "cards_hand_id": [
+        29,
+        39,
+        65,
+        67
+      ],
+      "cards_playable": [
+        "Pantheon",
+        "Haven",
+        "Study",
+        "Craftmens Guild"
+      ],
+      "cards_playable_id": [
+        29,
+        39,
+        65,
+        67
+      ],
+      "cards_played": [
+        "East Trading Post",
+        "Guard Tower",
+        "West Trading Post",
+        "Apothecary",
+        "Stockade",
+        "Loom",
+        "Forum",
+        "Dispensary",
+        "Foundry",
+        "Glassworks",
+        "Observatory"
+      ],
+      "points": {
+        "civilian": 0,
+        "commercial": 1,
+        "guild": 0,
+        "military": 4,
+        "scientific": 5,
+        "total": 13,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 4,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 2,
+        "ore": 2,
+        "papyrus": 0,
+        "shields": 2,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 13,
+      "wonder_name": "Halikarnassos B",
+      "wonder_stage": 3
+    },
+    "2": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 2,
+        "guild": 0,
+        "manufactured_goods": 1,
+        "military": 2,
+        "raw_material": 5,
+        "scientific": 1
+      },
+      "can_build_hand_free": true,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Siege Workshop",
+        "Spies Guild",
+        "Palace",
+        "Academy"
+      ],
+      "cards_hand_id": [
+        53,
+        70,
+        30,
+        64
+      ],
+      "cards_playable": [
+        "Siege Workshop",
+        "Spies Guild",
+        "Palace",
+        "Academy"
+      ],
+      "cards_playable_id": [
+        53,
+        70,
+        30,
+        64
+      ],
+      "cards_played": [
+        "Clay Pit",
+        "Timber Yard",
+        "Barracks",
+        "Altar",
+        "Stone Pit",
+        "Archery Range",
+        "Quarry",
+        "Press",
+        "Brickyard",
+        "Arena",
+        "University",
+        "Lighthouse"
+      ],
+      "points": {
+        "civilian": 2,
+        "commercial": 9,
+        "guild": 0,
+        "military": 6,
+        "scientific": 1,
+        "total": 28,
+        "wonder": 10
+      },
+      "resources": {
+        "clay": 2,
+        "coins": 12,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 0,
+        "ore": 0,
+        "papyrus": 1,
+        "shields": 3,
+        "stone": 3,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 2,
+      "wonder_name": "Olympia A",
+      "wonder_stage": 3
+    }
+  }
+}

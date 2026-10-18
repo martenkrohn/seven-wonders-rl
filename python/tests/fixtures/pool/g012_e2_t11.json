@@ -1,0 +1,206 @@
+{
+  "game": {
+    "clockwise": false,
+    "era": 2,
+    "turn": 11
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 2,
+        "commercial": 2,
+        "guild": 0,
+        "manufactured_goods": 2,
+        "military": 0,
+        "raw_material": 1,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": true,
+      "cards_hand": [
+        "Press",
+        "Dispensary",
+        "Glassworks"
+      ],
+      "cards_hand_id": [
+        17,
+        57,
+        16
+      ],
+      "cards_playable": [
+        "Glassworks"
+      ],
+      "cards_playable_id": [
+        16
+      ],
+      "cards_played": [
+        "East Trading Post",
+        "Altar",
+        "Loom",
+        "Marketplace",
+        "Press",
+        "Sawmill",
+        "Temple"
+      ],
+      "points": {
+        "civilian": 5,
+        "commercial": 1,
+        "guild": 0,
+        "military": -1,
+        "scientific": 1,
+        "total": 9,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 1,
+        "coins": 3,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 1,
+        "ore": 0,
+        "papyrus": 1,
+        "shields": 0,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 2
+      },
+      "wonder_id": 1,
+      "wonder_name": "Babylon A",
+      "wonder_stage": 2
+    },
+    "1": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 0,
+        "military": 2,
+        "raw_material": 2,
+        "scientific": 2
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": true,
+      "cards_hand": [
+        "Library",
+        "Courthouse",
+        "Walls"
+      ],
+      "cards_hand_id": [
+        59,
+        23,
+        46
+      ],
+      "cards_playable": [
+        "Courthouse"
+      ],
+      "cards_playable_id": [
+        23
+      ],
+      "cards_played": [
+        "Ore Vein",
+        "Guard Tower",
+        "Barracks",
+        "Clay Pit",
+        "Workshop",
+        "Theater",
+        "Laboratory",
+        "Vineyard"
+      ],
+      "points": {
+        "civilian": 2,
+        "commercial": 1,
+        "guild": 0,
+        "military": 2,
+        "scientific": 4,
+        "total": 12,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 3,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 0,
+        "ore": 1,
+        "papyrus": 0,
+        "shields": 2,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 5,
+      "wonder_name": "Alexandria A",
+      "wonder_stage": 2
+    },
+    "2": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 1,
+        "military": 0,
+        "raw_material": 5,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Loom",
+        "Statue",
+        "Quarry"
+      ],
+      "cards_hand_id": [
+        15,
+        24,
+        12
+      ],
+      "cards_playable": [
+        "Loom",
+        "Statue",
+        "Quarry"
+      ],
+      "cards_playable_id": [
+        15,
+        24,
+        12
+      ],
+      "cards_played": [
+        "Clay Pool",
+        "Glassworks",
+        "West Trading Post",
+        "Lumber Yard",
+        "Stone Pit",
+        "Timber Yard",
+        "Brickyard"
+      ],
+      "points": {
+        "civilian": 0,
+        "commercial": 3,
+        "guild": 0,
+        "military": -1,
+        "scientific": 0,
+        "total": 15,
+        "wonder": 13
+      },
+      "resources": {
+        "clay": 3,
+        "coins": 9,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 0,
+        "ore": 0,
+        "papyrus": 0,
+        "shields": 0,
+        "stone": 2,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 7,
+      "wonder_name": "Gizah B",
+      "wonder_stage": 3
+    }
+  }
+}

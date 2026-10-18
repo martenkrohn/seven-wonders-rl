@@ -1,0 +1,249 @@
+{
+  "game": {
+    "clockwise": true,
+    "era": 3,
+    "turn": 14
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 2,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 3,
+        "military": 1,
+        "raw_material": 2,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Craftmens Guild",
+        "Workers Guild",
+        "Gardens",
+        "Senate",
+        "Observatory",
+        "Pantheon",
+        "Scientists Guild"
+      ],
+      "cards_hand_id": [
+        67,
+        66,
+        26,
+        28,
+        62,
+        29,
+        74
+      ],
+      "cards_playable": [
+        "Craftmens Guild",
+        "Gardens",
+        "Observatory",
+        "Pantheon"
+      ],
+      "cards_playable_id": [
+        67,
+        26,
+        62,
+        29
+      ],
+      "cards_played": [
+        "Loom",
+        "Clay Pool",
+        "Press",
+        "Guard Tower",
+        "Baths",
+        "Marketplace",
+        "Glassworks",
+        "Quarry",
+        "Temple"
+      ],
+      "points": {
+        "civilian": 6,
+        "commercial": 0,
+        "guild": 0,
+        "military": 0,
+        "scientific": 0,
+        "total": 16,
+        "wonder": 10
+      },
+      "resources": {
+        "clay": 1,
+        "coins": 2,
+        "compass": 0,
+        "gear": 0,
+        "glass": 2,
+        "loom": 1,
+        "ore": 0,
+        "papyrus": 1,
+        "shields": 1,
+        "stone": 2,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 5,
+      "wonder_name": "Alexandria A",
+      "wonder_stage": 3
+    },
+    "1": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 2,
+        "guild": 0,
+        "manufactured_goods": 2,
+        "military": 1,
+        "raw_material": 2,
+        "scientific": 2
+      },
+      "can_build_hand_free": true,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Siege Workshop",
+        "Academy",
+        "Palace",
+        "Strategists Guild",
+        "Fortifications",
+        "Town Hall",
+        "Arena"
+      ],
+      "cards_hand_id": [
+        53,
+        64,
+        30,
+        73,
+        50,
+        27,
+        42
+      ],
+      "cards_playable": [
+        "Siege Workshop"
+      ],
+      "cards_playable_id": [
+        53
+      ],
+      "cards_played": [
+        "East Trading Post",
+        "Glassworks",
+        "Workshop",
+        "Stockade",
+        "Lumber Yard",
+        "Brickyard",
+        "Loom",
+        "Laboratory",
+        "Caravansery"
+      ],
+      "points": {
+        "civilian": 0,
+        "commercial": 0,
+        "guild": 0,
+        "military": 0,
+        "scientific": 4,
+        "total": 14,
+        "wonder": 10
+      },
+      "resources": {
+        "clay": 2,
+        "coins": 0,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 1,
+        "ore": 0,
+        "papyrus": 0,
+        "shields": 1,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 2
+      },
+      "wonder_id": 2,
+      "wonder_name": "Olympia A",
+      "wonder_stage": 3
+    },
+    "2": {
+      "amount": {
+        "civilian": 2,
+        "commercial": 0,
+        "guild": 0,
+        "manufactured_goods": 0,
+        "military": 1,
+        "raw_material": 3,
+        "scientific": 3
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Arsenal",
+        "Haven",
+        "Lighthouse",
+        "Spies Guild",
+        "Lodge",
+        "Study",
+        "University"
+      ],
+      "cards_hand_id": [
+        52,
+        39,
+        40,
+        70,
+        61,
+        65,
+        63
+      ],
+      "cards_playable": [
+        "Arsenal",
+        "Haven",
+        "Lighthouse",
+        "Spies Guild",
+        "Lodge",
+        "Study",
+        "University"
+      ],
+      "cards_playable_id": [
+        52,
+        39,
+        40,
+        70,
+        61,
+        65,
+        63
+      ],
+      "cards_played": [
+        "Theater",
+        "Apothecary",
+        "Altar",
+        "Stone Pit",
+        "Scriptorium",
+        "Timber Yard",
+        "Foundry",
+        "Walls",
+        "Dispensary"
+      ],
+      "points": {
+        "civilian": 4,
+        "commercial": 4,
+        "guild": 0,
+        "military": 4,
+        "scientific": 5,
+        "total": 27,
+        "wonder": 10
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 12,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 0,
+        "ore": 2,
+        "papyrus": 1,
+        "shields": 2,
+        "stone": 1,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 4,
+      "wonder_name": "Ephesos A",
+      "wonder_stage": 3
+    }
+  }
+}

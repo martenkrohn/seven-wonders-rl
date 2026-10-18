@@ -1,0 +1,221 @@
+{
+  "game": {
+    "clockwise": true,
+    "era": 3,
+    "turn": 17
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 2,
+        "commercial": 1,
+        "guild": 1,
+        "manufactured_goods": 3,
+        "military": 1,
+        "raw_material": 3,
+        "scientific": 1
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Observatory",
+        "Pantheon",
+        "Palace",
+        "Strategists Guild"
+      ],
+      "cards_hand_id": [
+        62,
+        29,
+        30,
+        73
+      ],
+      "cards_playable": [],
+      "cards_playable_id": [],
+      "cards_played": [
+        "Theater",
+        "Ore Vein",
+        "Stone Pit",
+        "Loom",
+        "Press",
+        "Glassworks",
+        "Sawmill",
+        "School",
+        "Walls",
+        "Vineyard",
+        "Senate",
+        "Shipowners Guild"
+      ],
+      "points": {
+        "civilian": 8,
+        "commercial": 0,
+        "guild": 7,
+        "military": 0,
+        "scientific": 1,
+        "total": 29,
+        "wonder": 13
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 1,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 1,
+        "ore": 1,
+        "papyrus": 1,
+        "shields": 2,
+        "stone": 2,
+        "tablet": 0,
+        "wood": 2
+      },
+      "wonder_id": 7,
+      "wonder_name": "Gizah B",
+      "wonder_stage": 3
+    },
+    "1": {
+      "amount": {
+        "civilian": 4,
+        "commercial": 2,
+        "guild": 0,
+        "manufactured_goods": 1,
+        "military": 5,
+        "raw_material": 2,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Academy",
+        "Fortifications",
+        "University",
+        "Philosophers Guild"
+      ],
+      "cards_hand_id": [
+        64,
+        50,
+        63,
+        69
+      ],
+      "cards_playable": [],
+      "cards_playable_id": [],
+      "cards_played": [
+        "Lumber Yard",
+        "East Trading Post",
+        "Clay Pit",
+        "Altar",
+        "Stockade",
+        "Caravansery",
+        "Stables",
+        "Statue",
+        "Loom",
+        "Archery Range",
+        "Courthouse",
+        "Arsenal",
+        "Siege Workshop",
+        "Gardens"
+      ],
+      "points": {
+        "civilian": 15,
+        "commercial": 0,
+        "guild": 0,
+        "military": 7,
+        "scientific": 0,
+        "total": 25,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 1,
+        "coins": 0,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 1,
+        "ore": 0,
+        "papyrus": 0,
+        "shields": 11,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 8,
+      "wonder_name": "Babylon B",
+      "wonder_stage": 2
+    },
+    "2": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 2,
+        "guild": 1,
+        "manufactured_goods": 1,
+        "military": 1,
+        "raw_material": 4,
+        "scientific": 1
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Lodge",
+        "Workers Guild",
+        "Arena",
+        "Haven"
+      ],
+      "cards_hand_id": [
+        61,
+        66,
+        42,
+        39
+      ],
+      "cards_playable": [
+        "Lodge",
+        "Workers Guild",
+        "Arena",
+        "Haven"
+      ],
+      "cards_playable_id": [
+        61,
+        66,
+        42,
+        39
+      ],
+      "cards_played": [
+        "Timber Yard",
+        "Barracks",
+        "West Trading Post",
+        "Clay Pool",
+        "Press",
+        "Forum",
+        "Brickyard",
+        "Quarry",
+        "Town Hall",
+        "Study",
+        "Spies Guild"
+      ],
+      "points": {
+        "civilian": 6,
+        "commercial": 4,
+        "guild": 6,
+        "military": -1,
+        "scientific": 1,
+        "total": 21,
+        "wonder": 5
+      },
+      "resources": {
+        "clay": 3,
+        "coins": 14,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 0,
+        "ore": 0,
+        "papyrus": 1,
+        "shields": 1,
+        "stone": 2,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 9,
+      "wonder_name": "Olympia B",
+      "wonder_stage": 3
+    }
+  }
+}

@@ -1,0 +1,206 @@
+{
+  "game": {
+    "clockwise": false,
+    "era": 2,
+    "turn": 12
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 3,
+        "commercial": 0,
+        "guild": 0,
+        "manufactured_goods": 2,
+        "military": 0,
+        "raw_material": 3,
+        "scientific": 2
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Quarry",
+        "Dispensary"
+      ],
+      "cards_hand_id": [
+        12,
+        57
+      ],
+      "cards_playable": [
+        "Quarry",
+        "Dispensary"
+      ],
+      "cards_playable_id": [
+        12,
+        57
+      ],
+      "cards_played": [
+        "Baths",
+        "Glassworks",
+        "Lumber Yard",
+        "Scriptorium",
+        "Clay Pit",
+        "Temple",
+        "Aqueduct",
+        "Library",
+        "Foundry",
+        "Loom"
+      ],
+      "points": {
+        "civilian": 11,
+        "commercial": 1,
+        "guild": 0,
+        "military": -1,
+        "scientific": 4,
+        "total": 18,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 3,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 1,
+        "ore": 2,
+        "papyrus": 0,
+        "shields": 0,
+        "stone": 1,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 0,
+      "wonder_name": "Gizah A",
+      "wonder_stage": 1
+    },
+    "1": {
+      "amount": {
+        "civilian": 3,
+        "commercial": 3,
+        "guild": 0,
+        "manufactured_goods": 2,
+        "military": 0,
+        "raw_material": 1,
+        "scientific": 2
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Caravansery",
+        "Sawmill"
+      ],
+      "cards_hand_id": [
+        36,
+        11
+      ],
+      "cards_playable": [
+        "Caravansery",
+        "Sawmill"
+      ],
+      "cards_playable_id": [
+        36,
+        11
+      ],
+      "cards_played": [
+        "West Trading Post",
+        "Timber Yard",
+        "Workshop",
+        "Loom",
+        "East Trading Post",
+        "Theater",
+        "Glassworks",
+        "School",
+        "Vineyard",
+        "Courthouse",
+        "Statue"
+      ],
+      "points": {
+        "civilian": 10,
+        "commercial": 1,
+        "guild": 0,
+        "military": -1,
+        "scientific": 2,
+        "total": 12,
+        "wonder": 0
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 4,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 1,
+        "ore": 1,
+        "papyrus": 0,
+        "shields": 0,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 10,
+      "wonder_name": "Rhodos B",
+      "wonder_stage": 0
+    },
+    "2": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 1,
+        "military": 1,
+        "raw_material": 3,
+        "scientific": 1
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Press",
+        "Stables"
+      ],
+      "cards_hand_id": [
+        17,
+        48
+      ],
+      "cards_playable": [
+        "Stables"
+      ],
+      "cards_playable_id": [
+        48
+      ],
+      "cards_played": [
+        "Ore Vein",
+        "Barracks",
+        "Apothecary",
+        "Press",
+        "Marketplace",
+        "Stone Pit",
+        "Brickyard"
+      ],
+      "points": {
+        "civilian": 0,
+        "commercial": 2,
+        "guild": 0,
+        "military": 2,
+        "scientific": 1,
+        "total": 8,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 2,
+        "coins": 6,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 1,
+        "ore": 1,
+        "papyrus": 1,
+        "shields": 1,
+        "stone": 1,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 13,
+      "wonder_name": "Halikarnassos B",
+      "wonder_stage": 3
+    }
+  }
+}

@@ -1,0 +1,26 @@
+[project]
+name = "sevenwonders-rl"
+version = "0.1.0"
+description = "RL environment for 7 Wonders card game"
+requires-python = ">=3.10"
+dependencies = [
+  "gymnasium",
+  "numpy",
+  "torch",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+sevenwonders_rl = ["data/*.json"]

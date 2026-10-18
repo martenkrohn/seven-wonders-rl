@@ -1,0 +1,213 @@
+{
+  "game": {
+    "clockwise": true,
+    "era": 3,
+    "turn": 20
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 3,
+        "guild": 0,
+        "manufactured_goods": 0,
+        "military": 2,
+        "raw_material": 4,
+        "scientific": 5
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Shipowners Guild"
+      ],
+      "cards_hand_id": [
+        72
+      ],
+      "cards_playable": [
+        "Shipowners Guild"
+      ],
+      "cards_playable_id": [
+        72
+      ],
+      "cards_played": [
+        "Timber Yard",
+        "Ore Vein",
+        "East Trading Post",
+        "Apothecary",
+        "Lumber Yard",
+        "Barracks",
+        "Caravansery",
+        "Library",
+        "Foundry",
+        "Observatory",
+        "Academy",
+        "Arena",
+        "Siege Workshop",
+        "Lodge",
+        "Senate"
+      ],
+      "points": {
+        "civilian": 6,
+        "commercial": 5,
+        "guild": 0,
+        "military": 4,
+        "scientific": 18,
+        "total": 43,
+        "wonder": 10
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 6,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 1,
+        "ore": 3,
+        "papyrus": 0,
+        "shields": 4,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 6,
+      "wonder_name": "Halikarnassos A",
+      "wonder_stage": 3
+    },
+    "1": {
+      "amount": {
+        "civilian": 3,
+        "commercial": 4,
+        "guild": 0,
+        "manufactured_goods": 2,
+        "military": 0,
+        "raw_material": 2,
+        "scientific": 4
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Philosophers Guild"
+      ],
+      "cards_hand_id": [
+        69
+      ],
+      "cards_playable": [
+        "Philosophers Guild"
+      ],
+      "cards_playable_id": [
+        69
+      ],
+      "cards_played": [
+        "Loom",
+        "Glassworks",
+        "West Trading Post",
+        "Clay Pit",
+        "Workshop",
+        "Scriptorium",
+        "Brickyard",
+        "Vineyard",
+        "Laboratory",
+        "School",
+        "Haven",
+        "Pantheon",
+        "Gardens",
+        "Lighthouse",
+        "Palace"
+      ],
+      "points": {
+        "civilian": 20,
+        "commercial": 13,
+        "guild": 0,
+        "military": -4,
+        "scientific": 8,
+        "total": 47,
+        "wonder": 10
+      },
+      "resources": {
+        "clay": 2,
+        "coins": 23,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 1,
+        "ore": 0,
+        "papyrus": 1,
+        "shields": 0,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 11,
+      "wonder_name": "Ephesos B",
+      "wonder_stage": 3
+    },
+    "2": {
+      "amount": {
+        "civilian": 3,
+        "commercial": 2,
+        "guild": 2,
+        "manufactured_goods": 2,
+        "military": 1,
+        "raw_material": 3,
+        "scientific": 2
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Arsenal"
+      ],
+      "cards_hand_id": [
+        52
+      ],
+      "cards_playable": [
+        "Arsenal"
+      ],
+      "cards_playable_id": [
+        52
+      ],
+      "cards_played": [
+        "Marketplace",
+        "Altar",
+        "Press",
+        "Clay Pool",
+        "Stockade",
+        "Forum",
+        "Loom",
+        "Courthouse",
+        "Quarry",
+        "Temple",
+        "Sawmill",
+        "University",
+        "Builders Guild",
+        "Study",
+        "Magistrates Guild"
+      ],
+      "points": {
+        "civilian": 9,
+        "commercial": 2,
+        "guild": 13,
+        "military": 4,
+        "scientific": 10,
+        "total": 48,
+        "wonder": 10
+      },
+      "resources": {
+        "clay": 2,
+        "coins": 6,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 1,
+        "ore": 0,
+        "papyrus": 1,
+        "shields": 1,
+        "stone": 2,
+        "tablet": 0,
+        "wood": 2
+      },
+      "wonder_id": 1,
+      "wonder_name": "Babylon A",
+      "wonder_stage": 3
+    }
+  }
+}

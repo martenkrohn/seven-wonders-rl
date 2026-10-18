@@ -1,0 +1,220 @@
+{
+  "game": {
+    "clockwise": true,
+    "era": 3,
+    "turn": 19
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 3,
+        "commercial": 3,
+        "guild": 1,
+        "manufactured_goods": 2,
+        "military": 2,
+        "raw_material": 3,
+        "scientific": 1
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Lodge",
+        "Haven"
+      ],
+      "cards_hand_id": [
+        61,
+        39
+      ],
+      "cards_playable": [
+        "Lodge",
+        "Haven"
+      ],
+      "cards_playable_id": [
+        61,
+        39
+      ],
+      "cards_played": [
+        "Clay Pit",
+        "West Trading Post",
+        "East Trading Post",
+        "Loom",
+        "Marketplace",
+        "Sawmill",
+        "Archery Range",
+        "Press",
+        "Brickyard",
+        "Courthouse",
+        "Pantheon",
+        "Siege Workshop",
+        "Observatory",
+        "Workers Guild",
+        "Palace"
+      ],
+      "points": {
+        "civilian": 19,
+        "commercial": 1,
+        "guild": 6,
+        "military": 2,
+        "scientific": 4,
+        "total": 35,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 3,
+        "coins": 4,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 1,
+        "ore": 0,
+        "papyrus": 1,
+        "shields": 5,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 2
+      },
+      "wonder_id": 8,
+      "wonder_name": "Babylon B",
+      "wonder_stage": 3
+    },
+    "1": {
+      "amount": {
+        "civilian": 2,
+        "commercial": 0,
+        "guild": 3,
+        "manufactured_goods": 0,
+        "military": 2,
+        "raw_material": 4,
+        "scientific": 2
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Philosophers Guild",
+        "Lighthouse"
+      ],
+      "cards_hand_id": [
+        69,
+        40
+      ],
+      "cards_playable": [
+        "Lighthouse"
+      ],
+      "cards_playable_id": [
+        40
+      ],
+      "cards_played": [
+        "Ore Vein",
+        "Timber Yard",
+        "Lumber Yard",
+        "Altar",
+        "Stables",
+        "Temple",
+        "Quarry",
+        "Walls",
+        "University",
+        "Strategists Guild",
+        "Academy",
+        "Craftmens Guild",
+        "Magistrates Guild"
+      ],
+      "points": {
+        "civilian": 5,
+        "commercial": 2,
+        "guild": 17,
+        "military": 6,
+        "scientific": 2,
+        "total": 42,
+        "wonder": 10
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 6,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 0,
+        "ore": 1,
+        "papyrus": 0,
+        "shields": 4,
+        "stone": 2,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 5,
+      "wonder_name": "Alexandria A",
+      "wonder_stage": 3
+    },
+    "2": {
+      "amount": {
+        "civilian": 5,
+        "commercial": 2,
+        "guild": 0,
+        "manufactured_goods": 1,
+        "military": 0,
+        "raw_material": 2,
+        "scientific": 4
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": true,
+      "cards_hand": [
+        "Fortifications",
+        "Arsenal"
+      ],
+      "cards_hand_id": [
+        50,
+        52
+      ],
+      "cards_playable": [
+        "Fortifications",
+        "Arsenal"
+      ],
+      "cards_playable_id": [
+        50,
+        52
+      ],
+      "cards_played": [
+        "Theater",
+        "Stone Pit",
+        "Apothecary",
+        "Glassworks",
+        "Statue",
+        "Caravansery",
+        "Library",
+        "Foundry",
+        "Dispensary",
+        "Study",
+        "Town Hall",
+        "Gardens",
+        "Senate",
+        "Arena"
+      ],
+      "points": {
+        "civilian": 23,
+        "commercial": 2,
+        "guild": 0,
+        "military": -2,
+        "scientific": 13,
+        "total": 38,
+        "wonder": 2
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 5,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 1,
+        "ore": 2,
+        "papyrus": 0,
+        "shields": 0,
+        "stone": 1,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 13,
+      "wonder_name": "Halikarnassos B",
+      "wonder_stage": 1
+    }
+  }
+}

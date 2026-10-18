@@ -1,0 +1,203 @@
+{
+  "game": {
+    "clockwise": true,
+    "era": 1,
+    "turn": 4
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 0,
+        "guild": 0,
+        "manufactured_goods": 1,
+        "military": 0,
+        "raw_material": 1,
+        "scientific": 1
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Barracks",
+        "Guard Tower",
+        "Ore Vein"
+      ],
+      "cards_hand_id": [
+        44,
+        45,
+        4
+      ],
+      "cards_playable": [
+        "Barracks",
+        "Guard Tower",
+        "Ore Vein"
+      ],
+      "cards_playable_id": [
+        44,
+        45,
+        4
+      ],
+      "cards_played": [
+        "Loom",
+        "Apothecary",
+        "Theater",
+        "Stone Pit"
+      ],
+      "points": {
+        "civilian": 2,
+        "commercial": 1,
+        "guild": 0,
+        "military": 0,
+        "scientific": 1,
+        "total": 4,
+        "wonder": 0
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 3,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 1,
+        "ore": 0,
+        "papyrus": 0,
+        "shields": 0,
+        "stone": 2,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 7,
+      "wonder_name": "Gizah B",
+      "wonder_stage": 0
+    },
+    "1": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 0,
+        "guild": 0,
+        "manufactured_goods": 1,
+        "military": 0,
+        "raw_material": 1,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": true,
+      "cards_hand": [
+        "Workshop",
+        "Clay Pool",
+        "Marketplace"
+      ],
+      "cards_hand_id": [
+        55,
+        3,
+        34
+      ],
+      "cards_playable": [
+        "Workshop",
+        "Clay Pool",
+        "Marketplace"
+      ],
+      "cards_playable_id": [
+        55,
+        3,
+        34
+      ],
+      "cards_played": [
+        "Timber Yard",
+        "Altar",
+        "Glassworks"
+      ],
+      "points": {
+        "civilian": 2,
+        "commercial": 0,
+        "guild": 0,
+        "military": 0,
+        "scientific": 0,
+        "total": 2,
+        "wonder": 0
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 2,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 0,
+        "ore": 0,
+        "papyrus": 0,
+        "shields": 0,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 9,
+      "wonder_name": "Olympia B",
+      "wonder_stage": 1
+    },
+    "2": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 0,
+        "military": 1,
+        "raw_material": 2,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Press",
+        "East Trading Post",
+        "Baths"
+      ],
+      "cards_hand_id": [
+        17,
+        32,
+        21
+      ],
+      "cards_playable": [
+        "Press",
+        "East Trading Post",
+        "Baths"
+      ],
+      "cards_playable_id": [
+        17,
+        32,
+        21
+      ],
+      "cards_played": [
+        "Lumber Yard",
+        "West Trading Post",
+        "Stockade",
+        "Clay Pit"
+      ],
+      "points": {
+        "civilian": 0,
+        "commercial": 0,
+        "guild": 0,
+        "military": 0,
+        "scientific": 0,
+        "total": 0,
+        "wonder": 0
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 2,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 1,
+        "ore": 0,
+        "papyrus": 0,
+        "shields": 1,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 6,
+      "wonder_name": "Halikarnassos A",
+      "wonder_stage": 0
+    }
+  }
+}

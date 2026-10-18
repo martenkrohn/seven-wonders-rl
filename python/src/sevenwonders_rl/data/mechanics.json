@@ -1,0 +1,28 @@
+{
+  "trade": {
+    "base_cost_per_resource": 2,
+    "discount_cost_per_resource": 1,
+    "manufactured_discount_flag": "manuf_cheap",
+    "raw_discount_flags": [
+      "raw_cheap_east",
+      "raw_cheap_west",
+      "wonder_raw_cheap"
+    ],
+    "non_tradable_sources": [
+      "yellow_extra",
+      "wonder_extra"
+    ]
+  },
+  "tradable_rule": {
+    "only_if_is_neighbor_false": [
+      "forum",
+      "caravansery",
+      "bazar",
+      "alexandria_choose_raw",
+      "alexandria_choose_manuf"
+    ]
+  },
+  "treasure": {
+    "coins_per_vp": 3
+  }
+}

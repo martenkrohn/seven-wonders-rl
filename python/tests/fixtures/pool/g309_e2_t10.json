@@ -1,0 +1,214 @@
+{
+  "game": {
+    "clockwise": false,
+    "era": 2,
+    "turn": 10
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 3,
+        "military": 0,
+        "raw_material": 1,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": true,
+      "cards_hand": [
+        "Statue",
+        "Aqueduct",
+        "Stables",
+        "School"
+      ],
+      "cards_hand_id": [
+        24,
+        25,
+        48,
+        60
+      ],
+      "cards_playable": [
+        "Statue",
+        "School"
+      ],
+      "cards_playable_id": [
+        24,
+        60
+      ],
+      "cards_played": [
+        "West Trading Post",
+        "Clay Pit",
+        "Altar",
+        "Glassworks",
+        "Press",
+        "Loom"
+      ],
+      "points": {
+        "civilian": 2,
+        "commercial": 1,
+        "guild": 0,
+        "military": 0,
+        "scientific": 0,
+        "total": 8,
+        "wonder": 5
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 3,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 1,
+        "ore": 0,
+        "papyrus": 1,
+        "shields": 0,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 9,
+      "wonder_name": "Olympia B",
+      "wonder_stage": 2
+    },
+    "1": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 2,
+        "military": 0,
+        "raw_material": 2,
+        "scientific": 2
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Glassworks",
+        "Quarry",
+        "Sawmill",
+        "Forum"
+      ],
+      "cards_hand_id": [
+        16,
+        12,
+        11,
+        35
+      ],
+      "cards_playable": [
+        "Glassworks"
+      ],
+      "cards_playable_id": [
+        16
+      ],
+      "cards_played": [
+        "Stone Pit",
+        "Timber Yard",
+        "Theater",
+        "Loom",
+        "Press",
+        "Library",
+        "Caravansery",
+        "Dispensary"
+      ],
+      "points": {
+        "civilian": 2,
+        "commercial": 0,
+        "guild": 0,
+        "military": 0,
+        "scientific": 2,
+        "total": 7,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 0,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 1,
+        "ore": 1,
+        "papyrus": 1,
+        "shields": 0,
+        "stone": 1,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 3,
+      "wonder_name": "Rhodos A",
+      "wonder_stage": 1
+    },
+    "2": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 2,
+        "guild": 0,
+        "manufactured_goods": 0,
+        "military": 1,
+        "raw_material": 2,
+        "scientific": 1
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": true,
+      "cards_hand": [
+        "Laboratory",
+        "Courthouse",
+        "Vineyard",
+        "Brickyard"
+      ],
+      "cards_hand_id": [
+        58,
+        23,
+        37,
+        13
+      ],
+      "cards_playable": [
+        "Laboratory",
+        "Courthouse",
+        "Vineyard",
+        "Brickyard"
+      ],
+      "cards_playable_id": [
+        58,
+        23,
+        37,
+        13
+      ],
+      "cards_played": [
+        "Lumber Yard",
+        "East Trading Post",
+        "Workshop",
+        "Marketplace",
+        "Archery Range",
+        "Foundry"
+      ],
+      "points": {
+        "civilian": 0,
+        "commercial": 3,
+        "guild": 0,
+        "military": 0,
+        "scientific": 1,
+        "total": 7,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 9,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 0,
+        "ore": 2,
+        "papyrus": 0,
+        "shields": 2,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 5,
+      "wonder_name": "Alexandria A",
+      "wonder_stage": 2
+    }
+  }
+}

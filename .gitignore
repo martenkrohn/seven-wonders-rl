@@ -1,0 +1,45 @@
+
+/cmake-build-debug/
+/build/
+/CMakeFiles/
+.idea/
+compile_commands.json
+cmake_install.cmake
+.ycm_extra_conf.py
+/io/
+/logs/
+results.txt
+.clangd/
+/.venv/
+/python/.venv/
+/python/00_marten
+**/__pycache__/
+*.pyc
+/python/runs/
+/python/python/runs/
+/python/src/*.egg-info/
+*.pt
+
+# Generated local experiment and test artifacts
+/.tmp_fixture_capture/
+/io_train/
+/python/io_train/
+/python/.coverage
+/python/.coverage.*
+/python/htmlcov/
+/python/.pytest_cache/
+/python/.ruff_cache/
+/python/.mypy_cache/
+.env
+.env.*
+!.env.example
+
+# Local-only history, GUI assets and references; omitted from the GitHub snapshot
+/00_marten/
+/Game.py
+/images/
+/references/
+*.code-workspace
+/python/tests/fixtures/pool descriptives/
+/python/tests/descriptiv tests/
+/python/validate_selfplay.py

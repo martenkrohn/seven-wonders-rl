@@ -1,0 +1,230 @@
+{
+  "game": {
+    "clockwise": false,
+    "era": 2,
+    "turn": 9
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 4,
+        "guild": 0,
+        "manufactured_goods": 1,
+        "military": 0,
+        "raw_material": 0,
+        "scientific": 1
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Forum",
+        "Courthouse",
+        "Brickyard",
+        "Archery Range",
+        "Press"
+      ],
+      "cards_hand_id": [
+        35,
+        23,
+        13,
+        49,
+        17
+      ],
+      "cards_playable": [
+        "Forum",
+        "Courthouse",
+        "Brickyard",
+        "Press"
+      ],
+      "cards_playable_id": [
+        35,
+        23,
+        13,
+        17
+      ],
+      "cards_played": [
+        "East Trading Post",
+        "Marketplace",
+        "Loom",
+        "West Trading Post",
+        "Vineyard",
+        "Dispensary"
+      ],
+      "points": {
+        "civilian": 0,
+        "commercial": 2,
+        "guild": 0,
+        "military": 0,
+        "scientific": 1,
+        "total": 6,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 8,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 1,
+        "ore": 0,
+        "papyrus": 1,
+        "shields": 0,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 4,
+      "wonder_name": "Ephesos A",
+      "wonder_stage": 1
+    },
+    "1": {
+      "amount": {
+        "civilian": 2,
+        "commercial": 0,
+        "guild": 0,
+        "manufactured_goods": 1,
+        "military": 0,
+        "raw_material": 1,
+        "scientific": 3
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Walls",
+        "Sawmill",
+        "Glassworks",
+        "Caravansery",
+        "Temple"
+      ],
+      "cards_hand_id": [
+        46,
+        11,
+        16,
+        36,
+        22
+      ],
+      "cards_playable": [
+        "Sawmill",
+        "Glassworks",
+        "Temple"
+      ],
+      "cards_playable_id": [
+        11,
+        16,
+        22
+      ],
+      "cards_played": [
+        "Theater",
+        "Timber Yard",
+        "Workshop",
+        "Scriptorium",
+        "Apothecary",
+        "Statue",
+        "Loom"
+      ],
+      "points": {
+        "civilian": 6,
+        "commercial": 1,
+        "guild": 0,
+        "military": 0,
+        "scientific": 10,
+        "total": 17,
+        "wonder": 0
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 3,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 1,
+        "ore": 0,
+        "papyrus": 0,
+        "shields": 0,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 12,
+      "wonder_name": "Alexandria B",
+      "wonder_stage": 0
+    },
+    "2": {
+      "amount": {
+        "civilian": 0,
+        "commercial": 0,
+        "guild": 0,
+        "manufactured_goods": 2,
+        "military": 0,
+        "raw_material": 4,
+        "scientific": 1
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "School",
+        "Library",
+        "Aqueduct",
+        "Quarry",
+        "Stables"
+      ],
+      "cards_hand_id": [
+        60,
+        59,
+        25,
+        12,
+        48
+      ],
+      "cards_playable": [
+        "School",
+        "Library",
+        "Aqueduct",
+        "Quarry",
+        "Stables"
+      ],
+      "cards_playable_id": [
+        60,
+        59,
+        25,
+        12,
+        48
+      ],
+      "cards_played": [
+        "Press",
+        "Stone Pit",
+        "Clay Pool",
+        "Clay Pit",
+        "Glassworks",
+        "Foundry",
+        "Laboratory"
+      ],
+      "points": {
+        "civilian": 0,
+        "commercial": 1,
+        "guild": 0,
+        "military": 0,
+        "scientific": 1,
+        "total": 5,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 2,
+        "coins": 5,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 0,
+        "ore": 2,
+        "papyrus": 1,
+        "shields": 0,
+        "stone": 1,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 8,
+      "wonder_name": "Babylon B",
+      "wonder_stage": 1
+    }
+  }
+}

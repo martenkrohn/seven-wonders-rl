@@ -1,0 +1,205 @@
+{
+  "game": {
+    "clockwise": false,
+    "era": 2,
+    "turn": 12
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 2,
+        "commercial": 2,
+        "guild": 0,
+        "manufactured_goods": 2,
+        "military": 1,
+        "raw_material": 2,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": true,
+      "cards_hand": [
+        "Brickyard",
+        "Sawmill"
+      ],
+      "cards_hand_id": [
+        13,
+        11
+      ],
+      "cards_playable": [
+        "Brickyard",
+        "Sawmill"
+      ],
+      "cards_playable_id": [
+        13,
+        11
+      ],
+      "cards_played": [
+        "Stone Pit",
+        "Guard Tower",
+        "Ore Vein",
+        "Theater",
+        "West Trading Post",
+        "Loom",
+        "Statue",
+        "Forum",
+        "Press"
+      ],
+      "points": {
+        "civilian": 6,
+        "commercial": 1,
+        "guild": 0,
+        "military": 1,
+        "scientific": 0,
+        "total": 11,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 3,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 1,
+        "ore": 1,
+        "papyrus": 1,
+        "shields": 1,
+        "stone": 1,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 5,
+      "wonder_name": "Alexandria A",
+      "wonder_stage": 1
+    },
+    "1": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 2,
+        "guild": 0,
+        "manufactured_goods": 1,
+        "military": 2,
+        "raw_material": 3,
+        "scientific": 1
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": true,
+      "cards_hand": [
+        "Walls",
+        "Foundry"
+      ],
+      "cards_hand_id": [
+        46,
+        14
+      ],
+      "cards_playable": [
+        "Walls",
+        "Foundry"
+      ],
+      "cards_playable_id": [
+        46,
+        14
+      ],
+      "cards_played": [
+        "Clay Pool",
+        "Timber Yard",
+        "Loom",
+        "Clay Pit",
+        "Barracks",
+        "Laboratory",
+        "Courthouse",
+        "Archery Range",
+        "Vineyard",
+        "Caravansery"
+      ],
+      "points": {
+        "civilian": 4,
+        "commercial": 2,
+        "guild": 0,
+        "military": 1,
+        "scientific": 1,
+        "total": 11,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 2,
+        "coins": 8,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 1,
+        "ore": 0,
+        "papyrus": 0,
+        "shields": 3,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 1,
+      "wonder_name": "Babylon A",
+      "wonder_stage": 1
+    },
+    "2": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 2,
+        "military": 0,
+        "raw_material": 2,
+        "scientific": 2
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Aqueduct",
+        "Stables"
+      ],
+      "cards_hand_id": [
+        25,
+        48
+      ],
+      "cards_playable": [
+        "Stables"
+      ],
+      "cards_playable_id": [
+        48
+      ],
+      "cards_played": [
+        "Glassworks",
+        "Workshop",
+        "East Trading Post",
+        "Lumber Yard",
+        "Press",
+        "Quarry",
+        "Temple",
+        "School"
+      ],
+      "points": {
+        "civilian": 3,
+        "commercial": 3,
+        "guild": 0,
+        "military": -2,
+        "scientific": 2,
+        "total": 9,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 11,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 1,
+        "ore": 0,
+        "papyrus": 1,
+        "shields": 0,
+        "stone": 2,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 6,
+      "wonder_name": "Halikarnassos A",
+      "wonder_stage": 1
+    }
+  }
+}

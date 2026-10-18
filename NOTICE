@@ -1,0 +1,20 @@
+Seven Wonders RL — origin and third-party notices
+
+The C++ simulator originates from DMAG/UFSM:
+https://github.com/dmag-ufsm/7Wonders
+Local pre-cleanup base: 020869a (backup of the Python extension work).
+Historical upstream license-update commit: a0bc333.
+
+The inherited root LICENSE contains GNU GPL version 3 and is retained.
+The upstream README's MIT claim conflicts with that file; this notice does not
+resolve that discrepancy or replace permissions for individual components.
+The Python RL layer and local C++ changes are extensions of the original
+simulator. Precise author/contribution attribution remains under review.
+
+Bundled nlohmann/json headers retain their original copyright and MIT notices
+in include/nlohmann/. They are not relicensed by this repository.
+
+7 Wonders is a third-party board game. GUI artwork, personal reference files
+and historical Fandom-scraped CSVs are not part of the GitHub source snapshot.
+Redistribution terms for included derived game data/fixtures still require
+review before a public release. No publisher affiliation is claimed.

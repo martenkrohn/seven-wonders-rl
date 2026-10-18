@@ -1,0 +1,223 @@
+{
+  "game": {
+    "clockwise": false,
+    "era": 2,
+    "turn": 9
+  },
+  "players": {
+    "0": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 1,
+        "military": 1,
+        "raw_material": 3,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "School",
+        "Dispensary",
+        "Stables",
+        "Brickyard",
+        "Caravansery"
+      ],
+      "cards_hand_id": [
+        60,
+        57,
+        48,
+        13,
+        36
+      ],
+      "cards_playable": [
+        "Stables",
+        "Brickyard",
+        "Caravansery"
+      ],
+      "cards_playable_id": [
+        48,
+        13,
+        36
+      ],
+      "cards_played": [
+        "Timber Yard",
+        "West Trading Post",
+        "Guard Tower",
+        "Ore Vein",
+        "Lumber Yard",
+        "Courthouse",
+        "Glassworks"
+      ],
+      "points": {
+        "civilian": 4,
+        "commercial": 0,
+        "guild": 0,
+        "military": 0,
+        "scientific": 0,
+        "total": 7,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 1,
+        "coins": 1,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 0,
+        "ore": 1,
+        "papyrus": 0,
+        "shields": 1,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 1
+      },
+      "wonder_id": 1,
+      "wonder_name": "Babylon A",
+      "wonder_stage": 1
+    },
+    "1": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 2,
+        "guild": 0,
+        "manufactured_goods": 3,
+        "military": 1,
+        "raw_material": 0,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Foundry",
+        "Loom",
+        "Forum",
+        "Sawmill",
+        "Laboratory"
+      ],
+      "cards_hand_id": [
+        14,
+        15,
+        35,
+        11,
+        58
+      ],
+      "cards_playable": [
+        "Forum"
+      ],
+      "cards_playable_id": [
+        35
+      ],
+      "cards_played": [
+        "Theater",
+        "Marketplace",
+        "East Trading Post",
+        "Glassworks",
+        "Barracks",
+        "Loom",
+        "Press"
+      ],
+      "points": {
+        "civilian": 2,
+        "commercial": 0,
+        "guild": 0,
+        "military": 0,
+        "scientific": 0,
+        "total": 5,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 0,
+        "coins": 0,
+        "compass": 0,
+        "gear": 0,
+        "glass": 1,
+        "loom": 2,
+        "ore": 0,
+        "papyrus": 1,
+        "shields": 1,
+        "stone": 0,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 6,
+      "wonder_name": "Halikarnassos A",
+      "wonder_stage": 1
+    },
+    "2": {
+      "amount": {
+        "civilian": 1,
+        "commercial": 1,
+        "guild": 0,
+        "manufactured_goods": 0,
+        "military": 1,
+        "raw_material": 4,
+        "scientific": 0
+      },
+      "can_build_hand_free": false,
+      "can_build_wonder": false,
+      "cards_hand": [
+        "Aqueduct",
+        "Temple",
+        "Statue",
+        "Archery Range",
+        "Library"
+      ],
+      "cards_hand_id": [
+        25,
+        22,
+        24,
+        49,
+        59
+      ],
+      "cards_playable": [
+        "Temple",
+        "Statue",
+        "Archery Range",
+        "Library"
+      ],
+      "cards_playable_id": [
+        22,
+        24,
+        49,
+        59
+      ],
+      "cards_played": [
+        "Clay Pool",
+        "Altar",
+        "Clay Pit",
+        "Stone Pit",
+        "Stockade",
+        "Vineyard",
+        "Quarry"
+      ],
+      "points": {
+        "civilian": 2,
+        "commercial": 3,
+        "guild": 0,
+        "military": 0,
+        "scientific": 0,
+        "total": 8,
+        "wonder": 3
+      },
+      "resources": {
+        "clay": 1,
+        "coins": 11,
+        "compass": 0,
+        "gear": 0,
+        "glass": 0,
+        "loom": 0,
+        "ore": 0,
+        "papyrus": 0,
+        "shields": 1,
+        "stone": 4,
+        "tablet": 0,
+        "wood": 0
+      },
+      "wonder_id": 0,
+      "wonder_name": "Gizah A",
+      "wonder_stage": 1
+    }
+  }
+}
