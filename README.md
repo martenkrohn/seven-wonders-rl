@@ -98,7 +98,3 @@ Generated builds, runtime exchange files, logs, training runs and checkpoints ar
 ## License and attribution
 
 This project is distributed under **GNU GPL version 3**; see [LICENSE](LICENSE) and [NOTICE](NOTICE). The inherited GPLv3 license is retained and also applies to the downstream RL code and simulator modifications. The vendored **nlohmann/json** library retains its MIT license and copyright notices.
-
-The upstream README contains an inconsistent MIT sentence. This repository follows the GPLv3 file present in the pinned upstream source and does not claim an alternative MIT license for the simulator. [Origin and licensing details](docs/ORIGIN.md).
-
-7 Wonders is a third-party board game. No affiliation with its designers or publisher is claimed; software licensing does not grant rights in the game's trademarks or artwork.
