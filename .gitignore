@@ -47,3 +47,8 @@ results.txt
 # Wheel/build outputs from local packaging checks
 /python/build/
 /python/dist/
+
+# Private restart notes are kept outside the versioned project.
+/HANDOVER.md
+/*HANDOVER*.md
+/*handover*.md

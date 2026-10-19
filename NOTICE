@@ -1,20 +1,36 @@
-Seven Wonders RL — origin and third-party notices
+Seven Wonders RL — source origin and licensing
 
-The C++ simulator originates from DMAG/UFSM:
+This is a modified version of DMAG/UFSM's 7Wonders simulator:
 https://github.com/dmag-ufsm/7Wonders
-Local pre-cleanup base: 020869a (backup of the Python extension work).
-Historical upstream license-update commit: a0bc333.
+Upstream baseline: a0bc333a7a7f21f83156de8a2d522e7baa913f0a
+Baseline commit date: 2021-10-07 (Update LICENSE).
 
-The inherited root LICENSE contains GNU GPL version 3 and is retained.
-The upstream README's MIT claim conflicts with that file; this notice does not
-resolve that discrepancy or replace permissions for individual components.
-The Python RL layer and local C++ changes are extensions of the original
-simulator. Precise author/contribution attribution remains under review.
+Downstream modifications are maintained by Marten Krohn. Their scope was
+compared with the upstream baseline and documented on 2026-10-19:
 
-Bundled nlohmann/json headers retain their original copyright and MIT notices
-in include/nlohmann/. They are not relicensed by this repository.
+- include/player.h and src/player.cpp: selectable-production state and
+  production/trading corrections.
+- src/wonder.cpp: Gizah B fourth-stage transition correction.
+- CMakeLists.txt: downstream regression-test targets and CTest registration.
+- python/: the Gymnasium/PyTorch RL extension, features, opponents,
+  training/evaluation tools and tests.
+- tests/, CI and project documentation: downstream validation and maintenance.
 
-7 Wonders is a third-party board game. GUI artwork, personal reference files
-and historical Fandom-scraped CSVs are not part of the GitHub source snapshot.
-Redistribution terms for included derived game data/fixtures still require
-review before a public release. No publisher affiliation is claimed.
+The original simulator is not claimed as downstream-authored code. Existing
+upstream source and copyright notices are retained. The root LICENSE is the
+unmodified GNU General Public License version 3 supplied with the baseline.
+The simulator and downstream extension are distributed under GPL-3.0-only.
+The old upstream README's MIT statement is inconsistent with that LICENSE;
+this project does not use it to claim MIT licensing for the simulator.
+
+include/nlohmann/ is the bundled nlohmann/json library, copyright Niels Lohmann
+and contributors, under its original MIT license. Its embedded notices remain
+unchanged. Those permissions are not replaced by the project's GPL notice.
+
+Included card/wonder JSON records are extracted from engine definitions by
+the accompanying scripts. Game-state fixtures are simulator outputs used for
+tests. The original GUI artwork, rulebook/reference documents and historical
+scraped tables are not included. No rights in board-game trademarks or
+artwork, and no publisher affiliation, are claimed.
+
+See docs/ORIGIN.md for the verified file-level distinction.

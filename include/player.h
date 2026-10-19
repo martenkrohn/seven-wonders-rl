@@ -1,3 +1,5 @@
+// Downstream modifications for Seven Wonders RL; documented 2026-10-19.
+// Derived from DMAG/UFSM 7Wonders. See NOTICE and docs/ORIGIN.md (GPLv3).
 #ifndef PLAYER_H
 #define PLAYER_H
 

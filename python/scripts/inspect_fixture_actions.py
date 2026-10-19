@@ -1,5 +1,6 @@
 """
-cd /home/marten/dev/7Wonders/python && .venv/bin/python scripts/inspect_fixture_actions.py --fixture tests/fixtures/pool/g194_e1_t00.json --seat 1 2>&1 | head -100
+From python/, with the virtual environment active:
+python scripts/inspect_fixture_actions.py --fixture tests/fixtures/pool/g000_e1_t00.json --seat 1
 """
 
 

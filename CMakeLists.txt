@@ -1,3 +1,4 @@
+# Downstream test integration; documented 2026-10-19. See NOTICE and docs/ORIGIN.md.
 cmake_minimum_required(VERSION 3.5)
 
 project(7Wonders LANGUAGES CXX)

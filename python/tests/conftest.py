@@ -19,7 +19,7 @@ def load_fixture_json(filename: str) -> dict:
     if not path.exists():
         raise FileNotFoundError(
             f"Missing fixture: {path}\n"
-            f"Create it under python/tests/fixtures/ (see HANDOVER.md at the repository root)."
+            f"Create it under python/tests/fixtures/ (see python/scripts/README.md and capture_fixtures.py)."
         )
     return json.loads(path.read_text())
 
