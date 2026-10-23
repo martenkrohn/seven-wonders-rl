@@ -2,6 +2,8 @@
 
 ## Baseline
 
+For the complete current, function-level change log and exact source comparison, see [SIMULATOR_CHANGES.md](SIMULATOR_CHANGES.md), its [upstream patch](simulator/upstream.patch) and [file checksum inventory](simulator/manifest.json). The table below retains the historical comparison from 19 October; it is not the current full diff.
+
 The simulator is derived from [dmag-ufsm/7Wonders](https://github.com/dmag-ufsm/7Wonders), using upstream commit [`a0bc333a7a7f21f83156de8a2d522e7baa913f0a`](https://github.com/dmag-ufsm/7Wonders/tree/a0bc333a7a7f21f83156de8a2d522e7baa913f0a), dated 7 October 2021, as the comparison baseline. Its commit message is `Update LICENSE`.
 
 The original local history was inspected on 19 October 2026. The comparison below describes the simulator changes already present before this documentation cleanup. The exact dates and line-by-line authorship of the earlier downstream edits are not asserted.
@@ -34,3 +36,7 @@ The upstream README has a conflicting MIT sentence. This project follows the exp
 The embedded MIT notices in `include/nlohmann/` remain intact. Game names and trademarks are not relicensed. Card/wonder data are derived from engine definitions using the included extraction scripts; fixtures are recorded simulator states. GUI artwork, rulebooks and unrelated scraped datasets are excluded.
 
 Relevant primary sources: [upstream LICENSE](https://github.com/dmag-ufsm/7Wonders/blob/a0bc333a7a7f21f83156de8a2d522e7baa913f0a/LICENSE), [GPLv3 terms](https://www.gnu.org/licenses/gpl-3.0.html), [nlohmann/json license](https://github.com/nlohmann/json/blob/v3.7.0/LICENSE.MIT).
+
+## Runtime and training corrections, 23 October 2026
+
+The baseline table above is the historical comparison from 19 October. Subsequent downstream changes modify `main.cpp` (local seeded generator, protocol v2, final status after scoring, action acknowledgements and yielding poll), `src/filer.cpp` (atomic status publication) and `CMakeLists.txt` (final-status regression and active Release assertions). The Python extension now includes independent-environment GAE, shared completion-aware evaluation, explicit RNG streams, semantic checkpoint validation and paired runtime measurement. The inherited engine implementation and vendored JSON notices remain attributed as above.

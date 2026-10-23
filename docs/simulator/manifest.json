@@ -1,0 +1,584 @@
+{
+  "format_version": 1,
+  "upstream": "https://github.com/dmag-ufsm/7Wonders",
+  "baseline_commit": "a0bc333a7a7f21f83156de8a2d522e7baa913f0a",
+  "patch_sha256": "962c9e03c142cce46eb0a1ef99b7e13ad73f28eb1e581a656d3ee2e8c79c2af8",
+  "files": [
+    {
+      "path": "CMakeLists.txt",
+      "status": "modified",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "89798e4668c9abcc0dee848590b15e1fa9c788650ce727237bb4d0365b7ae4c4"
+      },
+      "current": {
+        "sha256": "f9598d79bf77711f506ccd6649fdc5e38423a700a8226989704642198fd65365",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/card.h",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "399a5036f828298b664bbec2414cfd057a6380e06268e66fb67d861029f2d3cd"
+      },
+      "current": {
+        "sha256": "399a5036f828298b664bbec2414cfd057a6380e06268e66fb67d861029f2d3cd",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/filer.h",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "19e25fde83601e151518409bce211110c40c147e6fb34ee8795df7fc05106c74"
+      },
+      "current": {
+        "sha256": "19e25fde83601e151518409bce211110c40c147e6fb34ee8795df7fc05106c74",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/adl_serializer.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "8d8d0ed47841939ef6ba7da42a4583761b2f7770c380579a18871dc43892c518"
+      },
+      "current": {
+        "sha256": "8d8d0ed47841939ef6ba7da42a4583761b2f7770c380579a18871dc43892c518",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/conversions/from_json.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "4eddb5b0b4e1920bb75f3943abbe78a5374785d38bf9fc615814740fe7ac1783"
+      },
+      "current": {
+        "sha256": "4eddb5b0b4e1920bb75f3943abbe78a5374785d38bf9fc615814740fe7ac1783",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/conversions/to_chars.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "ccd7e9a42d29abd527217c0195358c2f7eb7b0a74829eb99afc3eb13bac7c24b"
+      },
+      "current": {
+        "sha256": "ccd7e9a42d29abd527217c0195358c2f7eb7b0a74829eb99afc3eb13bac7c24b",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/conversions/to_json.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "aaf4f9f3b012210f04cb814d4170efc3cb4265ffe3deb32f9183f97fb7f35798"
+      },
+      "current": {
+        "sha256": "aaf4f9f3b012210f04cb814d4170efc3cb4265ffe3deb32f9183f97fb7f35798",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/exceptions.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "61f3b3649aa10811213feca5eccd8fc46be6c03f76a3c1b9bdd261db079825f7"
+      },
+      "current": {
+        "sha256": "61f3b3649aa10811213feca5eccd8fc46be6c03f76a3c1b9bdd261db079825f7",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/input/binary_reader.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "d6736931d2753c9a99489ff63d23a8050715766754eb525ca2ebefc2a8f299de"
+      },
+      "current": {
+        "sha256": "d6736931d2753c9a99489ff63d23a8050715766754eb525ca2ebefc2a8f299de",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/input/input_adapters.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "49f5e02a2e27bcafd1f787c53978c5cd43372dc1e919cb629ca3a73c5cc7c558"
+      },
+      "current": {
+        "sha256": "49f5e02a2e27bcafd1f787c53978c5cd43372dc1e919cb629ca3a73c5cc7c558",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/input/json_sax.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "5bc8c617088471879d1907a378753d0a9fa59ea891d6c21ff21778e380cb5a17"
+      },
+      "current": {
+        "sha256": "5bc8c617088471879d1907a378753d0a9fa59ea891d6c21ff21778e380cb5a17",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/input/lexer.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "07635508c4504bae031b40a3f602b642ffd51be011cf602fcb6cf94ad0a49f88"
+      },
+      "current": {
+        "sha256": "07635508c4504bae031b40a3f602b642ffd51be011cf602fcb6cf94ad0a49f88",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/input/parser.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "2f14e9362e3247bb17391398466f803840c4bb6f45a75d48862b4b6af99b5f9e"
+      },
+      "current": {
+        "sha256": "2f14e9362e3247bb17391398466f803840c4bb6f45a75d48862b4b6af99b5f9e",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/input/position_t.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "74165b5bfc846ec864a1a925f2581954b138156412fe55ec3d777117acd344d9"
+      },
+      "current": {
+        "sha256": "74165b5bfc846ec864a1a925f2581954b138156412fe55ec3d777117acd344d9",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/iterators/internal_iterator.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "ac86431bcf82d1b91e6d49124bb8a03d04837ebfdf5ef50ec72ff71995b6e79b"
+      },
+      "current": {
+        "sha256": "ac86431bcf82d1b91e6d49124bb8a03d04837ebfdf5ef50ec72ff71995b6e79b",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/iterators/iter_impl.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "fc25cb1b0e5361d57bccc8ce0501fee9c0ff64df7d47a04da04fbbba8109675e"
+      },
+      "current": {
+        "sha256": "fc25cb1b0e5361d57bccc8ce0501fee9c0ff64df7d47a04da04fbbba8109675e",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/iterators/iteration_proxy.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "3e5636040fea7ec7fb0009aee37e0b2155530a4491100ac3a1baec09db64d070"
+      },
+      "current": {
+        "sha256": "3e5636040fea7ec7fb0009aee37e0b2155530a4491100ac3a1baec09db64d070",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/iterators/iterator_traits.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "95dc7a5967febab672cf2f221e8aaaa5165d53728444b31f2bca708224cd02d9"
+      },
+      "current": {
+        "sha256": "95dc7a5967febab672cf2f221e8aaaa5165d53728444b31f2bca708224cd02d9",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/iterators/json_reverse_iterator.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "b099eedf9f8ad19a0b8d1e29ef8fea84455937c8454befe86941c6301b51f05e"
+      },
+      "current": {
+        "sha256": "b099eedf9f8ad19a0b8d1e29ef8fea84455937c8454befe86941c6301b51f05e",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/iterators/primitive_iterator.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "2a3a9324f3ba72e7589ecdf8f7d6f96a4bfd6c7c91818043d074e1330a5c1f8d"
+      },
+      "current": {
+        "sha256": "2a3a9324f3ba72e7589ecdf8f7d6f96a4bfd6c7c91818043d074e1330a5c1f8d",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/json_pointer.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "b1a571a0a20aa0db7876c6ea0c62a7fad9052d7d1defd26329a412df9c504eca"
+      },
+      "current": {
+        "sha256": "b1a571a0a20aa0db7876c6ea0c62a7fad9052d7d1defd26329a412df9c504eca",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/json_ref.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "159d8c9dddbe8c631019d8c4d08afdbd745c9129a80ef67f1adf32ab8ea092d3"
+      },
+      "current": {
+        "sha256": "159d8c9dddbe8c631019d8c4d08afdbd745c9129a80ef67f1adf32ab8ea092d3",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/macro_scope.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "891aeefbbd8b028825433153a15709b865ce4d8b9bcb299f30fa8ee0cda90dfe"
+      },
+      "current": {
+        "sha256": "891aeefbbd8b028825433153a15709b865ce4d8b9bcb299f30fa8ee0cda90dfe",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/macro_unscope.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "5eec4b9189b025a9ffad4c37d9348c51d236c451f2faf040ef535174027f49f0"
+      },
+      "current": {
+        "sha256": "5eec4b9189b025a9ffad4c37d9348c51d236c451f2faf040ef535174027f49f0",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/meta/cpp_future.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "4727f0b2989ea9aa25c50d176cf376c88aff7ec6976cb0bdfb986a69a55dc915"
+      },
+      "current": {
+        "sha256": "4727f0b2989ea9aa25c50d176cf376c88aff7ec6976cb0bdfb986a69a55dc915",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/meta/detected.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "0376ff42f93d775f29451c62551b3c265ce53dbe3fe65e3284aee3e7a693a76b"
+      },
+      "current": {
+        "sha256": "0376ff42f93d775f29451c62551b3c265ce53dbe3fe65e3284aee3e7a693a76b",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/meta/is_sax.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "2a10d80d7c41a5775e4eef576596dd2a230ba23c8b35d83f1d136a40ec08b58c"
+      },
+      "current": {
+        "sha256": "2a10d80d7c41a5775e4eef576596dd2a230ba23c8b35d83f1d136a40ec08b58c",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/meta/type_traits.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "1177ebcee722da4e9f6c5609f05e203232ced97cd53cf8d3bfd305b38fa0976d"
+      },
+      "current": {
+        "sha256": "1177ebcee722da4e9f6c5609f05e203232ced97cd53cf8d3bfd305b38fa0976d",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/meta/void_t.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "8de592d4827204cae8e9248f94ccbf689f9cda546673899055f2db88be90d66d"
+      },
+      "current": {
+        "sha256": "8de592d4827204cae8e9248f94ccbf689f9cda546673899055f2db88be90d66d",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/output/binary_writer.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "715fd3acbce97c673c328953c92bac9c36e511fc4370b3c604743227ec0c70b2"
+      },
+      "current": {
+        "sha256": "715fd3acbce97c673c328953c92bac9c36e511fc4370b3c604743227ec0c70b2",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/output/output_adapters.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "ea054aa477a1b13cfb56dea8e4c40e9de52acc9b526d350c82cf45becc85b46e"
+      },
+      "current": {
+        "sha256": "ea054aa477a1b13cfb56dea8e4c40e9de52acc9b526d350c82cf45becc85b46e",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/output/serializer.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "c01eda39bebb381e71c0418a910f3e050df32da908df34f6bc9ec3eace6f1915"
+      },
+      "current": {
+        "sha256": "c01eda39bebb381e71c0418a910f3e050df32da908df34f6bc9ec3eace6f1915",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/detail/value_t.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "11f21d729fc9aaeae91d61897d4aa2887740b3c207b4e62b1d9d7ec2eb1421fa"
+      },
+      "current": {
+        "sha256": "11f21d729fc9aaeae91d61897d4aa2887740b3c207b4e62b1d9d7ec2eb1421fa",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/json.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "389ad735735448d9403c81f6ba68c2f318ac1a9aeadeeec5a88aa3229e834667"
+      },
+      "current": {
+        "sha256": "389ad735735448d9403c81f6ba68c2f318ac1a9aeadeeec5a88aa3229e834667",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/json_fwd.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "6e45599c784d514db49037d2d34953146f41eada57d69118bdabccc0b0b1d746"
+      },
+      "current": {
+        "sha256": "6e45599c784d514db49037d2d34953146f41eada57d69118bdabccc0b0b1d746",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/thirdparty/hedley/hedley.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "9e7d57bd9b0a09a0097318dce4806447b7fb69980d60d7f76c6894cd5aaa9bed"
+      },
+      "current": {
+        "sha256": "9e7d57bd9b0a09a0097318dce4806447b7fb69980d60d7f76c6894cd5aaa9bed",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/nlohmann/thirdparty/hedley/hedley_undef.hpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "d02f861451a7072e36db892ffecff892c36e8bc89b14a1a5795bf29e4b00a4d1"
+      },
+      "current": {
+        "sha256": "d02f861451a7072e36db892ffecff892c36e8bc89b14a1a5795bf29e4b00a4d1",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/player.h",
+      "status": "modified",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "46e13fa5ef2493e95db98e9dd357e1182d914b2505360b8918ca697811a51a82"
+      },
+      "current": {
+        "sha256": "e31dc90a8d8f91205234b19071b4dc850609b9a04c7a2c0aba8eb278f8477fd2",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/resources.h",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "a75deddd016535236751486bb19ab1210fb727cd1d3b987094d735e21c429614"
+      },
+      "current": {
+        "sha256": "a75deddd016535236751486bb19ab1210fb727cd1d3b987094d735e21c429614",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "include/wonder.h",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "e8cec6631184b30a2ee1d621f7cc5732ce3b0875278c37b73ede804b44991854"
+      },
+      "current": {
+        "sha256": "e8cec6631184b30a2ee1d621f7cc5732ce3b0875278c37b73ede804b44991854",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "main.cpp",
+      "status": "modified",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "cde2e751d66dd10e4ff4793172441bdd9314a80f3f37349a9258db7ce2674a4c"
+      },
+      "current": {
+        "sha256": "a0700b465020c237f354f2c75283d5dd14dc2bc05d605a646bceec5f5d08fa56",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "src/card.cpp",
+      "status": "unchanged",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "d479a2427f6a0f14e335cce68b895816fbc1662c7f87ffa35d6cd32a4de8a296"
+      },
+      "current": {
+        "sha256": "d479a2427f6a0f14e335cce68b895816fbc1662c7f87ffa35d6cd32a4de8a296",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "src/filer.cpp",
+      "status": "modified",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "ebaf2a1161f5955ec86f3047fe2f1e70ee03ac6fc6605b4fb3bd496b83cbcc46"
+      },
+      "current": {
+        "sha256": "4939196c0791bd80450055fba5684dfcb403fc51f206091dd5cb2104ab5d8a2b",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "src/player.cpp",
+      "status": "modified",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "ea3bd2f5862ac2b952f3e9848b0333c6f56effa073618645ce9ef4d9074e2ce1"
+      },
+      "current": {
+        "sha256": "f948ad044d0cc832cfda4e2105e36667dad02edf2312f17f6cbbfaf2405518dc",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "src/wonder.cpp",
+      "status": "modified",
+      "baseline": {
+        "mode": "100644",
+        "sha256": "d0ffb71fecc6efef4f52347fa39c34d1eb2b5039945c6a600dd182cd4ba51193"
+      },
+      "current": {
+        "sha256": "e7565a10464a2a629220fefe05ea5e7f78c363149f9d7bda8e9ae9f5a2caafbb",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "tests/test_choice_once_per_turn.cpp",
+      "status": "added",
+      "baseline": null,
+      "current": {
+        "sha256": "fa61b1abc801a394b9761b5edf6d1287ef828aa5762018f8e68778059502ef63",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "tests/test_choice_simple.cpp",
+      "status": "added",
+      "baseline": null,
+      "current": {
+        "sha256": "26f8fbbb2dc89f33820c7a24ed26fddf41c292d43d21dd79e83390035f7e2cad",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "tests/test_final_status.cpp",
+      "status": "added",
+      "baseline": null,
+      "current": {
+        "sha256": "5fc386146f0e941ea63b8e7aee54cb6069cf3dd88c00170adca5ac5534b875b4",
+        "mode": "100644"
+      }
+    },
+    {
+      "path": "tests/test_joint_action_resources.cpp",
+      "status": "added",
+      "baseline": null,
+      "current": {
+        "sha256": "a1829e235d6b71df15e1da5f4d2eed75f0b82f07426790056ae0523116a2ece9",
+        "mode": "100644"
+      }
+    }
+  ]
+}

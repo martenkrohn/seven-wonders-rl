@@ -71,7 +71,7 @@ class OpponentPool:
         # Apply lag filter
         if self.min_step_lag > 0:
             items = [
-                (s, f) for (s, f) in items if s <= (current_step - self.min_step_lag)
+                (s, f) for (s, f) in items if s == 0 or s <= (current_step - self.min_step_lag)
             ]
 
         # Apply max_size (keep newest)

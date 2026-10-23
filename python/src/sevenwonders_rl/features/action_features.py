@@ -369,7 +369,7 @@ def _build_player_context(
     built_card_ids = _resolve_built_card_ids(p)
     
     # Basic info
-    current_coins = p.get('resources', {}).get('coin', 0)
+    current_coins = p.get('resources', {}).get('coins', 0)
     
     # Discount flags
     discount_flags = set()
@@ -394,7 +394,7 @@ def _build_player_context(
     own_choice_resources.extend(_extract_wonder_choice_resources(wonder_id, wonder_stage))
     
     # Shields
-    own_shields = p.get('resources', {}).get('shield', 0)
+    own_shields = p.get('resources', {}).get('shields', 0)
     
     # Science
     own_science = _extract_science_counts(built_card_ids)
@@ -417,8 +417,8 @@ def _build_player_context(
         left_supply = _compute_tradable_supply(left_p, left_built, [])
         right_supply = _compute_tradable_supply(right_p, right_built, [])
         
-        left_shields = left_p.get('resources', {}).get('shield', 0)
-        right_shields = right_p.get('resources', {}).get('shield', 0)
+        left_shields = left_p.get('resources', {}).get('shields', 0)
+        right_shields = right_p.get('resources', {}).get('shields', 0)
         
         left_science = _extract_science_counts(left_built)
         right_science = _extract_science_counts(right_built)
@@ -478,21 +478,22 @@ def _fill_game_state_feats(
     action_idx: int,
     status: Dict[str, Any],
     ctx: PlayerContext,
+    agent_seat: int,
 ) -> None:
     """Fill game state features (age, round, cards remaining, military balance)."""
     # Age one-hot
-    current_era = status.get('current_era', 1)
+    current_era = status['game']['era']
     feats[action_idx, IDX['age_1']] = 1.0 if current_era == 1 else 0.0
     feats[action_idx, IDX['age_2']] = 1.0 if current_era == 2 else 0.0
     feats[action_idx, IDX['age_3']] = 1.0 if current_era == 3 else 0.0
     
     # Round number (normalized 0-1, typically 6 rounds per age)
-    current_round = status.get('current_round', 0)
+    current_round = status['game']['turn'] % 7
     max_rounds = 6  # Typically 6 rounds per age
     feats[action_idx, IDX['round_number_norm']] = min(current_round / max_rounds, 1.0)
     
     # Cards remaining in hand (normalized)
-    hand_size = len(status['players'][str(status.get('current_player', 0))].get('cards_hand', []))
+    hand_size = len(status['players'][str(agent_seat)].get('cards_hand', []))
     feats[action_idx, IDX['cards_remaining_norm']] = hand_size / 7.0
     
     # Military balance (your shields - neighbor's shields)
@@ -631,7 +632,7 @@ def _fill_discard_feats(
     status: Dict[str, Any],
 ) -> None:
     """Fill discard features (coins gained)."""
-    current_era = status.get('current_era', 1)
+    current_era = status['game']['era']
     discard_coins = 3  # Always 3 coins for discarding
     feats[action_idx, IDX['discard_delta_coins']] = float(discard_coins)
 
@@ -691,7 +692,7 @@ def build_action_feats(
             continue
         
         # Fill game state features (same for all legal actions)
-        _fill_game_state_feats(feats, action_idx, status, ctx)
+        _fill_game_state_feats(feats, action_idx, status, ctx, agent_seat)
         _fill_science_state_feats(feats, action_idx, ctx)
         _fill_opponent_state_feats(feats, action_idx, ctx)
         

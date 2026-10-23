@@ -1,0 +1,115 @@
+{
+  "date": "2026-10-23",
+  "purpose": "Runtime throughput comparison, not playing-strength evaluation",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "versions": {
+    "numpy": "2.4.2",
+    "torch": "2.10.0",
+    "gymnasium": "1.2.3"
+  },
+  "source_commit": "9a0255e814703d703385579050dd9d0b43924306",
+  "dirty": true,
+  "engine_sha256": "c2fb8595a1f5edf8c8accd3fe4b552a3c98ecd31fdc6fa987ea20305524e67d8",
+  "repeats": 5,
+  "n_envs": 2,
+  "rollout_horizon": 64,
+  "training_steps_per_trial": 2048,
+  "transport_games_per_trial": 20,
+  "training_transitions": 40960,
+  "training_completed_games": 1920,
+  "transport_completed_games": 400,
+  "failed_games": 0,
+  "all_paired_behavior_fingerprints_match": true,
+  "notes": "Warm-up excluded. Alternating configuration order. RSS is session high-water mark. Training wall includes startup/checkpoints; evaluation disabled.",
+  "results": [
+    {
+      "mode": "transport",
+      "engine_poll_us": 0,
+      "repeats": 5,
+      "steps_per_second_median": 219.44848796426598,
+      "steps_per_second_std": 42.520183201465414,
+      "paired_speed_ratio_median": 1.0,
+      "behavior_identical_to_baseline": true,
+      "child_cpu_seconds_median": 3.6087309999999775,
+      "storage": "ext4"
+    },
+    {
+      "mode": "transport",
+      "engine_poll_us": 1000,
+      "repeats": 5,
+      "steps_per_second_median": 317.8850164074816,
+      "steps_per_second_std": 40.0516725151941,
+      "paired_speed_ratio_median": 1.4485632567185633,
+      "behavior_identical_to_baseline": true,
+      "child_cpu_seconds_median": 0.4695270000000846,
+      "storage": "ext4"
+    },
+    {
+      "mode": "transport",
+      "engine_poll_us": 0,
+      "repeats": 5,
+      "steps_per_second_median": 350.4480761933626,
+      "steps_per_second_std": 18.682479678050232,
+      "paired_speed_ratio_median": 1.4953127456221766,
+      "behavior_identical_to_baseline": true,
+      "child_cpu_seconds_median": 2.1575880000000325,
+      "storage": "tmpfs"
+    },
+    {
+      "mode": "transport",
+      "engine_poll_us": 1000,
+      "repeats": 5,
+      "steps_per_second_median": 420.3005539840726,
+      "steps_per_second_std": 76.34662168088062,
+      "paired_speed_ratio_median": 1.8795570076986419,
+      "behavior_identical_to_baseline": true,
+      "child_cpu_seconds_median": 0.33648899999997184,
+      "storage": "tmpfs"
+    },
+    {
+      "mode": "training",
+      "engine_poll_us": 0,
+      "repeats": 5,
+      "steps_per_second_median": 82.93403303526495,
+      "steps_per_second_std": 1.2253010056760651,
+      "paired_speed_ratio_median": 1.0,
+      "behavior_identical_to_baseline": true,
+      "child_cpu_seconds_median": 65.29138000000012,
+      "storage": "ext4"
+    },
+    {
+      "mode": "training",
+      "engine_poll_us": 1000,
+      "repeats": 5,
+      "steps_per_second_median": 99.7988507042238,
+      "steps_per_second_std": 2.44063776010244,
+      "paired_speed_ratio_median": 1.2402168640877023,
+      "behavior_identical_to_baseline": true,
+      "child_cpu_seconds_median": 23.378650000000007,
+      "storage": "ext4"
+    },
+    {
+      "mode": "training",
+      "engine_poll_us": 0,
+      "repeats": 5,
+      "steps_per_second_median": 100.02833292273208,
+      "steps_per_second_std": 1.5515761452111008,
+      "paired_speed_ratio_median": 1.2007667378663984,
+      "behavior_identical_to_baseline": true,
+      "child_cpu_seconds_median": 52.87422400000003,
+      "storage": "tmpfs"
+    },
+    {
+      "mode": "training",
+      "engine_poll_us": 1000,
+      "repeats": 5,
+      "steps_per_second_median": 124.79734112244928,
+      "steps_per_second_std": 8.517421352687224,
+      "paired_speed_ratio_median": 1.5088129636735899,
+      "behavior_identical_to_baseline": true,
+      "child_cpu_seconds_median": 18.23199900000003,
+      "storage": "tmpfs"
+    }
+  ]
+}

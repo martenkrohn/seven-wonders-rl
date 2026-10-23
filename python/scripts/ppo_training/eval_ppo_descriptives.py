@@ -26,8 +26,9 @@ from __future__ import annotations
 
 import argparse
 import json
-from collections import defaultdict
-from dataclasses import dataclass, field
+import shutil
+from collections import defaultdict, Counter
+from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -41,6 +42,10 @@ from sevenwonders_rl.policies.specialist_policies import _is_science_action, _is
 from sevenwonders_rl.features.action_feature_schema import IDX
 from sevenwonders_rl.utils.ppo_model import ActorCritic
 from sevenwonders_rl.utils.ppo_utils import flatten_global
+from sevenwonders_rl.utils.checkpoints import load_model as load_checkpoint_model, manifest, file_hash
+from sevenwonders_rl.utils.runtime import atomic_json, run_io_root
+from sevenwonders_rl.utils.seeding import derive_seed
+from sevenwonders_rl.evaluation.runner import run_game, aggregate
 
 
 # Card color mapping
@@ -96,6 +101,7 @@ class ActionEvent:
     science_gain: float
     invalid_returned: bool
     card_color: str
+    execution: str = "requested"
 
 
 @dataclass
@@ -105,6 +111,7 @@ class PPOPolicyLogger:
     model: ActorCritic
     device: torch.device
     events: List[ActionEvent] = field(default_factory=list)
+    deterministic: bool = True
 
     def select_action(self, obs: Dict[str, Any], rng: Optional[np.random.Generator] = None) -> int:
         # Convert obs to tensors
@@ -119,9 +126,13 @@ class PPOPolicyLogger:
             action_logits = action_logits.masked_fill(action_mask == 0, float('-inf'))
             
             action_probs = torch.softmax(action_logits, dim=-1)
-            dist = torch.distributions.Categorical(action_probs)
-            action = dist.sample()
-            a = int(action.item())
+            if self.deterministic:
+                a = int(action_logits.argmax(-1).item())
+            else:
+                if rng is None:
+                    raise ValueError("Stochastic evaluation requires a local RNG")
+                probs = action_probs.squeeze(0).cpu().numpy().astype(np.float64)
+                a = int(rng.choice(len(probs), p=probs / probs.sum()))
 
         mask = np.asarray(obs["action_mask"], dtype=np.int8)
         invalid_returned = not (0 <= a < len(mask) and mask[a] == 1)
@@ -150,17 +161,17 @@ class PPOPolicyLogger:
             "delta_prod_loom", "delta_prod_glass", "delta_prod_papyrus",
             "delta_prod_choice_raw", "delta_prod_choice_manuf",
         ]
-        prod_gain = float(sum(float(f[IDX.get(k, 0)]) for k in prod_keys))
+        prod_gain = float(sum(float((f[IDX[k]] if k in IDX else 0.0)) for k in prod_keys))
 
-        shields_gain = float(f[IDX.get("delta_shields", 0)]) + float(f[IDX.get("wonder_delta_shields", 0)])
+        shields_gain = float((f[IDX["delta_shields"]] if "delta_shields" in IDX else 0.0)) + float((f[IDX["wonder_delta_shields"]] if "wonder_delta_shields" in IDX else 0.0))
         science_gain = float(
-            f[IDX.get("delta_science_gear", 0)] +
-            f[IDX.get("delta_science_compass", 0)] +
-            f[IDX.get("delta_science_tablet", 0)] +
-            f[IDX.get("wonder_delta_science_gear", 0)] +
-            f[IDX.get("wonder_delta_science_compass", 0)] +
-            f[IDX.get("wonder_delta_science_tablet", 0)] +
-            f[IDX.get("wonder_effect_add_science", 0)]
+            (f[IDX["delta_science_gear"]] if "delta_science_gear" in IDX else 0.0) +
+            (f[IDX["delta_science_compass"]] if "delta_science_compass" in IDX else 0.0) +
+            (f[IDX["delta_science_tablet"]] if "delta_science_tablet" in IDX else 0.0) +
+            (f[IDX["wonder_delta_science_gear"]] if "wonder_delta_science_gear" in IDX else 0.0) +
+            (f[IDX["wonder_delta_science_compass"]] if "wonder_delta_science_compass" in IDX else 0.0) +
+            (f[IDX["wonder_delta_science_tablet"]] if "wonder_delta_science_tablet" in IDX else 0.0) +
+            (f[IDX["wonder_effect_add_science"]] if "wonder_effect_add_science" in IDX else 0.0)
         )
 
         card_color = get_card_color_from_feats(f)
@@ -229,17 +240,17 @@ class BotPolicyLogger:
             "delta_prod_loom", "delta_prod_glass", "delta_prod_papyrus",
             "delta_prod_choice_raw", "delta_prod_choice_manuf",
         ]
-        prod_gain = float(sum(float(f[IDX.get(k, 0)]) for k in prod_keys))
+        prod_gain = float(sum(float((f[IDX[k]] if k in IDX else 0.0)) for k in prod_keys))
 
-        shields_gain = float(f[IDX.get("delta_shields", 0)]) + float(f[IDX.get("wonder_delta_shields", 0)])
+        shields_gain = float((f[IDX["delta_shields"]] if "delta_shields" in IDX else 0.0)) + float((f[IDX["wonder_delta_shields"]] if "wonder_delta_shields" in IDX else 0.0))
         science_gain = float(
-            f[IDX.get("delta_science_gear", 0)] +
-            f[IDX.get("delta_science_compass", 0)] +
-            f[IDX.get("delta_science_tablet", 0)] +
-            f[IDX.get("wonder_delta_science_gear", 0)] +
-            f[IDX.get("wonder_delta_science_compass", 0)] +
-            f[IDX.get("wonder_delta_science_tablet", 0)] +
-            f[IDX.get("wonder_effect_add_science", 0)]
+            (f[IDX["delta_science_gear"]] if "delta_science_gear" in IDX else 0.0) +
+            (f[IDX["delta_science_compass"]] if "delta_science_compass" in IDX else 0.0) +
+            (f[IDX["delta_science_tablet"]] if "delta_science_tablet" in IDX else 0.0) +
+            (f[IDX["wonder_delta_science_gear"]] if "wonder_delta_science_gear" in IDX else 0.0) +
+            (f[IDX["wonder_delta_science_compass"]] if "wonder_delta_science_compass" in IDX else 0.0) +
+            (f[IDX["wonder_delta_science_tablet"]] if "wonder_delta_science_tablet" in IDX else 0.0) +
+            (f[IDX["wonder_effect_add_science"]] if "wonder_effect_add_science" in IDX else 0.0)
         )
 
         card_color = get_card_color_from_feats(f)
@@ -271,26 +282,8 @@ class BotPolicyLogger:
         return int(a)
 
 
-def load_model(checkpoint_path: Path, device: torch.device) -> ActorCritic:
-    """Load PPO model from checkpoint."""
-    ckpt = torch.load(checkpoint_path, map_location=device, weights_only=True)
-    
-    # Extract model config from checkpoint or use defaults
-    config = ckpt.get("config", {})
-    global_dim = config.get("global_dim", 90)
-    action_feat_dim = config.get("action_feat_dim", 92)
-    hidden_dim = config.get("hidden_dim", 128)  # Default to 128
-    
-    model = ActorCritic(
-        global_dim=global_dim,
-        action_feat_dim=action_feat_dim,
-        hidden=hidden_dim,
-    ).to(device)
-    
-    model.load_state_dict(ckpt["state_dict"])
-    model.eval()
-    
-    return model
+def load_model(checkpoint_path, device, allow_legacy=False):
+    return load_checkpoint_model(checkpoint_path, device, allow_legacy=allow_legacy)
 
 
 def repo_root() -> Path:
@@ -312,6 +305,8 @@ def parse_opponent_mix(spec: str) -> Dict[str, float]:
         mix[name.strip()] = float(weight.strip())
     
     # Normalize
+    if not mix or any(not np.isfinite(v) or v < 0 for v in mix.values()) or sum(mix.values()) <= 0:
+        raise ValueError("Opponent weights must be finite, nonnegative and have positive sum")
     total = sum(mix.values())
     if total > 0:
         mix = {k: v / total for k, v in mix.items()}
@@ -333,7 +328,7 @@ def is_checkpoint_path(name: str) -> bool:
     return "/" in name or name.endswith(".pt")
 
 
-def create_policy(name: str, seed: int, device: torch.device) -> tuple[Any, str]:
+def create_policy(name: str, seed: int, device: torch.device, allow_legacy=False) -> tuple[Any, str]:
     """Create a policy instance (bot or PPO checkpoint).
     
     Returns:
@@ -346,9 +341,9 @@ def create_policy(name: str, seed: int, device: torch.device) -> tuple[Any, str]
             raise FileNotFoundError(f"Checkpoint not found: {ckpt_path}")
         
         # Use checkpoint filename as label (without .pt extension)
-        label = ckpt_path.stem
+        label = f"{ckpt_path.stem}_{file_hash(ckpt_path)[:12]}"
         
-        model = load_model(ckpt_path, device)
+        model = load_model(ckpt_path, device, allow_legacy=allow_legacy)
         return model, f"ppo_{label}"
     else:
         # Create bot policy
@@ -356,149 +351,81 @@ def create_policy(name: str, seed: int, device: torch.device) -> tuple[Any, str]
             return BaselinePolicy(seed=seed), "baseline"
         elif name == "military":
             return MilitaryTempoPolicy(seed=seed), "military"
-        elif name == "science" or name == "scientist":
+        elif name in ("science", "scientist", "mad_scientist"):
             return MadScientistPolicy(seed=seed), "scientist"
         else:
             raise ValueError(f"Unknown bot: {name}")
 
 
 
-def run_evaluation(
-    model: ActorCritic,
-    device: torch.device,
-    n_games: int,
-    opp_mix: Dict[str, float],
-    base_seed: int,
-) -> Tuple[List[ActionEvent], List[Dict[str, Any]]]:
-    """Run evaluation games and collect action events."""
+def run_evaluation(model, device, n_games, opp_mix, base_seed, out_dir=None,
+                   io_root=None, action_mode="greedy", engine_poll_us=1000,
+                   poll_seconds=.001, allow_legacy=False, checkpoint_id=None):
     rr = repo_root()
-    
-    all_events: List[ActionEvent] = []
-    finals: List[Dict[str, Any]] = []
-    
-    ppo_logger = PPOPolicyLogger("ppo", model, device)
-    
+    output = Path(out_dir) if out_dir else run_io_root("runs/evaluations", "detail")
+    output.mkdir(parents=True, exist_ok=True)
+    exchange = run_io_root(io_root or rr / "io", "evaluation")
+    for name in ("games.jsonl", "actions.jsonl"):
+        (output / name).open("x").close()
+    all_events, attempts = [], []
+    ppo_logger = PPOPolicyLogger("ppo", model, device, deterministic=action_mode == "greedy")
     for game_idx in range(n_games):
-        game_seed = base_seed + game_idx
-        rng = np.random.default_rng(game_seed)
-        
-        # Sample opponents
-        opp_left, opp_right = sample_opponents(opp_mix, rng)
-        
-        # Create opponent policies (bot or PPO)
-        left_policy, left_label_base = create_policy(opp_left, seed=42, device=device)
-        right_policy, right_label_base = create_policy(opp_right, seed=43, device=device)
-        
-        # Ensure unique labels per seat (append seat identifier if same base label)
-        if left_label_base == right_label_base:
-            left_label = f"{left_label_base}_left"
-            right_label = f"{right_label_base}_right"
-        else:
-            left_label = left_label_base
-            right_label = right_label_base
-        
-        # Create appropriate loggers based on policy type
-        if isinstance(left_policy, ActorCritic):
-            left_logger = PPOPolicyLogger(left_label, left_policy, device)
-        else:
-            left_logger = BotPolicyLogger(left_label, left_policy)
-        
-        if isinstance(right_policy, ActorCritic):
-            right_logger = PPOPolicyLogger(right_label, right_policy, device)
-        else:
-            right_logger = BotPolicyLogger(right_label, right_policy)
-        
-        loggers = [ppo_logger, left_logger, right_logger]
-        
-        opponent_policies = [
-            SeatPolicy("ppo", policy=ppo_logger),
-            SeatPolicy(left_label, policy=left_logger),
-            SeatPolicy(right_label, policy=right_logger),
-        ]
-        
-        io_dir = rr / "io" / "eval_ppo_descriptives" / f"game_{game_idx}" / "io"
-        io_dir.mkdir(parents=True, exist_ok=True)
-        
-        env = SevenWondersEnv(
-            repo_root=str(rr),
-            engine_path="build/7Wonders",
-            io_dir=str(io_dir),
-            agent_seat=0,
-            opponent_policies=opponent_policies,
-            invalid_action_fallback="raise",
-        )
-        
-        try:
-            obs, info = env.reset(seed=game_seed)
-            terminated = False
-            truncated = False
-            steps = 0
-            
-            while not (terminated or truncated):
-                steps += 1
-                if steps > 40:
-                    raise RuntimeError("Stalled (too many steps)")
-                
-                # Tag loggers with game/seat before step
-                for s in (0, 1, 2):
-                    loggers[s]._game_idx = game_idx
-                    loggers[s]._seat = s
-                
-                a0 = int(loggers[0].select_action(obs, rng))
-                obs, reward, terminated, truncated, info = env.step(a0)
-                
-                if truncated:
-                    raise RuntimeError(f"Truncated: {info.get('truncated_reason', '')}")
-            
-            status = info["status"]
-            players = status["players"]
-            
-            totals = [int(players[str(s)]["points"]["total"]) for s in (0, 1, 2)]
-            coins = [int(players[str(s)]["resources"].get("coins", 0)) for s in (0, 1, 2)]
-            
-            vp_breakdown = {}
-            for seat in (0, 1, 2):
-                pts = players[str(seat)]["points"]
-                vp_breakdown[seat] = {
-                    "civilian": int(pts.get("civilian", 0)),
-                    "commercial": int(pts.get("commercial", 0)),
-                    "guild": int(pts.get("guild", 0)),
-                    "military": int(pts.get("military", 0)),
-                    "scientific": int(pts.get("scientific", 0)),
-                    "wonder": int(pts.get("wonder", 0)),
-                    "total": int(pts.get("total", 0)),
-                }
-            
-            wonder_stages = {
-                seat: int(players[str(seat)].get("wonder_stage", 0))
-                for seat in (0, 1, 2)
-            }
-            
-            best = max((totals[s], coins[s], -s) for s in (0, 1, 2))
-            winner_seat = int(-best[2])
-            
-            finals.append({
-                "game_idx": game_idx,
-                "opponents": (left_label, right_label),
-                "seed": game_seed,
-                "totals": totals,
-                "coins": coins,
-                "vp_breakdown": vp_breakdown,
-                "wonder_stages": wonder_stages,
-                "winner_seat": winner_seat,
-            })
-            
-            for lg in loggers:
-                all_events.extend(lg.events)
-                lg.events.clear()  # Clear events after extending to avoid duplication
-        
-        finally:
-            env.close()
-        
-        if (game_idx + 1) % 10 == 0:
-            print(f"  Completed {game_idx + 1}/{n_games} games...")
-    
-    return all_events, finals
+        game_seed = derive_seed(base_seed, "evaluation", game_idx)
+        rng = np.random.default_rng(derive_seed(base_seed, "opponents", game_idx))
+        left_name, right_name = sample_opponents(opp_mix, rng)
+        # Relative to seat 0, left is seat 2 and right is seat 1.
+        policies, labels = {}, {}
+        for seat, name in ((2, left_name), (1, right_name)):
+            policy, label = create_policy(name, derive_seed(game_seed, "policy", seat), device, allow_legacy)
+            labels[seat] = label + ("_left" if seat == 2 else "_right")
+            policies[seat] = (PPOPolicyLogger(labels[seat], policy, device,
+                             deterministic=action_mode == "greedy") if isinstance(policy, ActorCritic)
+                             else BotPolicyLogger(labels[seat], policy))
+        loggers = [ppo_logger, policies[1], policies[2]]
+        for seat, logger in enumerate(loggers):
+            logger.events.clear()
+            logger._game_idx, logger._seat = game_idx, seat
+        env = SevenWondersEnv(repo_root=str(rr), io_dir=str(exchange / f"game_{game_idx}" / "io"),
+            agent_seat=0, opponent_policies=[SeatPolicy(l.name, policy=l) for l in loggers],
+            invalid_action_fallback="raise", engine_poll_us=engine_poll_us, poll_seconds=poll_seconds)
+        def on_step(obs, action, info):
+            acknowledgements = info.get("status", {}).get("last_actions", {})
+            for seat, logger in enumerate(loggers):
+                if logger.events:
+                    logger.events[-1].execution = acknowledgements.get(str(seat), {}).get("status", "unknown")
+        agent_rng = np.random.default_rng(derive_seed(game_seed, "policy", 0))
+        record, info = run_game(env, lambda obs: ppo_logger.select_action(obs, agent_rng),
+            {"game_id": game_idx, "game_idx": game_idx, "engine_seed": game_seed, "seed": game_seed,
+             "agent_seat": 0, "checkpoint_id": checkpoint_id,
+             "policy_seeds": {str(s): derive_seed(game_seed, "policy", s) for s in (0, 1, 2)},
+             "action_selection_mode": action_mode, "legacy_override": allow_legacy,
+             "opponents": {"left": labels[2], "right": labels[1]},
+             "opponents_by_seat": {str(s): labels[s] for s in (1, 2)},
+             "unavailable_features": ["wonder_delta_shields", "wonder_delta_science_*", "wonder_effect_add_science"]}, on_step)
+        if record["status"] == "completed":
+            players = info["status"]["players"]
+            record.update(coins=[int(players[str(s)]["resources"]["coins"]) for s in (0,1,2)],
+                          vp_breakdown={s: players[str(s)]["points"] for s in (0,1,2)},
+                          wonder_stages={s: players[str(s)]["wonder_stage"] for s in (0,1,2)})
+        counts = Counter()
+        for event in ppo_logger.events:
+            if event.execution == "applied":
+                counts["discard" if event.is_discard else "build_wonder" if event.is_wonder else
+                       "prod_build" if event.prod_gain > 0 else "other"] += 1
+        record["action_counts"] = dict(counts)
+        attempts.append(record)
+        with (output / "games.jsonl").open("a") as f:
+            f.write(json.dumps(record, allow_nan=False) + "\n")
+        with (output / "actions.jsonl").open("a") as f:
+            for logger in loggers:
+                for event in logger.events:
+                    f.write(json.dumps(asdict(event), allow_nan=False) + "\n")
+                    all_events.append(event)
+                logger.events.clear()
+        shutil.rmtree(env.io_dir.parent)
+    atomic_json(output / "summary.json", aggregate(attempts))
+    shutil.rmtree(exchange)
+    return all_events, attempts
 
 
 def categorize(e: ActionEvent) -> str:
@@ -554,7 +481,15 @@ def per_game_metrics(game_events: List[ActionEvent]) -> Dict[str, float]:
 
 def summarize(events: List[ActionEvent], finals: List[Dict[str, Any]]) -> None:
     """Print comprehensive statistics."""
-    policies = ["ppo"] + sorted(set(p for f in finals for p in f["opponents"]))
+    print("Completion summary:", aggregate(finals))
+    completed_ids = {f["game_idx"] for f in finals if f["status"] == "completed"}
+    finals = [f for f in finals if f["status"] == "completed"]
+    events = [e for e in events if e.game_idx in completed_ids and e.execution == "applied"]
+    if not finals:
+        print("No completed games; performance metrics unavailable.")
+        return
+    print("Gain statistics are feature estimates; unavailable wonder gains are excluded.")
+    policies = ["ppo"] + sorted(set(p for f in finals for p in f["opponents_by_seat"].values()))
     ages = (1, 2, 3)
     
     # Index events
@@ -571,7 +506,7 @@ def summarize(events: List[ActionEvent], finals: List[Dict[str, Any]]) -> None:
     final_by_gp: Dict[tuple[int, str], Dict[str, Any]] = {}
     for fin in finals:
         gidx = int(fin["game_idx"])
-        left_label, right_label = fin["opponents"]
+        left_label, right_label = (fin["opponents_by_seat"][str(s)] for s in (1, 2))
         vp_breakdown = fin["vp_breakdown"]
         wonder_stages = fin["wonder_stages"]
         coins = fin["coins"]
@@ -598,7 +533,7 @@ def summarize(events: List[ActionEvent], finals: List[Dict[str, Any]]) -> None:
     
     for fin in finals:
         gidx = int(fin["game_idx"])
-        left_label, right_label = fin["opponents"]
+        left_label, right_label = (fin["opponents_by_seat"][str(s)] for s in (1, 2))
         policy_map = {0: "ppo", 1: left_label, 2: right_label}
         
         for seat, pol in policy_map.items():
@@ -659,7 +594,7 @@ def summarize(events: List[ActionEvent], finals: List[Dict[str, Any]]) -> None:
     
     for fin in finals:
         gidx = int(fin["game_idx"])
-        left_label, right_label = fin["opponents"]
+        left_label, right_label = (fin["opponents_by_seat"][str(s)] for s in (1, 2))
         policy_map = {0: "ppo", 1: left_label, 2: right_label}
         
         for seat, pol in policy_map.items():
@@ -669,6 +604,7 @@ def summarize(events: List[ActionEvent], finals: List[Dict[str, Any]]) -> None:
                 if n == 0:
                     for b in BUCKETS:
                         per_policy_age[(pol, age)][b].append(0.0)
+                        per_policy_age[(pol, age)]["count_" + b].append(0.0)
                     per_policy_age[(pol, age)]["n_actions"].append(0.0)
                     continue
                 
@@ -678,6 +614,7 @@ def summarize(events: List[ActionEvent], finals: List[Dict[str, Any]]) -> None:
                 
                 for b in BUCKETS:
                     per_policy_age[(pol, age)][b].append(cats[b] / n)
+                    per_policy_age[(pol, age)]["count_" + b].append(float(cats[b]))
                 per_policy_age[(pol, age)]["n_actions"].append(float(n))
     
     for pol in policies:
@@ -693,8 +630,7 @@ def summarize(events: List[ActionEvent], finals: List[Dict[str, Any]]) -> None:
             display_lines = []
             for b in BUCKETS:
                 m, s = mean_std(d[b])
-                c = m * mN
-                c_std = s * mN + m * sN
+                c, c_std = mean_std(d["count_" + b])
                 pct = m * 100
                 
                 display_lines.append(f"{b.capitalize():<12}: {c:>5.2f} ± {c_std:<5.2f} ({pct:>5.1f}%)")
@@ -711,14 +647,15 @@ def summarize(events: List[ActionEvent], finals: List[Dict[str, Any]]) -> None:
     
     wins = defaultdict(int)
     for f in finals:
-        winner_seat = f["winner_seat"]
-        left_label, right_label = f["opponents"]
-        policy_map = {0: "ppo", 1: left_label, 2: right_label}
-        wins[policy_map[winner_seat]] += 1
+        first_label, second_label = (f["opponents_by_seat"][str(s)] for s in (1, 2))
+        policy_map = {0: "ppo", 1: first_label, 2: second_label}
+        if len(f["winner_seats"]) == 1:
+            wins[policy_map[f["winner_seats"][0]]] += 1
     
     total_games = len(finals)
     for pol in policies:
-        print(f"  {pol}: wins={wins[pol]}  win_rate={wins[pol]/max(1,total_games):.3f}")
+        appearances = sum(pol == "ppo" or pol in f["opponents_by_seat"].values() for f in finals)
+        print(f"  {pol}: wins={wins[pol]}  appearances={appearances}  vp_win_rate={wins[pol]/max(1,appearances):.3f}")
     
     print("\n" + "=" * 80)
 
@@ -738,7 +675,15 @@ def main() -> None:
     ap.add_argument("--device", type=str, default="cpu",
                     help="Device to run model on (default: cpu)")
     
+    ap.add_argument("--out-dir")
+    ap.add_argument("--io-root")
+    ap.add_argument("--action-mode", choices=["greedy", "stochastic"], default="greedy")
+    ap.add_argument("--engine-poll-us", type=int, default=1000)
+    ap.add_argument("--poll-seconds", type=float, default=.001)
+    ap.add_argument("--allow-legacy", action="store_true")
     args = ap.parse_args()
+    if args.games <= 0 or args.seed < 0:
+        ap.error("games must be positive and seed nonnegative")
     
     # Resolve checkpoint path
     ckpt_path = Path(args.checkpoint)
@@ -754,18 +699,26 @@ def main() -> None:
     device = torch.device(args.device)
     
     print(f"\nLoading model from: {ckpt_path}")
-    model = load_model(ckpt_path, device)
+    model = load_model(ckpt_path, device, args.allow_legacy)
     
     print(f"Running {args.games} evaluation games...")
     print(f"Opponent mix: {opp_mix}")
     print(f"Seed: {args.seed}")
     
+    output = Path(args.out_dir).expanduser().resolve() if args.out_dir else run_io_root("runs/evaluations", "detail")
+    if args.out_dir and output.exists() and any(output.iterdir()):
+        raise ValueError("Evaluation output directory is not empty")
+    output.mkdir(parents=True, exist_ok=True)
+    atomic_json(output / "manifest.json", manifest(repo_root(), {**vars(args), "checkpoint_sha256": file_hash(ckpt_path)}))
     events, finals = run_evaluation(
         model=model,
         device=device,
         n_games=args.games,
         opp_mix=opp_mix,
-        base_seed=args.seed,
+        base_seed=args.seed, out_dir=output, io_root=args.io_root,
+        action_mode=args.action_mode, engine_poll_us=args.engine_poll_us,
+        poll_seconds=args.poll_seconds, allow_legacy=args.allow_legacy,
+        checkpoint_id=file_hash(ckpt_path),
     )
     
     print(f"\nCompleted {len(finals)} games, {len(events)} total actions logged.\n")

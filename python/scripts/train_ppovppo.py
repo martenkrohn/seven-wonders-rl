@@ -1263,4 +1263,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit("Historical trainer disabled: use scripts/ppo_training/train_unified.py --help (corrected GAE/protocol).")

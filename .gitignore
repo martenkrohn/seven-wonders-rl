@@ -52,3 +52,6 @@ results.txt
 /HANDOVER.md
 /*HANDOVER*.md
 /*handover*.md
+
+# Isolated performance benchmark exchange files
+/io_benchmark/

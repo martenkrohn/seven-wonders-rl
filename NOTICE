@@ -11,6 +11,10 @@ compared with the upstream baseline and documented on 2026-10-19:
 - include/player.h and src/player.cpp: selectable-production state and
   production/trading corrections.
 - src/wonder.cpp: Gizah B fourth-stage transition correction.
+- main.cpp and src/filer.cpp (2026-10-23): seeded RNG, final-scoring
+  status/protocol v2, action acknowledgements and atomic publication.
+- main.cpp (2026-10-23, ENG-006): isolate choice-resource allocation
+  between players' decisions; documented reproducer and regression test.
 - CMakeLists.txt: downstream regression-test targets and CTest registration.
 - python/: the Gymnasium/PyTorch RL extension, features, opponents,
   training/evaluation tools and tests.
@@ -33,4 +37,6 @@ tests. The original GUI artwork, rulebook/reference documents and historical
 scraped tables are not included. No rights in board-game trademarks or
 artwork, and no publisher affiliation, are claimed.
 
-See docs/ORIGIN.md for the verified file-level distinction.
+See docs/ORIGIN.md for the verified file-level distinction and
+docs/SIMULATOR_CHANGES.md for function-level changes, the exact upstream
+patch and the checked source checksum inventory.

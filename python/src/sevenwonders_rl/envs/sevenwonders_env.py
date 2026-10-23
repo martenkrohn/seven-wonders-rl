@@ -3,9 +3,9 @@ from __future__ import annotations
 
 import json
 import os
-import random
 import subprocess
 import time
+import math
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -22,6 +22,8 @@ from sevenwonders_rl.features.obs_builder import build_obs, compute_action_mask
 from sevenwonders_rl.features.action_feature_schema import K as K_ACTION_FEATS
 from sevenwonders_rl.policies.opponent_sampler import OpponentSampler
 from sevenwonders_rl.policies.registry import make_policy
+from sevenwonders_rl.utils.seeding import derive_seed
+from sevenwonders_rl.utils.runtime import run_io_root
 
 
 # ----------------------------
@@ -46,6 +48,13 @@ def decode_action(action_index: int) -> Tuple[int, int]:
 
 def encode_action(action_type: int, slot: int) -> int:
     return int(action_type) * N_SLOTS + int(slot)
+
+
+class EngineError(RuntimeError):
+    """A failed exchange, never a valid MDP transition."""
+    def __init__(self, reason: str, message: str):
+        super().__init__(message)
+        self.reason = reason
 
 
 @dataclass
@@ -118,7 +127,7 @@ class SevenWondersEnv(gym.Env):
         self,
         repo_root: str = ".",
         engine_path: str = "build/7Wonders",
-        io_dir: str = "io",
+        io_dir: Optional[str] = None,
         agent_seat: int = 0,
         opponent_policies: Optional[List[SeatPolicy]] = None,
         max_wait_seconds: float = 5.0,
@@ -128,6 +137,9 @@ class SevenWondersEnv(gym.Env):
         env_id: int = 0,
         opponent_weights: Optional[Dict[str, float]] = None,
         timers: Optional[Any] = None,
+        engine_poll_us: int = 1000,
+        poll_seconds: float = 0.001,
+        batch_opponents: bool = True,
     ):
         super().__init__()
         assert agent_seat in (0, 1, 2)
@@ -144,13 +156,29 @@ class SevenWondersEnv(gym.Env):
 
         self.repo_root = Path(base)
         self.engine_path = (self.repo_root / engine_path).resolve()
-        self.io_dir = (self.repo_root / io_dir).resolve()
+        self.io_dir = ((self.repo_root / io_dir).resolve() if io_dir is not None
+                       else run_io_root(self.repo_root / "io", "env") / "io")
+        if self.io_dir.name != "io":
+            raise ValueError("io_dir must end in /io: the engine uses ./io relative to its working directory")
 
         self.agent_seat = agent_seat
+        self.batch_opponents = batch_opponents
         self.max_wait_seconds = float(max_wait_seconds)
         self.invalid_action_fallback = invalid_action_fallback
         self.reward_scale = float(reward_scale)
         self.timers = timers
+        if not math.isfinite(self.reward_scale) or self.reward_scale <= 0:
+            raise ValueError("reward_scale must be finite and positive")
+        if not math.isfinite(self.max_wait_seconds) or self.max_wait_seconds <= 0:
+            raise ValueError("max_wait_seconds must be finite and positive")
+        if not 0 <= engine_poll_us <= 1_000_000 or not math.isfinite(poll_seconds) or poll_seconds < 0:
+            raise ValueError("Invalid polling interval")
+        self.engine_poll_us = engine_poll_us
+        self.poll_seconds = poll_seconds
+        self._stderr_file = None
+        self._engine_seed_rng = np.random.default_rng(seed)
+        self.engine_seed = None
+        self._seat_rngs = [np.random.default_rng() for _ in range(3)]
 
         # Seat policies for seats 0..2. Agent seat is None here; applied in step().
         if opponent_policies is None:
@@ -210,7 +238,7 @@ class SevenWondersEnv(gym.Env):
                 
                 # Game metadata: [era, turn, clockwise]
                 # era: 1-3, turn: 0-20, clockwise: 0-1
-                "game_meta": spaces.Box(low=np.array([1, 0, 0]), high=np.array([3, 20, 1]), shape=(3,), dtype=np.int32),
+                "game_meta": spaces.Box(low=np.array([1, 0, 0]), high=np.array([4, 21, 1]), shape=(3,), dtype=np.int32),
             }
         )
 
@@ -269,67 +297,70 @@ class SevenWondersEnv(gym.Env):
         except Exception as e:
             raise RuntimeError(f"Failed to parse game_status.json: {e}")
     
-    def _read_status_blocking(self, timeout: float = 5.0) -> Dict[str, Any]:
-        # Read with retries (used at startup).
-        status_path = self._status_file()
-        deadline = time.time() + timeout
-        last_err: Optional[Exception] = None
-        while time.time() < deadline:
-            if not status_path.exists():
-                time.sleep(0.01)
-                continue
+    def _validate_status(self, status: Dict[str, Any]) -> None:
+        try:
+            if status["protocol_version"] != 2:
+                raise ValueError("Engine protocol v2 required; rebuild the engine")
+            if status["game"]["engine_seed"] != self.engine_seed:
+                raise ValueError("Status belongs to another engine seed")
+            turn = status["game"]["turn"]
+            phase = status["game"]["phase"]
+            if not (0 <= turn <= 21) or phase != ("finished" if turn == 21 else "playing"):
+                raise ValueError("Inconsistent turn/phase")
+            for sid in (0, 1, 2):
+                int(status["players"][str(sid)]["points"]["total"])
+        except (KeyError, TypeError, ValueError) as exc:
+            raise EngineError("protocol_error", str(exc)) from exc
+
+    def _read_status_blocking(self, timeout: Optional[float] = None) -> Dict[str, Any]:
+        return self._wait_status(None, self.max_wait_seconds if timeout is None else timeout)
+
+    def _wait_status(self, prev_turn: Optional[int], timeout: float) -> Dict[str, Any]:
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            # Read before polling the process: a clean exit may have published final state.
             try:
-                txt = status_path.read_text(encoding="utf-8")
-                return json.loads(txt)
-            except Exception as e:
-                last_err = e
-                time.sleep(0.01)
-        raise RuntimeError(f"Failed to read/parse game_status.json within timeout. Last error: {last_err}")
+                if self.timers:
+                    with self.timers.time("transport.read_parse"):
+                        status = self._read_status()
+                else:
+                    status = self._read_status()
+            except (FileNotFoundError, RuntimeError) as exc:
+                # Atomic publishing means an existing malformed file is a protocol failure.
+                if isinstance(exc, RuntimeError):
+                    raise EngineError("protocol_error", str(exc)) from exc
+            else:
+                self._validate_status(status)
+                turn = int(status["game"]["turn"])
+                if prev_turn is None:
+                    if turn != 0:
+                        raise EngineError("protocol_error", "Initial status is not turn zero")
+                    return status
+                if turn == prev_turn + 1:
+                    return status
+                if turn != prev_turn:
+                    raise EngineError("protocol_error", "Unexpected turn sequence")
+            if self.proc is not None and self.proc.poll() is not None:
+                # The process can publish its final state between our read and poll.
+                # Re-read after observing exit; never accept the stale pre-exit state.
+                try:
+                    final = self._read_status()
+                    self._validate_status(final)
+                    if (prev_turn is not None and final["game"]["turn"] == prev_turn + 1
+                            and final["game"]["phase"] == "finished"):
+                        return final
+                except (FileNotFoundError, RuntimeError):
+                    pass
+                raise EngineError("engine_exit", f"Engine exited with code {self.proc.returncode}")
+            if self.timers:
+                with self.timers.time("transport.poll_sleep"):
+                    time.sleep(self.poll_seconds)
+            else:
+                time.sleep(self.poll_seconds)
+        raise EngineError("timeout", "Timed out waiting for engine status")
 
     def _wait_for_turn_change(self, prev_turn: int) -> Dict[str, Any]:
-        from time import perf_counter_ns
-        deadline = time.time() + self.max_wait_seconds
-        debug_count = 0
-        status_path = self._status_file()
-        last_mtime = None
-        timers = self.timers
-        
-        while time.time() < deadline:
-            if self.proc is not None and self.proc.poll() is not None:
-                # Engine exited; try one last read (might fail if file missing)
-                try:
-                    return self._read_status()
-                except Exception:
-                    return self._last_status or {}
-            
-            # Always attempt to read/parse (no mtime gate)
-            try:
-                if timers: t0 = perf_counter_ns()
-                txt = status_path.read_text(encoding="utf-8")
-                if timers: timers.add_ns("env.wait_read_status", perf_counter_ns() - t0)
-                
-                if timers: t0 = perf_counter_ns()
-                status = json.loads(txt)
-                if timers: timers.add_ns("env.wait_parse_status", perf_counter_ns() - t0)
-                
-                turn = int(status["game"]["turn"])
-                if turn != prev_turn:
-                    return status
-            except (FileNotFoundError, json.JSONDecodeError, KeyError, RuntimeError) as e:
-                debug_count += 1
-                if debug_count == 5000:  # After ~5 seconds with 1ms polling
-                    print(f"\n[HANG DEBUG] Env {self.io_dir}: Unable to parse turn change")
-                    print(f"  Expected turn != {prev_turn}")
-                    print(f"  Status file exists: {status_path.exists()}")
-                    print(f"  Error: {type(e).__name__}")
-            
-            if timers:
-                t0 = perf_counter_ns()
-                time.sleep(0.001)
-                timers.add_ns("env.wait_poll_sleep", perf_counter_ns() - t0)
-            else:
-                time.sleep(0.001)  # 1ms polling interval
-        raise RuntimeError("Timeout waiting for engine to advance to next turn.")
+        return self._wait_status(prev_turn, self.max_wait_seconds)
 
     # ------------------------
     # Action mask + decoding
@@ -349,13 +380,17 @@ class SevenWondersEnv(gym.Env):
         card_name = hand[slot]
         subcommand = ACTION_TYPES[action_type]
 
-        return {"command": {"subcommand": subcommand, "argument": card_name, "extra": ""}}
+        return {"turn": int(status["game"]["turn"]),
+                "command": {"subcommand": subcommand, "argument": card_name, "extra": ""}}
 
     # ------------------------
     # Observation construction
     # ------------------------
     def _build_obs(self, status: Dict[str, Any]) -> Dict[str, Any]:
         """Wrapper for obs_builder.build_obs."""
+        if self.timers:
+            with self.timers.time("features.agent_observation"):
+                return build_obs(status, self.agent_seat)
         return build_obs(status, self.agent_seat)
 
     # --------------
@@ -394,14 +429,19 @@ class SevenWondersEnv(gym.Env):
         # Engine uses relative path ./io/ so we ensure io_dir ends with /io
         engine_cwd = self.io_dir.parent if self.io_dir.name == "io" else self.repo_root
         
-        self.proc = subprocess.Popen(
-            [str(self.engine_path)],
-            cwd=str(engine_cwd),
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
-
-        status = self._read_status_blocking()
+        self.engine_seed = int(seed) if seed is not None else int(self._engine_seed_rng.integers(0, 2**63))
+        self._seat_rngs = [np.random.default_rng(derive_seed(self.engine_seed, "policy", sid))
+                           for sid in (0, 1, 2)]
+        self._stderr_file = (self.io_dir.parent / "engine_stderr.log").open("w")
+        try:
+            self.proc = subprocess.Popen(
+                [str(self.engine_path), "--seed", str(self.engine_seed),
+                 "--poll-us", str(self.engine_poll_us), "--quiet"],
+                cwd=str(engine_cwd), stdout=subprocess.DEVNULL, stderr=self._stderr_file)
+            status = self._read_status_blocking()
+        except Exception:
+            self.close()
+            raise
         self._last_status = status
         
         # Sample opponents per episode (if enabled)
@@ -459,6 +499,8 @@ class SevenWondersEnv(gym.Env):
             )
 
         return {
+            "engine_seed": self.engine_seed,
+            "transition_valid": True,
             "status": status,
             "turn": int(status["game"]["turn"]),
             "era": int(status["game"]["era"]),
@@ -473,21 +515,26 @@ class SevenWondersEnv(gym.Env):
     # ----------------------
     # Two-phase stepping (for parallel collection)
     # ----------------------
-    def send_action(self, action: int, status: Optional[Dict[str, Any]] = None) -> int:
+    def send_action(self, action: int, status: Optional[Dict[str, Any]] = None,
+                    *, opponent_actions: Optional[Dict[int, int]] = None) -> int:
         """Phase 1: Send action to engine without waiting.
         
         Returns the prev_turn number (needed for wait_next).
         """
         from time import perf_counter_ns
         timers = self.timers
+        if opponent_actions is None and self.batch_opponents:
+            from sevenwonders_rl.policies.opponent_batch import opponent_actions_batch
+            opponent_actions = opponent_actions_batch([self], [status], timers)[0]
         
         if timers:
             with timers.time("env.send_action_total"):
-                return self._send_action_impl(action, status, timers)
+                return self._send_action_impl(action, status, timers, opponent_actions)
         else:
-            return self._send_action_impl(action, status, None)
+            return self._send_action_impl(action, status, None, opponent_actions)
     
-    def _send_action_impl(self, action: int, status: Optional[Dict[str, Any]], timers: Optional[Any]) -> int:
+    def _send_action_impl(self, action: int, status: Optional[Dict[str, Any]], timers: Optional[Any],
+                          opponent_actions: Optional[Dict[int, int]] = None) -> int:
         from time import perf_counter_ns
         
         if self.proc is None:
@@ -514,7 +561,14 @@ class SevenWondersEnv(gym.Env):
         prev_turn = int(current_status.get("game", {}).get("turn", 0))
         
         # Build masks
+        if timers: t0 = perf_counter_ns()
         masks = [self._compute_mask(current_status, sid) for sid in (0, 1, 2)]
+        if timers: timers.add_ns("features.masks", perf_counter_ns() - t0)
+        for sid, selected in (opponent_actions or {}).items():
+            if sid not in (0, 1, 2) or sid == self.agent_seat:
+                raise ValueError(f"Invalid opponent override seat {sid}")
+            if not 0 <= int(selected) < N_ACTIONS or masks[sid][int(selected)] == 0:
+                raise ValueError(f"Illegal opponent action {selected} for seat {sid}")
         
         # Validate action
         if int(action) < 0 or int(action) >= N_ACTIONS or masks[self.agent_seat][int(action)] == 0:
@@ -524,10 +578,13 @@ class SevenWondersEnv(gym.Env):
             action = int(self._rng.choice(legal))
         
         # Choose actions for all seats
+        if timers: t0 = perf_counter_ns()
         actions = [0, 0, 0]
         for sid in (0, 1, 2):
             if sid == self.agent_seat:
                 actions[sid] = int(action)
+            elif opponent_actions is not None and sid in opponent_actions:
+                actions[sid] = int(opponent_actions[sid])
             else:
                 # Use sampled opponents if available, otherwise fall back to opponent_policies
                 if self._opponent_sampler is not None:
@@ -540,10 +597,11 @@ class SevenWondersEnv(gym.Env):
                     
                     # Use policy's select_action method
                     obs_for_opp = build_obs(current_status, sid)
-                    action_opp = opp_policy.select_action(obs_for_opp, self._rng)
+                    action_opp = opp_policy.select_action(obs_for_opp, self._seat_rngs[sid])
                     actions[sid] = int(action_opp)
                 else:
-                    actions[sid] = int(self.opponent_policies[sid](current_status, sid, masks[sid], self._rng))
+                    actions[sid] = int(self.opponent_policies[sid](current_status, sid, masks[sid], self._seat_rngs[sid]))
+        if timers: timers.add_ns("policies.opponents", perf_counter_ns() - t0)
         
         # Write player JSONs and ready (atomic, no waiting)
         if timers: t0 = perf_counter_ns()
@@ -577,16 +635,21 @@ class SevenWondersEnv(gym.Env):
         
         try:
             status2 = self._wait_for_turn_change(prev_turn=prev_turn)
-        except RuntimeError:
+        except EngineError as exc:
             status2 = self._last_status or {}
+            if not status2:
+                raise EngineError("protocol_error", "No cached observation for failed transition") from exc
             if timers:
                 with timers.time("env.build_obs"):
-                    obs = self._build_obs(status2) if status2 else self.observation_space.sample()
-                    info = self._build_info(status2, obs) if status2 else {}
+                    obs = self._build_obs(status2)
+                    info = self._build_info(status2, obs)
             else:
-                obs = self._build_obs(status2) if status2 else self.observation_space.sample()
-                info = self._build_info(status2, obs) if status2 else {}
-            info["truncated_reason"] = "timeout_or_engine_exit"
+                obs = self._build_obs(status2)
+                info = self._build_info(status2, obs)
+            info["truncated_reason"] = exc.reason
+            info["transition_valid"] = False
+            info["error"] = str(exc)
+            info["engine_stderr"] = str(self.io_dir.parent / "engine_stderr.log")
             return obs, 0.0, False, True, info
         
         self._last_status = status2
@@ -595,9 +658,10 @@ class SevenWondersEnv(gym.Env):
         if hasattr(self, '_step_since_reset'):
             self._step_since_reset += 1
         
-        # Termination - only when game truly ends at turn 20
-        turn2 = int(status2.get("game", {}).get("turn", prev_turn))
-        terminated = (turn2 == 20)
+        terminated = status2["game"]["phase"] == "finished"
+        result = status2.get("last_actions", {}).get(str(self.agent_seat), {})
+        if result.get("status") == "fallback_discard":
+            raise EngineError("action_rejected", "Engine replaced learner action with discard")
         
         if timers: t0 = perf_counter_ns()
         obs = self._build_obs(status2)
@@ -632,6 +696,10 @@ class SevenWondersEnv(gym.Env):
             except Exception:
                 try:
                     self.proc.kill()
+                    self.proc.wait(timeout=1.0)
                 except Exception:
                     pass
             self.proc = None
+        if self._stderr_file is not None:
+            self._stderr_file.close()
+            self._stderr_file = None

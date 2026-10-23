@@ -38,7 +38,15 @@ def summarize_eval(records: List[Dict[str, Any]]) -> str:
     if not records:
         return "No records found."
 
-    lines = []
+    attempts = records
+    from sevenwonders_rl.evaluation.runner import aggregate
+    if any("status" not in r for r in records):
+        return "Legacy evaluation has no completion markers; results cannot be validated. Re-evaluate the checkpoint."
+    summary = aggregate(records)
+    records = [r for r in records if r["status"] == "completed"]
+    if not records:
+        return "No completed games. " + json.dumps(summary, allow_nan=False)
+    lines = [json.dumps(summary, allow_nan=False)]
     lines.append("=" * 80)
     lines.append(f"EVALUATION SUMMARY ({len(records)} games)")
     lines.append("=" * 80)

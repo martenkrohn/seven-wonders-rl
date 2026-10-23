@@ -91,7 +91,7 @@ def _run_one_game(
         terminated = False
         truncated = False
         steps = 0
-        max_steps = 40  # hard safety; game should end at turn==20
+        max_steps = 40  # hard safety; game should end at turn==21
 
         agent_name = perm[agent_seat]
         agent_policy = policies[agent_name]
@@ -109,7 +109,7 @@ def _run_one_game(
 
         # Terminal invariants (per your spec)
         assert terminated
-        assert info["turn"] == 20
+        assert info["turn"] == 21
         assert "final_totals" in info and len(info["final_totals"]) == 3
 
         totals = info["final_totals"]
@@ -141,7 +141,7 @@ def test_specialist_policies_1v1v1_all_seats(require_engine, tmp_path: Path) -> 
       - for each permutation, run 3 games rotating agent_seat (0,1,2)
 
     What we assert:
-      - every game terminates cleanly (no truncation, turn==20)
+      - every game terminates cleanly (no truncation, turn==21)
       - agent's chosen actions are legal
       - military agent never chooses science
       - science agent never chooses military

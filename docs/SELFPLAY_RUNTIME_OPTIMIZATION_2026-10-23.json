@@ -1,0 +1,1250 @@
+{
+  "date": "2026-10-23",
+  "scope": "Two paired 2048-transition neural-only runs per configuration; alternating order; fixed-mode warm-up excluded",
+  "all_trajectories_weights_and_final_evaluations_match": true,
+  "end_to_end_speedup": [
+    1.3515762801259277,
+    1.577732291283613
+  ],
+  "batch_collection_speedup": [
+    1.0509189025141128,
+    1.3477321046337847
+  ],
+  "median_end_to_end_speedup": 1.4646542857047704,
+  "median_batch_collection_speedup": 1.1993255035739487,
+  "records": [
+    {
+      "repeat": 0,
+      "config": "reference",
+      "wall_seconds": 34.28915870000128,
+      "collection_seconds": 15.985988361,
+      "evaluation_seconds": 11.306514059,
+      "opponent_seconds": 6.972436068,
+      "forward_groups": null,
+      "opponent_requests": null,
+      "weight_sha256": "981e823f898ba4bbf6e7abc3e8485183b0fa10972dfc0ac06f0c786f8e9a33c0",
+      "trajectory_hashes": [
+        "29f3c20c31617be1b358ca718d7171ee05861dfef489e73f39f0737ff66dbdca",
+        "0ddeaf78dfd521cdef2fe3d8edd8706ba9b00935604c8fc0f997b79c56cbef2e",
+        "58e4bcf303ff9cd40a83bd1eff48cca9c7fa6b80336de14874345805052e3083",
+        "b7ff902dc0b3718c15a98a26933bee8459cb73337bab7e8f3f1b7c6345a1d598",
+        "000134f5d179859c671866585e7c4f98051edc91c20af6fed148d393aea92f98",
+        "9aed0a3f1369671fd365a8274648127c065b2792359877b2a68ba5c2f18dffc5",
+        "2179f4eec5f2391d6c11bbdc4b96dcd40d8bda44a4220f0cffe3920b51b54b95",
+        "50c7e1cd0bd2f0e78e703c909ed5ee8e54ff24f20901a686331b5252b79493c9"
+      ],
+      "final_evaluation": [
+        {
+          "totals": [
+            40,
+            16,
+            24
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 1,
+            "discard": 9,
+            "other": 5,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            44,
+            19,
+            25
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            34,
+            11,
+            23
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 11,
+            "other": 4,
+            "prod_build": 3
+          }
+        },
+        {
+          "totals": [
+            38,
+            13,
+            37
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 1,
+            "discard": 9,
+            "other": 5,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            31,
+            22,
+            34
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 5,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            32,
+            12,
+            24
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 11,
+            "other": 3,
+            "prod_build": 4
+          }
+        },
+        {
+          "totals": [
+            40,
+            16,
+            24
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 1,
+            "discard": 9,
+            "other": 5,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            45,
+            18,
+            22
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            32,
+            12,
+            24
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 11,
+            "other": 3,
+            "prod_build": 4
+          }
+        },
+        {
+          "totals": [
+            38,
+            13,
+            37
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 1,
+            "discard": 9,
+            "other": 5,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            31,
+            22,
+            34
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 5,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            34,
+            11,
+            23
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 11,
+            "other": 4,
+            "prod_build": 3
+          }
+        }
+      ],
+      "result": {
+        "status": "completed",
+        "timestep": 2048,
+        "updates": 8,
+        "elapsed_seconds": 30.033720935998645,
+        "steps_per_second": 68.19001895783255,
+        "best_vp_diff": -2.4166666666666665,
+        "selection_metric": "win_share",
+        "best_selection_score": 0.5
+      }
+    },
+    {
+      "repeat": 0,
+      "config": "ram_sparse",
+      "wall_seconds": 24.17724636099956,
+      "collection_seconds": 13.781059232,
+      "evaluation_seconds": 3.915846633,
+      "opponent_seconds": 6.406669294,
+      "forward_groups": null,
+      "opponent_requests": null,
+      "weight_sha256": "981e823f898ba4bbf6e7abc3e8485183b0fa10972dfc0ac06f0c786f8e9a33c0",
+      "trajectory_hashes": [
+        "29f3c20c31617be1b358ca718d7171ee05861dfef489e73f39f0737ff66dbdca",
+        "0ddeaf78dfd521cdef2fe3d8edd8706ba9b00935604c8fc0f997b79c56cbef2e",
+        "58e4bcf303ff9cd40a83bd1eff48cca9c7fa6b80336de14874345805052e3083",
+        "b7ff902dc0b3718c15a98a26933bee8459cb73337bab7e8f3f1b7c6345a1d598",
+        "000134f5d179859c671866585e7c4f98051edc91c20af6fed148d393aea92f98",
+        "9aed0a3f1369671fd365a8274648127c065b2792359877b2a68ba5c2f18dffc5",
+        "2179f4eec5f2391d6c11bbdc4b96dcd40d8bda44a4220f0cffe3920b51b54b95",
+        "50c7e1cd0bd2f0e78e703c909ed5ee8e54ff24f20901a686331b5252b79493c9"
+      ],
+      "final_evaluation": [
+        {
+          "totals": [
+            40,
+            16,
+            24
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 1,
+            "discard": 9,
+            "other": 5,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            44,
+            19,
+            25
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            34,
+            11,
+            23
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 11,
+            "other": 4,
+            "prod_build": 3
+          }
+        },
+        {
+          "totals": [
+            38,
+            13,
+            37
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 1,
+            "discard": 9,
+            "other": 5,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            31,
+            22,
+            34
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 5,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            32,
+            12,
+            24
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 11,
+            "other": 3,
+            "prod_build": 4
+          }
+        },
+        {
+          "totals": [
+            40,
+            16,
+            24
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 1,
+            "discard": 9,
+            "other": 5,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            45,
+            18,
+            22
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            32,
+            12,
+            24
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 11,
+            "other": 3,
+            "prod_build": 4
+          }
+        },
+        {
+          "totals": [
+            38,
+            13,
+            37
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 1,
+            "discard": 9,
+            "other": 5,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            31,
+            22,
+            34
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 5,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            34,
+            11,
+            23
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 11,
+            "other": 4,
+            "prod_build": 3
+          }
+        }
+      ],
+      "result": {
+        "status": "completed",
+        "timestep": 2048,
+        "updates": 8,
+        "elapsed_seconds": 20.35494378799922,
+        "steps_per_second": 100.6143775846461,
+        "best_vp_diff": -2.4166666666666665,
+        "selection_metric": "win_share",
+        "best_selection_score": 0.5
+      }
+    },
+    {
+      "repeat": 0,
+      "config": "ram_sparse_batched",
+      "wall_seconds": 25.369754711000496,
+      "collection_seconds": 13.113342237,
+      "evaluation_seconds": 4.271190589,
+      "opponent_seconds": 4.921671578,
+      "forward_groups": 1980,
+      "opponent_requests": 4096,
+      "weight_sha256": "981e823f898ba4bbf6e7abc3e8485183b0fa10972dfc0ac06f0c786f8e9a33c0",
+      "trajectory_hashes": [
+        "29f3c20c31617be1b358ca718d7171ee05861dfef489e73f39f0737ff66dbdca",
+        "0ddeaf78dfd521cdef2fe3d8edd8706ba9b00935604c8fc0f997b79c56cbef2e",
+        "58e4bcf303ff9cd40a83bd1eff48cca9c7fa6b80336de14874345805052e3083",
+        "b7ff902dc0b3718c15a98a26933bee8459cb73337bab7e8f3f1b7c6345a1d598",
+        "000134f5d179859c671866585e7c4f98051edc91c20af6fed148d393aea92f98",
+        "9aed0a3f1369671fd365a8274648127c065b2792359877b2a68ba5c2f18dffc5",
+        "2179f4eec5f2391d6c11bbdc4b96dcd40d8bda44a4220f0cffe3920b51b54b95",
+        "50c7e1cd0bd2f0e78e703c909ed5ee8e54ff24f20901a686331b5252b79493c9"
+      ],
+      "final_evaluation": [
+        {
+          "totals": [
+            40,
+            16,
+            24
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 1,
+            "discard": 9,
+            "other": 5,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            44,
+            19,
+            25
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            34,
+            11,
+            23
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 11,
+            "other": 4,
+            "prod_build": 3
+          }
+        },
+        {
+          "totals": [
+            38,
+            13,
+            37
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 1,
+            "discard": 9,
+            "other": 5,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            31,
+            22,
+            34
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 5,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            32,
+            12,
+            24
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 11,
+            "other": 3,
+            "prod_build": 4
+          }
+        },
+        {
+          "totals": [
+            40,
+            16,
+            24
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 1,
+            "discard": 9,
+            "other": 5,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            45,
+            18,
+            22
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            32,
+            12,
+            24
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 11,
+            "other": 3,
+            "prod_build": 4
+          }
+        },
+        {
+          "totals": [
+            38,
+            13,
+            37
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 1,
+            "discard": 9,
+            "other": 5,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            31,
+            22,
+            34
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 5,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            34,
+            11,
+            23
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 11,
+            "other": 4,
+            "prod_build": 3
+          }
+        }
+      ],
+      "result": {
+        "status": "completed",
+        "timestep": 2048,
+        "updates": 8,
+        "elapsed_seconds": 20.10405118699964,
+        "steps_per_second": 101.87001519993875,
+        "best_vp_diff": -2.4166666666666665,
+        "selection_metric": "win_share",
+        "best_selection_score": 0.5
+      }
+    },
+    {
+      "repeat": 1,
+      "config": "ram_sparse_batched",
+      "wall_seconds": 21.22512957300023,
+      "collection_seconds": 11.047753822,
+      "evaluation_seconds": 3.596853242,
+      "opponent_seconds": 3.963623038,
+      "forward_groups": 2027,
+      "opponent_requests": 4096,
+      "weight_sha256": "dd1f1c6200ff88cff43854164acce3c93ce0000009e29794a6baeaa446a00a1c",
+      "trajectory_hashes": [
+        "e1315666b57ed7c0435d2a144d8093b357b9cc328867c653abacd245539649e7",
+        "d46e357a852130b474e7296bdd9b3d501e3d2a77256b63cb301938db5ffbd103",
+        "3689d8ef6745ad0de92340fb335411806562b244003d06cce4a1816d5f11c3fd",
+        "4e4abc8e4630960297833d4e9154d0316291f8006ef4d56b44f4f6c349239cfb",
+        "11d1634615381b4f6aa1a6dc28f683a7f7640ae445cb07d7b21ff305050f1891",
+        "64e37faddbe0d14ef2e0a7ce628793cd5659035d43537254c3034854ef11c871",
+        "d057f6ce1103d8280a6462a6dc40a7e03d4bf523b441a2595ac50e25e5e6c77d",
+        "7df2bc32f4cd7a5a92274e3731ae30487316fa904faa477565a6603cc24496ea"
+      ],
+      "final_evaluation": [
+        {
+          "totals": [
+            35,
+            16,
+            22
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 2,
+            "discard": 10,
+            "other": 4,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            43,
+            21,
+            27
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            43,
+            17,
+            23
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 10,
+            "other": 6,
+            "build_wonder": 1,
+            "prod_build": 1
+          }
+        },
+        {
+          "totals": [
+            35,
+            16,
+            22
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 2,
+            "discard": 10,
+            "other": 4,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            43,
+            21,
+            27
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            44,
+            22,
+            21
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 10,
+            "other": 5,
+            "build_wonder": 1,
+            "prod_build": 2
+          }
+        },
+        {
+          "totals": [
+            35,
+            16,
+            22
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 2,
+            "discard": 10,
+            "other": 4,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            43,
+            21,
+            27
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            44,
+            22,
+            21
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 10,
+            "other": 5,
+            "build_wonder": 1,
+            "prod_build": 2
+          }
+        },
+        {
+          "totals": [
+            35,
+            16,
+            22
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 2,
+            "discard": 10,
+            "other": 4,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            43,
+            21,
+            27
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            43,
+            17,
+            23
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 10,
+            "other": 6,
+            "build_wonder": 1,
+            "prod_build": 1
+          }
+        }
+      ],
+      "result": {
+        "status": "completed",
+        "timestep": 2048,
+        "updates": 8,
+        "elapsed_seconds": 17.181094605999533,
+        "steps_per_second": 119.20078708401098,
+        "best_vp_diff": -8.0,
+        "selection_metric": "win_share",
+        "best_selection_score": 0.3333333333333333
+      }
+    },
+    {
+      "repeat": 1,
+      "config": "ram_sparse",
+      "wall_seconds": 25.68999636800072,
+      "collection_seconds": 14.88941251,
+      "evaluation_seconds": 3.815410394,
+      "opponent_seconds": 6.937114251,
+      "forward_groups": null,
+      "opponent_requests": null,
+      "weight_sha256": "dd1f1c6200ff88cff43854164acce3c93ce0000009e29794a6baeaa446a00a1c",
+      "trajectory_hashes": [
+        "e1315666b57ed7c0435d2a144d8093b357b9cc328867c653abacd245539649e7",
+        "d46e357a852130b474e7296bdd9b3d501e3d2a77256b63cb301938db5ffbd103",
+        "3689d8ef6745ad0de92340fb335411806562b244003d06cce4a1816d5f11c3fd",
+        "4e4abc8e4630960297833d4e9154d0316291f8006ef4d56b44f4f6c349239cfb",
+        "11d1634615381b4f6aa1a6dc28f683a7f7640ae445cb07d7b21ff305050f1891",
+        "64e37faddbe0d14ef2e0a7ce628793cd5659035d43537254c3034854ef11c871",
+        "d057f6ce1103d8280a6462a6dc40a7e03d4bf523b441a2595ac50e25e5e6c77d",
+        "7df2bc32f4cd7a5a92274e3731ae30487316fa904faa477565a6603cc24496ea"
+      ],
+      "final_evaluation": [
+        {
+          "totals": [
+            35,
+            16,
+            22
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 2,
+            "discard": 10,
+            "other": 4,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            43,
+            21,
+            27
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            43,
+            17,
+            23
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 10,
+            "other": 6,
+            "build_wonder": 1,
+            "prod_build": 1
+          }
+        },
+        {
+          "totals": [
+            35,
+            16,
+            22
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 2,
+            "discard": 10,
+            "other": 4,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            43,
+            21,
+            27
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            44,
+            22,
+            21
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 10,
+            "other": 5,
+            "build_wonder": 1,
+            "prod_build": 2
+          }
+        },
+        {
+          "totals": [
+            35,
+            16,
+            22
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 2,
+            "discard": 10,
+            "other": 4,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            43,
+            21,
+            27
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            44,
+            22,
+            21
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 10,
+            "other": 5,
+            "build_wonder": 1,
+            "prod_build": 2
+          }
+        },
+        {
+          "totals": [
+            35,
+            16,
+            22
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 2,
+            "discard": 10,
+            "other": 4,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            43,
+            21,
+            27
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            43,
+            17,
+            23
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 10,
+            "other": 6,
+            "build_wonder": 1,
+            "prod_build": 1
+          }
+        }
+      ],
+      "result": {
+        "status": "completed",
+        "timestep": 2048,
+        "updates": 8,
+        "elapsed_seconds": 21.912658561999706,
+        "steps_per_second": 93.46195917785995,
+        "best_vp_diff": -8.0,
+        "selection_metric": "win_share",
+        "best_selection_score": 0.3333333333333333
+      }
+    },
+    {
+      "repeat": 1,
+      "config": "reference",
+      "wall_seconds": 33.48757231400123,
+      "collection_seconds": 15.066088024,
+      "evaluation_seconds": 11.193383139,
+      "opponent_seconds": 6.359747399,
+      "forward_groups": null,
+      "opponent_requests": null,
+      "weight_sha256": "dd1f1c6200ff88cff43854164acce3c93ce0000009e29794a6baeaa446a00a1c",
+      "trajectory_hashes": [
+        "e1315666b57ed7c0435d2a144d8093b357b9cc328867c653abacd245539649e7",
+        "d46e357a852130b474e7296bdd9b3d501e3d2a77256b63cb301938db5ffbd103",
+        "3689d8ef6745ad0de92340fb335411806562b244003d06cce4a1816d5f11c3fd",
+        "4e4abc8e4630960297833d4e9154d0316291f8006ef4d56b44f4f6c349239cfb",
+        "11d1634615381b4f6aa1a6dc28f683a7f7640ae445cb07d7b21ff305050f1891",
+        "64e37faddbe0d14ef2e0a7ce628793cd5659035d43537254c3034854ef11c871",
+        "d057f6ce1103d8280a6462a6dc40a7e03d4bf523b441a2595ac50e25e5e6c77d",
+        "7df2bc32f4cd7a5a92274e3731ae30487316fa904faa477565a6603cc24496ea"
+      ],
+      "final_evaluation": [
+        {
+          "totals": [
+            35,
+            16,
+            22
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 2,
+            "discard": 10,
+            "other": 4,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            43,
+            21,
+            27
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            43,
+            17,
+            23
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 10,
+            "other": 6,
+            "build_wonder": 1,
+            "prod_build": 1
+          }
+        },
+        {
+          "totals": [
+            35,
+            16,
+            22
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 2,
+            "discard": 10,
+            "other": 4,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            43,
+            21,
+            27
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            44,
+            22,
+            21
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 10,
+            "other": 5,
+            "build_wonder": 1,
+            "prod_build": 2
+          }
+        },
+        {
+          "totals": [
+            35,
+            16,
+            22
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 2,
+            "discard": 10,
+            "other": 4,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            43,
+            21,
+            27
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            44,
+            22,
+            21
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 10,
+            "other": 5,
+            "build_wonder": 1,
+            "prod_build": 2
+          }
+        },
+        {
+          "totals": [
+            35,
+            16,
+            22
+          ],
+          "win_share": 1.0,
+          "action_counts": {
+            "prod_build": 2,
+            "discard": 10,
+            "other": 4,
+            "build_wonder": 2
+          }
+        },
+        {
+          "totals": [
+            43,
+            21,
+            27
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "other": 4,
+            "prod_build": 4,
+            "discard": 7,
+            "build_wonder": 3
+          }
+        },
+        {
+          "totals": [
+            43,
+            17,
+            23
+          ],
+          "win_share": 0.0,
+          "action_counts": {
+            "discard": 10,
+            "other": 6,
+            "build_wonder": 1,
+            "prod_build": 1
+          }
+        }
+      ],
+      "result": {
+        "status": "completed",
+        "timestep": 2048,
+        "updates": 8,
+        "elapsed_seconds": 29.292999154999052,
+        "steps_per_second": 69.91431601671606,
+        "best_vp_diff": -8.0,
+        "selection_metric": "win_share",
+        "best_selection_score": 0.3333333333333333
+      }
+    }
+  ],
+  "source_commit": "9a0255e814703d703385579050dd9d0b43924306",
+  "source_dirty": true,
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "versions": {
+    "numpy": "2.4.2",
+    "torch": "2.10.0",
+    "gymnasium": "1.2.3"
+  },
+  "engine_sha256": "16c3bb014b4c9723e4e3542a1531b6d5e5d3473f1f514dadb621524023452216",
+  "transitions_per_trial": 2048,
+  "n_envs": 2,
+  "rollout_horizon": 128,
+  "snapshot_every": 512,
+  "evaluation_seed_blocks": 1,
+  "configurations": {
+    "reference": {
+      "opponent_inference": "serial",
+      "exchange": "disk",
+      "eval_every": 512
+    },
+    "ram_sparse": {
+      "opponent_inference": "serial",
+      "exchange": "ram",
+      "eval_every": 32768
+    },
+    "ram_sparse_batched": {
+      "opponent_inference": "batched",
+      "exchange": "ram",
+      "eval_every": 32768
+    }
+  },
+  "collection_time_reduction": [
+    0.17969774899925572,
+    0.26671384075274673
+  ],
+  "opponent_time_reduction_from_batching": [
+    0.2317893507302986,
+    0.4286351796168507
+  ]
+}

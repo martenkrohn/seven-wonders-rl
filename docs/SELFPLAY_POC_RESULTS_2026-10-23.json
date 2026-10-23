@@ -1,0 +1,568 @@
+{
+  "date": "2026-10-23",
+  "training_version": 3,
+  "model_architecture_version": 2,
+  "purpose": "Initial neural-only learning proof of concept; not a playing-strength benchmark",
+  "python_tests_passed": 75,
+  "cpp_tests_passed": 4,
+  "simulator_inventory_files": 49,
+  "simulator_patch_sha256": "962c9e03c142cce46eb0a1ef99b7e13ad73f28eb1e581a656d3ee2e8c79c2af8",
+  "runs": [
+    {
+      "training_seed": 7,
+      "directory": "runs/selfplay-poc-20261023-fixed-seed7",
+      "config": {
+        "mode": "selfplay",
+        "seed": 7,
+        "agent_seat": 0,
+        "total_timesteps": 8192,
+        "n_envs": 2,
+        "rollout_horizon": 128,
+        "batch_size": 256,
+        "minibatch_epochs": 4,
+        "eval_every": 4096,
+        "log_every": 4096,
+        "save_every": 4096,
+        "eval_games_per_matchup": 6,
+        "eval_seed": 42,
+        "pool_max": 80,
+        "pool_lag_steps": 0,
+        "snapshot_every": 1024,
+        "engine_poll_us": 1000,
+        "learning_rate": 0.0003,
+        "gamma": 0.999,
+        "gae_lambda": 0.95,
+        "clip_eps": 0.2,
+        "ent_coef": 0.01,
+        "vf_coef": 0.5,
+        "reward_scale": 10.0,
+        "opponent_baseline": 0.5,
+        "opponent_scientist": 0.3,
+        "opponent_military": 0.2,
+        "poll_seconds": 0.001,
+        "io_root": "/home/marten/dev/7Wonders/io_train/training-7583a8ef6c414b14b7f9b5b947b1f09c",
+        "out_dir": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed7",
+        "league_dir": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed7",
+        "eval_action_mode": "stochastic",
+        "global_dim": 90,
+        "action_feat_dim": 92,
+        "hidden": 128,
+        "model_architecture_version": 2
+      },
+      "result": {
+        "status": "completed",
+        "timestep": 8192,
+        "updates": 32,
+        "elapsed_seconds": 189.80449327299903,
+        "steps_per_second": 43.1602005765865,
+        "best_vp_diff": 5.513888888888889,
+        "selection_metric": "win_share",
+        "best_selection_score": 0.6828703703703703
+      },
+      "completed_training_games": 390,
+      "learner_seat_counts": {
+        "0": 130,
+        "1": 130,
+        "2": 130
+      },
+      "opponent_selection_counts": {
+        "ppo_snapshot": 784
+      },
+      "selection_evaluations": {
+        "0": {
+          "attempted": 72,
+          "completed": 72,
+          "truncated": 0,
+          "failed": 0,
+          "completion_rate": 1.0,
+          "win_rate": 0.3472222222222222,
+          "win_share": 0.3472222222222222,
+          "vp_tie_rate": 0.0,
+          "vp_diff_mean": -5.583333333333333,
+          "agent_vp_mean": 23.98611111111111,
+          "vp_diff_std": 14.121250731511788,
+          "total_games": 72,
+          "valid_for_selection": true,
+          "failure_reasons": {},
+          "jsonl_path": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed7/eval_0.jsonl",
+          "paired_valid": true,
+          "seed_blocks": 6,
+          "vp_diff_gain": 0.0,
+          "vp_diff_gain_ci95": [
+            0.0,
+            0.0
+          ],
+          "win_share_gain": 0.0,
+          "win_share_gain_ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "4096": {
+          "attempted": 72,
+          "completed": 72,
+          "truncated": 0,
+          "failed": 0,
+          "completion_rate": 1.0,
+          "win_rate": 0.4166666666666667,
+          "win_share": 0.4328703703703704,
+          "vp_tie_rate": 0.041666666666666664,
+          "vp_diff_mean": 0.6111111111111112,
+          "agent_vp_mean": 31.833333333333332,
+          "vp_diff_std": 10.816083132122628,
+          "total_games": 72,
+          "valid_for_selection": true,
+          "failure_reasons": {},
+          "jsonl_path": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed7/eval_4096.jsonl",
+          "paired_valid": true,
+          "seed_blocks": 6,
+          "vp_diff_gain": 6.194444444444444,
+          "vp_diff_gain_ci95": [
+            3.0694444444444446,
+            8.86111111111111
+          ],
+          "win_share_gain": 0.08564814814814814,
+          "win_share_gain_ci95": [
+            -0.018518518518518517,
+            0.19444444444444442
+          ]
+        },
+        "8192": {
+          "attempted": 72,
+          "completed": 72,
+          "truncated": 0,
+          "failed": 0,
+          "completion_rate": 1.0,
+          "win_rate": 0.6527777777777778,
+          "win_share": 0.6828703703703703,
+          "vp_tie_rate": 0.06944444444444445,
+          "vp_diff_mean": 5.513888888888889,
+          "agent_vp_mean": 34.97222222222222,
+          "vp_diff_std": 11.17038875225671,
+          "total_games": 72,
+          "valid_for_selection": true,
+          "failure_reasons": {},
+          "jsonl_path": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed7/eval_8192.jsonl",
+          "paired_valid": true,
+          "seed_blocks": 6,
+          "vp_diff_gain": 11.097222222222223,
+          "vp_diff_gain_ci95": [
+            6.944444444444444,
+            14.194444444444445
+          ],
+          "win_share_gain": 0.33564814814814814,
+          "win_share_gain_ci95": [
+            0.14351851851851852,
+            0.48616898148148113
+          ]
+        }
+      },
+      "holdout": {
+        "initial": {
+          "attempted": 144,
+          "completed": 144,
+          "truncated": 0,
+          "failed": 0,
+          "completion_rate": 1.0,
+          "win_rate": 0.375,
+          "win_share": 0.3784722222222222,
+          "vp_tie_rate": 0.006944444444444444,
+          "vp_diff_mean": -3.75,
+          "agent_vp_mean": 25.770833333333332,
+          "vp_diff_std": 13.079617306667993,
+          "total_games": 144,
+          "valid_for_selection": true,
+          "failure_reasons": {},
+          "jsonl_path": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed7-holdout/initial.jsonl"
+        },
+        "candidate": {
+          "attempted": 144,
+          "completed": 144,
+          "truncated": 0,
+          "failed": 0,
+          "completion_rate": 1.0,
+          "win_rate": 0.8194444444444444,
+          "win_share": 0.8194444444444444,
+          "vp_tie_rate": 0.0,
+          "vp_diff_mean": 9.534722222222221,
+          "agent_vp_mean": 37.6875,
+          "vp_diff_std": 10.458856689723445,
+          "total_games": 144,
+          "valid_for_selection": true,
+          "failure_reasons": {},
+          "jsonl_path": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed7-holdout/candidate.jsonl",
+          "checkpoint": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed7/latest.pt",
+          "sha256": "bf2b8e93af7bc43bb2034f359a573644f037eeb59c5c825d863d3f9fa66a5bab"
+        },
+        "progress": {
+          "paired_valid": true,
+          "seed_blocks": 12,
+          "vp_diff_gain": 13.284722222222227,
+          "vp_diff_gain_ci95": [
+            9.846874999999999,
+            16.937847222222217
+          ],
+          "win_share_gain": 0.44097222222222227,
+          "win_share_gain_ci95": [
+            0.3263888888888889,
+            0.545138888888889
+          ]
+        },
+        "seed": 9001,
+        "seed_blocks": 12,
+        "references": [
+          {
+            "checkpoint": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed7/checkpoint_0.pt",
+            "sha256": "08c6f7b074fcfc210fe6c8419161b04a54c389c9bda7e3ded402bf31cc2f5a19"
+          },
+          {
+            "checkpoint": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed7/references/independent_initial.pt",
+            "sha256": "2a58d44b6e829d00ecd4ac07aebed27a984b8d0871c6d3c3ff8b3457c80ab2a0"
+          }
+        ]
+      },
+      "trained_opponents": {
+        "initial": {
+          "attempted": 144,
+          "completed": 144,
+          "truncated": 0,
+          "failed": 0,
+          "completion_rate": 1.0,
+          "win_rate": 0.1111111111111111,
+          "win_share": 0.11805555555555555,
+          "vp_tie_rate": 0.013888888888888888,
+          "vp_diff_mean": -15.131944444444445,
+          "agent_vp_mean": 23.98611111111111,
+          "vp_diff_std": 11.489878715017076,
+          "total_games": 144,
+          "valid_for_selection": true,
+          "failure_reasons": {},
+          "jsonl_path": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed7-trained/initial.jsonl"
+        },
+        "candidate": {
+          "attempted": 144,
+          "completed": 144,
+          "truncated": 0,
+          "failed": 0,
+          "completion_rate": 1.0,
+          "win_rate": 0.5138888888888888,
+          "win_share": 0.5277777777777778,
+          "vp_tie_rate": 0.027777777777777776,
+          "vp_diff_mean": 0.5,
+          "agent_vp_mean": 38.298611111111114,
+          "vp_diff_std": 12.216223275264378,
+          "total_games": 144,
+          "valid_for_selection": true,
+          "failure_reasons": {},
+          "jsonl_path": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed7-trained/candidate.jsonl",
+          "checkpoint": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed7/latest.pt",
+          "sha256": "bf2b8e93af7bc43bb2034f359a573644f037eeb59c5c825d863d3f9fa66a5bab"
+        },
+        "progress": {
+          "paired_valid": true,
+          "seed_blocks": 12,
+          "vp_diff_gain": 15.631944444444445,
+          "vp_diff_gain_ci95": [
+            12.735937499999999,
+            18.743402777777778
+          ],
+          "win_share_gain": 0.40972222222222215,
+          "win_share_gain_ci95": [
+            0.3576388888888889,
+            0.4618055555555556
+          ]
+        },
+        "seed": 19001,
+        "seed_blocks": 12,
+        "references": [
+          {
+            "checkpoint": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed7/checkpoint_2048.pt",
+            "sha256": "c61076c99a723eb20ba4006b24aa21ffa7448950395b05434a0734f566beff35"
+          },
+          {
+            "checkpoint": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed7/checkpoint_4096.pt",
+            "sha256": "3bff08e79b02f172f3aa9838db42a936e461150e13ddef07dd7029938e45ac07"
+          }
+        ]
+      }
+    },
+    {
+      "training_seed": 19,
+      "directory": "runs/selfplay-poc-20261023-fixed-seed19",
+      "config": {
+        "mode": "selfplay",
+        "seed": 19,
+        "agent_seat": 0,
+        "total_timesteps": 8192,
+        "n_envs": 2,
+        "rollout_horizon": 128,
+        "batch_size": 256,
+        "minibatch_epochs": 4,
+        "eval_every": 4096,
+        "log_every": 4096,
+        "save_every": 4096,
+        "eval_games_per_matchup": 6,
+        "eval_seed": 42,
+        "pool_max": 80,
+        "pool_lag_steps": 0,
+        "snapshot_every": 1024,
+        "engine_poll_us": 1000,
+        "learning_rate": 0.0003,
+        "gamma": 0.999,
+        "gae_lambda": 0.95,
+        "clip_eps": 0.2,
+        "ent_coef": 0.01,
+        "vf_coef": 0.5,
+        "reward_scale": 10.0,
+        "opponent_baseline": 0.5,
+        "opponent_scientist": 0.3,
+        "opponent_military": 0.2,
+        "poll_seconds": 0.001,
+        "io_root": "/home/marten/dev/7Wonders/io_train/training-fe5391201b41454c89c1e5f7dd29c4ea",
+        "out_dir": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed19",
+        "league_dir": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed19",
+        "eval_action_mode": "stochastic",
+        "global_dim": 90,
+        "action_feat_dim": 92,
+        "hidden": 128,
+        "model_architecture_version": 2
+      },
+      "result": {
+        "status": "completed",
+        "timestep": 8192,
+        "updates": 32,
+        "elapsed_seconds": 186.921048618,
+        "steps_per_second": 43.82598995975851,
+        "best_vp_diff": 17.0,
+        "selection_metric": "win_share",
+        "best_selection_score": 0.9722222222222222
+      },
+      "completed_training_games": 390,
+      "learner_seat_counts": {
+        "0": 130,
+        "1": 130,
+        "2": 130
+      },
+      "opponent_selection_counts": {
+        "ppo_snapshot": 784
+      },
+      "selection_evaluations": {
+        "0": {
+          "attempted": 72,
+          "completed": 72,
+          "truncated": 0,
+          "failed": 0,
+          "completion_rate": 1.0,
+          "win_rate": 0.3333333333333333,
+          "win_share": 0.3333333333333333,
+          "vp_tie_rate": 0.0,
+          "vp_diff_mean": -6.555555555555555,
+          "agent_vp_mean": 23.875,
+          "vp_diff_std": 14.627683883734607,
+          "total_games": 72,
+          "valid_for_selection": true,
+          "failure_reasons": {},
+          "jsonl_path": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed19/eval_0.jsonl",
+          "paired_valid": true,
+          "seed_blocks": 6,
+          "vp_diff_gain": 0.0,
+          "vp_diff_gain_ci95": [
+            0.0,
+            0.0
+          ],
+          "win_share_gain": 0.0,
+          "win_share_gain_ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "4096": {
+          "attempted": 72,
+          "completed": 72,
+          "truncated": 0,
+          "failed": 0,
+          "completion_rate": 1.0,
+          "win_rate": 0.6666666666666666,
+          "win_share": 0.6944444444444444,
+          "vp_tie_rate": 0.05555555555555555,
+          "vp_diff_mean": 5.583333333333333,
+          "agent_vp_mean": 34.5,
+          "vp_diff_std": 10.795768203843167,
+          "total_games": 72,
+          "valid_for_selection": true,
+          "failure_reasons": {},
+          "jsonl_path": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed19/eval_4096.jsonl",
+          "paired_valid": true,
+          "seed_blocks": 6,
+          "vp_diff_gain": 12.138888888888888,
+          "vp_diff_gain_ci95": [
+            8.610763888888888,
+            15.777777777777777
+          ],
+          "win_share_gain": 0.3611111111111111,
+          "win_share_gain_ci95": [
+            0.19444444444444442,
+            0.5
+          ]
+        },
+        "8192": {
+          "attempted": 72,
+          "completed": 72,
+          "truncated": 0,
+          "failed": 0,
+          "completion_rate": 1.0,
+          "win_rate": 0.9722222222222222,
+          "win_share": 0.9722222222222222,
+          "vp_tie_rate": 0.0,
+          "vp_diff_mean": 17.0,
+          "agent_vp_mean": 42.375,
+          "vp_diff_std": 9.585869229698936,
+          "total_games": 72,
+          "valid_for_selection": true,
+          "failure_reasons": {},
+          "jsonl_path": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed19/eval_8192.jsonl",
+          "paired_valid": true,
+          "seed_blocks": 6,
+          "vp_diff_gain": 23.555555555555557,
+          "vp_diff_gain_ci95": [
+            19.680555555555554,
+            28.06944444444444
+          ],
+          "win_share_gain": 0.6388888888888888,
+          "win_share_gain_ci95": [
+            0.5833333333333333,
+            0.6666666666666666
+          ]
+        }
+      },
+      "holdout": {
+        "initial": {
+          "attempted": 144,
+          "completed": 144,
+          "truncated": 0,
+          "failed": 0,
+          "completion_rate": 1.0,
+          "win_rate": 0.3333333333333333,
+          "win_share": 0.3333333333333333,
+          "vp_tie_rate": 0.0,
+          "vp_diff_mean": -5.763888888888889,
+          "agent_vp_mean": 24.45138888888889,
+          "vp_diff_std": 12.552105905158744,
+          "total_games": 144,
+          "valid_for_selection": true,
+          "failure_reasons": {},
+          "jsonl_path": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed19-holdout/initial.jsonl"
+        },
+        "candidate": {
+          "attempted": 144,
+          "completed": 144,
+          "truncated": 0,
+          "failed": 0,
+          "completion_rate": 1.0,
+          "win_rate": 0.8888888888888888,
+          "win_share": 0.9027777777777778,
+          "vp_tie_rate": 0.027777777777777776,
+          "vp_diff_mean": 15.20138888888889,
+          "agent_vp_mean": 42.74305555555556,
+          "vp_diff_std": 12.265341788229906,
+          "total_games": 144,
+          "valid_for_selection": true,
+          "failure_reasons": {},
+          "jsonl_path": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed19-holdout/candidate.jsonl",
+          "checkpoint": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed19/latest.pt",
+          "sha256": "f17f53a9718622c070fa382629f5e32657ea9f945383a321a615ea9e185dc42c"
+        },
+        "progress": {
+          "paired_valid": true,
+          "seed_blocks": 12,
+          "vp_diff_gain": 20.965277777777775,
+          "vp_diff_gain_ci95": [
+            16.916666666666668,
+            24.98628472222222
+          ],
+          "win_share_gain": 0.5694444444444445,
+          "win_share_gain_ci95": [
+            0.4583333333333334,
+            0.6666666666666666
+          ]
+        },
+        "seed": 9001,
+        "seed_blocks": 12,
+        "references": [
+          {
+            "checkpoint": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed19/checkpoint_0.pt",
+            "sha256": "0c749a12c7d0451bad90e4919b30d922a6ed18fcfc6c2d0da185fdae4198fbff"
+          },
+          {
+            "checkpoint": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed19/references/independent_initial.pt",
+            "sha256": "9f56943cc69cc9ac7a125a62b6156200a489db1d4f37b66da0223e5a82f5ceeb"
+          }
+        ]
+      },
+      "trained_opponents": {
+        "initial": {
+          "attempted": 144,
+          "completed": 144,
+          "truncated": 0,
+          "failed": 0,
+          "completion_rate": 1.0,
+          "win_rate": 0.11805555555555555,
+          "win_share": 0.12152777777777778,
+          "vp_tie_rate": 0.006944444444444444,
+          "vp_diff_mean": -14.645833333333334,
+          "agent_vp_mean": 24.381944444444443,
+          "vp_diff_std": 12.321767521792932,
+          "total_games": 144,
+          "valid_for_selection": true,
+          "failure_reasons": {},
+          "jsonl_path": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed19-trained/initial.jsonl"
+        },
+        "candidate": {
+          "attempted": 144,
+          "completed": 144,
+          "truncated": 0,
+          "failed": 0,
+          "completion_rate": 1.0,
+          "win_rate": 0.6458333333333334,
+          "win_share": 0.6597222222222222,
+          "vp_tie_rate": 0.027777777777777776,
+          "vp_diff_mean": 6.173611111111111,
+          "agent_vp_mean": 42.604166666666664,
+          "vp_diff_std": 11.831179299906802,
+          "total_games": 144,
+          "valid_for_selection": true,
+          "failure_reasons": {},
+          "jsonl_path": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed19-trained/candidate.jsonl",
+          "checkpoint": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed19/latest.pt",
+          "sha256": "f17f53a9718622c070fa382629f5e32657ea9f945383a321a615ea9e185dc42c"
+        },
+        "progress": {
+          "paired_valid": true,
+          "seed_blocks": 12,
+          "vp_diff_gain": 20.819444444444443,
+          "vp_diff_gain_ci95": [
+            18.42986111111111,
+            23.174479166666664
+          ],
+          "win_share_gain": 0.5381944444444444,
+          "win_share_gain_ci95": [
+            0.4618055555555555,
+            0.6215277777777777
+          ]
+        },
+        "seed": 19001,
+        "seed_blocks": 12,
+        "references": [
+          {
+            "checkpoint": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed19/checkpoint_2048.pt",
+            "sha256": "5fa94252c00a92927ec3e38ea2dd115187ad80436608238e647b953787fbfa5b"
+          },
+          {
+            "checkpoint": "/home/marten/dev/7Wonders/python/runs/selfplay-poc-20261023-fixed-seed19/checkpoint_4096.pt",
+            "sha256": "8c13605a6e69b2d861fdc8fba87f0893d8a78c097244e7c1c926a61548922171"
+          }
+        ]
+      }
+    }
+  ]
+}

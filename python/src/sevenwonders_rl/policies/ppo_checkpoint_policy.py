@@ -11,6 +11,7 @@ import torch
 
 from sevenwonders_rl.utils.ppo_model import ActorCritic
 from sevenwonders_rl.utils.ppo_utils import flatten_global, masked_logits
+from sevenwonders_rl.utils.checkpoints import load_model
 
 
 @dataclass
@@ -24,6 +25,7 @@ class PPOCheckpointPolicy:
     ckpt_path: str
     device: str = "cpu"
     deterministic: bool = False
+    allow_legacy: bool = False
 
     def __post_init__(self) -> None:
         """Load checkpoint and initialize model."""
@@ -31,23 +33,7 @@ class PPOCheckpointPolicy:
         if not p.exists():
             raise FileNotFoundError(f"Checkpoint not found: {p}")
 
-        ckpt = torch.load(p, map_location=self.device)
-
-        # Extract config from checkpoint metadata
-        cfg = ckpt.get("config", {})
-        global_dim = int(cfg.get("global_dim", 0))
-        action_feat_dim = int(cfg.get("action_feat_dim", 0))
-
-        if global_dim <= 0 or action_feat_dim <= 0:
-            raise ValueError(
-                f"Invalid config in checkpoint {p}: "
-                f"global_dim={global_dim}, action_feat_dim={action_feat_dim}"
-            )
-
-        # Initialize model
-        self.model = ActorCritic(global_dim, action_feat_dim).to(self.device)
-        self.model.load_state_dict(ckpt["state_dict"])
-        self.model.eval()
+        self.model = load_model(p, self.device, allow_legacy=self.allow_legacy)
 
         self._rng = np.random.default_rng(0)
 
@@ -75,27 +61,24 @@ class PPOCheckpointPolicy:
         """
         if rng is None:
             rng = self._rng
+        return self.select_actions([obs], [rng])[0]
 
-        global_vec = flatten_global(obs)
-        action_feats = obs["action_feats"]
-        mask = obs["action_mask"]
-
-        global_t = torch.tensor(
-            global_vec[None, :], dtype=torch.float32, device=self.device
-        )
-        feats_t = torch.tensor(
-            action_feats[None, :, :], dtype=torch.float32, device=self.device
-        )
-        mask_t = torch.tensor(mask[None, :], dtype=torch.float32, device=self.device)
+    def select_actions(self, observations, rngs):
+        """One forward pass for this frozen policy; one local RNG per seat/game."""
+        if len(observations) != len(rngs):
+            raise ValueError("Each opponent observation requires its own RNG")
+        if not observations:
+            return []
+        global_t = torch.from_numpy(np.stack([flatten_global(obs) for obs in observations])).to(self.device)
+        feats_t = torch.from_numpy(np.stack([obs["action_feats"] for obs in observations])).to(self.device, dtype=torch.float32)
+        mask_t = torch.from_numpy(np.stack([obs["action_mask"] for obs in observations])).to(self.device)
 
         with torch.no_grad():
             logits, _ = self.model.forward_batch(global_t, feats_t)
             logits = masked_logits(logits, mask_t)
 
             if self.deterministic:
-                action = int(torch.argmax(logits, dim=-1).item())
+                return logits.argmax(-1).cpu().tolist()
             else:
-                dist = torch.distributions.Categorical(logits=logits)
-                action = int(dist.sample().item())
-
-        return action
+                probs = logits.softmax(-1).cpu().numpy().astype(np.float64)
+                return [int(rng.choice(len(row), p=row / row.sum())) for row, rng in zip(probs, rngs)]

@@ -20,6 +20,7 @@ from sevenwonders_rl.policies import (
 )
 from sevenwonders_rl.features.action_feature_schema import FEATURE_NAMES, K as K_ACTION_FEATS
 from sevenwonders_rl.utils.ppo_model import ActorCritic
+from sevenwonders_rl.utils.checkpoints import load_model
 from sevenwonders_rl.utils.ppo_utils import select_action_from_obs
 
 
@@ -38,7 +39,7 @@ def _select_agent_action(
         return 0
 
     if model is not None:
-        return int(select_action_from_obs(obs, model, device, deterministic=deterministic))
+        return int(select_action_from_obs(obs, model, device, deterministic=deterministic, rng=rng))
 
     if policy_obj is not None:
         return int(policy_obj.select_action(obs, rng))
@@ -263,6 +264,7 @@ def main() -> None:
         default="random"
     )
     parser.add_argument("--model", type=str, default="")
+    parser.add_argument("--allow-legacy", action="store_true", help="Allow historical model/feature versions for inference")
     parser.add_argument("--opp-model", type=str, default="")
     parser.add_argument("--device", choices=["cpu", "cuda"], default="cpu")
     parser.add_argument("--deterministic", action="store_true")
@@ -277,17 +279,8 @@ def main() -> None:
     device = torch.device(args.device)
     model = None
     if args.model:
-        ckpt = torch.load(args.model, map_location=device)
-        cfg = ckpt.get("config", {})
-        global_dim = int(cfg.get("global_dim", 0))
-        action_feat_dim = int(cfg.get("action_feat_dim", 0))
-        hidden = int(cfg.get("hidden", 128))
-        if global_dim <= 0 or action_feat_dim <= 0:
-            raise ValueError("Checkpoint config missing global_dim or action_feat_dim")
-
-        model = ActorCritic(global_dim, action_feat_dim, hidden=hidden).to(device)
-        model.load_state_dict(ckpt["state_dict"])
-        model.eval()
+        model = load_model(args.model, device, allow_legacy=args.allow_legacy)
+        ckpt = torch.load(args.model, map_location=device, weights_only=True)
 
         meta = ckpt.get("meta", {})
         current_hash = hashlib.sha256("\n".join(FEATURE_NAMES).encode("utf-8")).hexdigest()
@@ -330,4 +323,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
- 

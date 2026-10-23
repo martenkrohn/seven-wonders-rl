@@ -1,3 +1,5 @@
+// Downstream runtime changes for Seven Wonders RL, 2026-10-23.
+// Derived from DMAG/UFSM 7Wonders; see NOTICE and docs/ORIGIN.md (GPLv3).
 #include <iostream>
 #include <card.h>
 #include <filer.h>
@@ -6,6 +8,8 @@
 #include <resources.h>
 #include <vector>
 #include <player.h>
+#include <cstdio>
+#include <stdexcept>
 
 using json = nlohmann::json;
 
@@ -26,10 +30,13 @@ int Filer::Init(int player_count){
  */
 
 int Filer::WriteMessage(json message, std::string path){
-	// out_file.open("./io/game_status.json");
-	out_file.open(path);
+	std::string temporary = path + ".tmp";
+	out_file.open(temporary);
 	out_file  << message << std::endl;
+	bool ok = out_file.good();
 	out_file.close();
+	if (!ok || std::rename(temporary.c_str(), path.c_str()) != 0)
+		throw std::runtime_error("Cannot publish status: " + path);
 	return 0;
 }
 

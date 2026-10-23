@@ -1,241 +1,37 @@
-"""Unified PPO Training Script for 7 Wonders
-
-Supports two training modes:
-1. --mode fixed: Train against fixed bot opponents (baseline/military/scientist)
-2. --mode selfplay: Train against growing pool of frozen snapshots (default)
-
-Both modes use identical PPO implementation with superior logging/progress output.
-"""
-
+"""CPU PPO with per-environment GAE, seeded engine games and strict evaluation."""
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
-from collections import OrderedDict
-import os
-import subprocess
+import math
+import shutil
 import time
-from datetime import datetime, timezone
+from collections import OrderedDict
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 
 import numpy as np
 import torch
-import torch.optim as optim
-
-# Prevent CPU oversubscription with parallel envs
-torch.set_num_threads(1)
-torch.set_num_interop_threads(1)
 
 from sevenwonders_rl.envs import SevenWondersEnv, SeatPolicy
-from sevenwonders_rl.envs.sevenwonders_env import N_ACTIONS
-from sevenwonders_rl.features.action_feature_schema import FEATURE_NAMES, K as K_ACTION_FEATS
-from sevenwonders_rl.policies.ppo_checkpoint_policy import PPOCheckpointPolicy
+from sevenwonders_rl.envs.sevenwonders_env import EngineError
+from sevenwonders_rl.evaluation.runner import evaluate_model
+from sevenwonders_rl.evaluation.selfplay import reference, evaluation_plan, paired_progress
 from sevenwonders_rl.policies.registry import make_policy
+from sevenwonders_rl.policies.ppo_checkpoint_policy import PPOCheckpointPolicy
+from sevenwonders_rl.policies.opponent_batch import opponent_actions_batch
 from sevenwonders_rl.selfplay.opponent_pool import OpponentPool
 from sevenwonders_rl.utils.ppo_model import ActorCritic
-from sevenwonders_rl.utils.ppo_utils import flatten_global, masked_logits, select_action_from_obs
+from sevenwonders_rl.utils.ppo_utils import flatten_global, masked_logits
+from sevenwonders_rl.utils.gae import compute_gae, normalize_advantages
+from sevenwonders_rl.utils.seeding import derive_seed
+from sevenwonders_rl.utils.checkpoints import manifest, save_checkpoint, file_hash
+from sevenwonders_rl.utils.runtime import atomic_json, run_io_root, exchange_io_root
+from sevenwonders_rl.utils.timing import TimingBuckets
 
-# Fixed evaluation matchups
-EVAL_FIXED_MATCHUPS = [
-    ("baseline", "baseline"),
-    ("mad_scientist", "mad_scientist"),
-    ("military", "military"),
-    ("random", "random"),
-]
-
-EVAL_FIXED_SEEDS = [42, 43, 44, 45, 46, 47, 48, 49, 50, 51]
-
-# Default opponent weights for fixed mode
-DEFAULT_OPPONENT_WEIGHTS = {
-    "baseline": 0.50,
-    "mad_scientist": 0.30,
-    "military": 0.20,
-}
-
-
-def _fmt_hours(seconds: float) -> str:
-    if seconds <= 0:
-        return "0.00h"
-    return f"{seconds / 3600.0:.2f}h"
-
-
-def _training_speed(steps_done: int, elapsed_sec: float) -> float:
-    if elapsed_sec <= 0:
-        return 0.0
-    return steps_done / elapsed_sec
-
-
-def _eta_seconds(total_steps: int, steps_done: int, steps_per_sec: float) -> float:
-    remaining = max(0, total_steps - steps_done)
-    if steps_per_sec <= 1e-12:
-        return 0.0
-    return remaining / steps_per_sec
-
-
-def _print_eval_block(
-    timestep: int,
-    total_timesteps: int,
-    start_time: float,
-    metrics: Dict[str, Any],
-    new_best: bool,
-    best_vp_diff: float,
-) -> None:
-    elapsed_sec = time.time() - start_time
-    steps_per_sec = _training_speed(timestep, elapsed_sec)
-    eta_sec = _eta_seconds(total_timesteps, timestep, steps_per_sec)
-    percent = 100.0 * timestep / total_timesteps if total_timesteps > 0 else 0.0
-
-    print("\n" + "=" * 80)
-    print(f"  ✓ Evaluation Results ({metrics['total_games']} games):")
-    print(
-        f"    Win rate: {metrics['win_rate']:.1%}  |  VP diff: {metrics['vp_diff_mean']:+.2f}±{metrics['vp_diff_std']:.2f}"
-    )
-    print(
-        f"    Agent VP: {metrics['agent_vp_mean']:.1f}  |  Progress: {percent:.1f}% ({timestep:,}/{total_timesteps:,})"
-    )
-    print(f"    Training time: {_fmt_hours(elapsed_sec)}")
-    print(f"    JSONL: {metrics['jsonl_path']}")
-    print(
-        f"    Elapsed: {_fmt_hours(elapsed_sec)}  |  ETA: {_fmt_hours(eta_sec)}  |  Speed: {steps_per_sec:.0f} steps/sec"
-    )
-    if new_best:
-        print(f"    New best model! Best VP diff so far: {best_vp_diff:+.2f}")
-    print("=" * 80)
-
-
-def _evaluate_fixed_opponents(
-    model: ActorCritic,
-    device: torch.device,
-    agent_seat: int,
-    timestep: int,
-    out_dir: Path,
-) -> Dict[str, Any]:
-    """Run fixed-matchup evaluation for deterministic cross-checkpoint comparison."""
-    from sevenwonders_rl.features.action_feature_schema import IDX
-
-    repo_root = Path(__file__).resolve().parents[3]
-    all_games = []
-
-    for left_policy_name, right_policy_name in EVAL_FIXED_MATCHUPS:
-        for seed in EVAL_FIXED_SEEDS:
-            left_policy = make_policy(left_policy_name, seed=seed + 10000)
-            right_policy = make_policy(right_policy_name, seed=seed + 20000)
-
-            other_seats = [s for s in (0, 1, 2) if s != agent_seat]
-            opponent_policies = [
-                SeatPolicy("random"),
-                SeatPolicy("random"),
-                SeatPolicy("random"),
-            ]
-            opponent_policies[other_seats[0]] = SeatPolicy(
-                left_policy_name, policy=left_policy
-            )
-            opponent_policies[other_seats[1]] = SeatPolicy(
-                right_policy_name, policy=right_policy
-            )
-
-            env = SevenWondersEnv(
-                repo_root=str(repo_root),
-                agent_seat=agent_seat,
-                opponent_policies=opponent_policies,
-                reward_scale=1.0,
-            )
-
-            obs, info = env.reset(seed=seed)
-            done = False
-
-            action_counts = {"discard": 0, "build_wonder": 0, "prod_build": 0, "other": 0}
-
-            while not done:
-                action = select_action_from_obs(obs, model, device, deterministic=True)
-
-                action_feats = obs.get("action_feats")
-                if action_feats is not None and action < len(action_feats):
-                    row = action_feats[action]
-                    if row[IDX["action_type_3"]] > 0.5:
-                        action_counts["discard"] += 1
-                    elif row[IDX["action_type_1"]] > 0.5:
-                        action_counts["build_wonder"] += 1
-                    elif (
-                        sum(row[IDX[f"delta_prod_{r}"]] for r in ["wood", "ore", "clay", "stone", "loom", "glass", "papyrus"]) > 0
-                        or row[IDX["delta_prod_choice_raw"]] > 0
-                        or row[IDX["delta_prod_choice_manuf"]] > 0
-                    ):
-                        action_counts["prod_build"] += 1
-                    else:
-                        action_counts["other"] += 1
-
-                obs, reward, terminated, truncated, info = env.step(action)
-                done = terminated or truncated
-
-            status = info.get("status", {})
-            players = status.get("players", {})
-            totals = [int(players[str(sid)]["points"]["total"]) for sid in (0, 1, 2)]
-            agent_total = totals[agent_seat]
-            opp_best = max(t for i, t in enumerate(totals) if i != agent_seat)
-            vp_diff = agent_total - opp_best
-            win = 1 if vp_diff > 0 else 0
-
-            points = players[str(agent_seat)]["points"]
-
-            game_record = {
-                "checkpoint_step": timestep,
-                "seed": seed,
-                "opponents": {"left": left_policy_name, "right": right_policy_name},
-                "win": win,
-                "agent_vp": agent_total,
-                "vp_diff": vp_diff,
-                "totals": totals,
-                "points_breakdown": {
-                    "civilian": int(points.get("civilian", 0)),
-                    "commercial": int(points.get("commercial", 0)),
-                    "guild": int(points.get("guild", 0)),
-                    "military": int(points.get("military", 0)),
-                    "scientific": int(points.get("scientific", 0)),
-                    "wonder": int(points.get("wonder", 0)),
-                    "total": agent_total,
-                },
-                "action_counts": action_counts,
-            }
-            all_games.append(game_record)
-            env.close()
-
-    jsonl_path = out_dir / f"eval_{timestep}.jsonl"
-    with jsonl_path.open("w", encoding="utf-8") as f:
-        for game in all_games:
-            f.write(json.dumps(game) + "\n")
-
-    wins = np.array([g["win"] for g in all_games], dtype=np.float32)
-    vp_diffs = np.array([g["vp_diff"] for g in all_games], dtype=np.float32)
-    agent_totals = np.array([g["agent_vp"] for g in all_games], dtype=np.float32)
-
-    matchup_stats = {}
-    for left, right in EVAL_FIXED_MATCHUPS:
-        matchup_key = f"{left}_vs_{right}"
-        matchup_games = [
-            g for g in all_games
-            if g["opponents"]["left"] == left and g["opponents"]["right"] == right
-        ]
-        if matchup_games:
-            matchup_wins = [g["win"] for g in matchup_games]
-            matchup_vp_diffs = [g["vp_diff"] for g in matchup_games]
-            matchup_stats[matchup_key] = {
-                "win_rate": float(np.mean(matchup_wins)),
-                "vp_diff_mean": float(np.mean(matchup_vp_diffs)),
-                "games": len(matchup_games),
-            }
-
-    return {
-        "win_rate": float(wins.mean()),
-        "vp_diff_mean": float(vp_diffs.mean()),
-        "vp_diff_std": float(vp_diffs.std(ddof=0)),
-        "agent_vp_mean": float(agent_totals.mean()),
-        "total_games": len(all_games),
-        "matchup_breakdown": matchup_stats,
-        "jsonl_path": str(jsonl_path),
-    }
-
+EVAL_FIXED_MATCHUPS = [("baseline", "baseline"), ("mad_scientist", "mad_scientist"),
+                       ("military", "military"), ("random", "random")]
 
 def sample_fixed_opponents(
     weights: Dict[str, float],
@@ -263,529 +59,378 @@ def sample_selfplay_opponents(
     env_rng: np.random.Generator,
     current_step: int,
     agent_seat: int,
-    bootstrap_mode: str,
     policy_cache: Optional[OrderedDict] = None,
 ) -> List[SeatPolicy]:
-    """Sample two opponents from snapshot pool or bots (SELFPLAY mode)."""
+    """Neural opponents only. Empty pools and load failures are fatal."""
     other_seats = [s for s in (0, 1, 2) if s != agent_seat]
     opps = [SeatPolicy("random"), SeatPolicy("random"), SeatPolicy("random")]
 
     def _get_cached_policy(path: str) -> PPOCheckpointPolicy:
-        if policy_cache is None:
-            return PPOCheckpointPolicy(path, device="cpu", deterministic=False)
-        if path in policy_cache:
+        if policy_cache is not None and path in policy_cache:
             policy = policy_cache.pop(path)
             policy_cache[path] = policy
             return policy
-        policy = PPOCheckpointPolicy(path, device="cpu", deterministic=False)
-        policy_cache[path] = policy
-        while len(policy_cache) > 16:
-            policy_cache.popitem(last=False)
+        try:
+            policy = PPOCheckpointPolicy(path, device="cpu", deterministic=False)
+        except Exception as exc:
+            raise RuntimeError(f"Cannot load neural opponent {path}: {exc}") from exc
+        if policy_cache is not None:
+            policy_cache[path] = policy
+            while len(policy_cache) > 16:
+                policy_cache.popitem(last=False)
         return policy
 
-    pool_size = pool.pool_size(current_step)
-
-    if pool_size < 3:
-        # Bootstrap with bots
-        if bootstrap_mode == "bots":
-            bot_names = ["baseline", "mad_scientist"]
-            for idx, seat in enumerate(other_seats):
-                bot_policy = make_policy(bot_names[idx], seed=int(env_rng.integers(0, 2**31 - 1)))
-                opps[seat] = SeatPolicy(bot_names[idx], policy=bot_policy)
-        return opps
-
-    # 70% snapshots, 30% bots for diversity
-    if env_rng.random() < 0.7:
-        p1 = pool.sample_path(env_rng, current_step)
-        p2 = pool.sample_path(env_rng, current_step)
-
-        if p1 is not None and p2 is not None:
-            try:
-                pol1 = _get_cached_policy(p1)
-                pol2 = _get_cached_policy(p2)
-                pol1.set_seed(int(env_rng.integers(0, 2**31 - 1)))
-                pol2.set_seed(int(env_rng.integers(0, 2**31 - 1)))
-                opps[other_seats[0]] = SeatPolicy("ppo_snapshot", policy=pol1)
-                opps[other_seats[1]] = SeatPolicy("ppo_snapshot", policy=pol2)
-            except (FileNotFoundError, ValueError):
-                if bootstrap_mode == "bots":
-                    bot_names = ["baseline", "mad_scientist"]
-                    for idx, seat in enumerate(other_seats):
-                        bot_policy = make_policy(bot_names[idx], seed=int(env_rng.integers(0, 2**31 - 1)))
-                        opps[seat] = SeatPolicy(bot_names[idx], policy=bot_policy)
-    else:
-        if bootstrap_mode == "bots":
-            bot_names = ["baseline", "military"]
-            for idx, seat in enumerate(other_seats):
-                bot_policy = make_policy(bot_names[idx], seed=int(env_rng.integers(0, 2**31 - 1)))
-                opps[seat] = SeatPolicy(bot_names[idx], policy=bot_policy)
-
+    for seat in other_seats:
+        path = pool.sample_path(env_rng, current_step)
+        if path is None:
+            raise ValueError("Self-play requires its initial neural checkpoint_0.pt")
+        opps[seat] = SeatPolicy("ppo_snapshot", policy=_get_cached_policy(path))
     return opps
 
 
-def _feature_schema_hash() -> str:
-    import hashlib
-    data = "\n".join(FEATURE_NAMES).encode("utf-8")
-    return hashlib.sha256(data).hexdigest()
+def tensor_observations(observations):
+    return (torch.from_numpy(np.stack([flatten_global(o) for o in observations])),
+            torch.from_numpy(np.stack([o["action_feats"] for o in observations])),
+            torch.from_numpy(np.stack([o["action_mask"] for o in observations])))
 
 
-def _git_commit() -> str:
-    for key in ("GIT_COMMIT", "GITHUB_SHA"):
-        if os.environ.get(key):
-            return os.environ[key]
-    try:
-        out = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
-        return out if out else "unknown"
-    except Exception:
-        return "unknown"
+def collect_rollout(model, envs, observations, horizon, action_generator, reset_env, timers):
+    """Preserve [time, env] through collection, including pre-reset next values."""
+    buffers = {k: [] for k in ("global", "features", "masks", "actions", "logprobs", "values",
+                               "rewards", "terminated", "truncated", "next_values")}
+    for _ in range(horizon):
+        with timers.time("collection.prepare"):
+            global_obs, features, masks = tensor_observations(observations)
+        with timers.time("collection.inference"), torch.no_grad():
+            logits, values = model.forward_batch(global_obs, features)
+            logits = masked_logits(logits, masks)
+            distribution = torch.distributions.Categorical(logits=logits)
+            actions = torch.multinomial(distribution.probs, 1, generator=action_generator).squeeze(-1)
+            logprobs = distribution.log_prob(actions)
+        with timers.time("collection.send"):
+            opponent_actions = opponent_actions_batch(envs, timers=timers)
+            previous_turns = [env.send_action(int(action), opponent_actions=prepared)
+                              for env, action, prepared in zip(envs, actions, opponent_actions)]
+        following, rewards, terminals, truncations, infos = [], [], [], [], []
+        with timers.time("collection.wait"):
+            for env, previous_turn in zip(envs, previous_turns):
+                obs, reward, terminated, truncated, info = env.wait_next(previous_turn)
+                if not info.get("transition_valid", True):
+                    raise EngineError(info.get("truncated_reason", "invalid_transition"),
+                                      f"Invalid transition at {env.io_dir}: {info.get('error', '')}")
+                following.append(obs)
+                rewards.append(reward)
+                terminals.append(terminated)
+                truncations.append(truncated)
+                infos.append(info)
+        with timers.time("collection.bootstrap"), torch.no_grad():
+            next_global, next_features, _ = tensor_observations(following)
+            _, next_values = model.forward_batch(next_global, next_features)
+            next_values = next_values.masked_fill(torch.tensor(terminals), 0.0)
+        rows = (global_obs, features, masks, actions, logprobs, values,
+                torch.tensor(rewards, dtype=torch.float32), torch.tensor(terminals),
+                torch.tensor(truncations), next_values)
+        for key, row in zip(buffers, rows):
+            buffers[key].append(row.detach())
+        for i, (terminated, truncated) in enumerate(zip(terminals, truncations)):
+            if terminated or truncated:
+                with timers.time("collection.reset"):
+                    following[i] = reset_env(i, infos[i], terminated)
+        observations = following
+    return {key: torch.stack(rows) for key, rows in buffers.items()}, observations
 
 
-def _git_dirty() -> bool:
-    try:
-        out = subprocess.check_output(["git", "status", "--porcelain"], text=True)
-        return bool(out.strip())
-    except Exception:
-        return False
+def ppo_update(model, optimizer, rollout, args, minibatch_rng):
+    raw_adv, returns = compute_gae(rollout["rewards"], rollout["values"],
+        rollout["terminated"], rollout["truncated"], rollout["next_values"], args.gamma, args.gae_lambda)
+    advantages = normalize_advantages(raw_adv).flatten()
+    returns = returns.flatten()
+    batch = {key: value.flatten(0, 1) for key, value in rollout.items()}
+    count = advantages.numel()
+    metrics = {k: [] for k in ("policy_loss", "value_loss", "entropy", "approx_kl", "clip_fraction", "gradient_norm")}
+    for _ in range(args.minibatch_epochs):
+        indices = minibatch_rng.permutation(count)
+        for start in range(0, count, args.batch_size):
+            mb = indices[start:start + args.batch_size]
+            logits, values = model.forward_batch(batch["global"][mb], batch["features"][mb])
+            dist = torch.distributions.Categorical(logits=masked_logits(logits, batch["masks"][mb]))
+            log_ratio = dist.log_prob(batch["actions"][mb]) - batch["logprobs"][mb]
+            ratio = log_ratio.exp()
+            unclipped = ratio * advantages[mb]
+            clipped = ratio.clamp(1 - args.clip_eps, 1 + args.clip_eps) * advantages[mb]
+            policy_loss = -torch.minimum(unclipped, clipped).mean()
+            value_loss = (returns[mb] - values).square().mean()
+            entropy = dist.entropy().mean()
+            loss = policy_loss + args.vf_coef * value_loss - args.ent_coef * entropy
+            if not torch.isfinite(loss):
+                raise FloatingPointError("Non-finite PPO loss")
+            optimizer.zero_grad()
+            loss.backward()
+            grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), float("inf"), error_if_nonfinite=True)
+            optimizer.step()
+            if not all(torch.isfinite(p).all() for p in model.parameters()):
+                raise FloatingPointError("Non-finite PPO parameters")
+            for key, value in zip(metrics, (policy_loss, value_loss, entropy,
+                    ((ratio - 1) - log_ratio).mean(), ((ratio - 1).abs() > args.clip_eps).float().mean(), grad_norm)):
+                metrics[key].append(float(value.detach()))
+    result = {key: float(np.mean(values)) for key, values in metrics.items()}
+    for key, values in (("reward", rollout["rewards"]), ("value", rollout["values"]),
+                        ("return", returns), ("advantage", raw_adv)):
+        result.update({f"{key}_mean": float(values.mean()), f"{key}_std": float(values.std(correction=0))})
+    result.update(transitions=count, terminated=int(rollout["terminated"].sum()),
+                  truncated=int(rollout["truncated"].sum()))
+    return result
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Unified PPO Training")
-    parser.add_argument("--mode", choices=["fixed", "selfplay"], default="selfplay",
-                        help="Training mode: 'fixed' (vs bots) or 'selfplay' (vs snapshots)")
-    parser.add_argument("--seed", type=int, default=0)
-    parser.add_argument("--agent-seat", type=int, default=0)
-    parser.add_argument("--total-timesteps", type=int, default=2_000_000)
-    parser.add_argument("--n-envs", type=int, default=2)
-    parser.add_argument("--rollout-horizon", type=int, default=256)
-    parser.add_argument("--io-root", type=str, default=None)
-    parser.add_argument("--learning-rate", type=float, default=3e-4)
-    parser.add_argument("--gamma", type=float, default=0.999)
-    parser.add_argument("--gae-lambda", type=float, default=0.95)
-    parser.add_argument("--clip-eps", type=float, default=0.2)
-    parser.add_argument("--ent-coef", type=float, default=0.01)
-    parser.add_argument("--vf-coef", type=float, default=0.5)
-    parser.add_argument("--batch-size", type=int, default=256)
-    parser.add_argument("--minibatch-epochs", type=int, default=4)
-    parser.add_argument("--reward-scale", type=float, default=10.0)
-    parser.add_argument("--eval-every", type=int, default=256_000)
-    parser.add_argument("--log-every", type=int, default=50_000)
-    parser.add_argument("--out-dir", type=str, default="runs/ppo_unified")
-    
-    # Self-play specific (ignored in fixed mode)
-    parser.add_argument("--league-dir", type=str, default=None)
-    parser.add_argument("--pool-max", type=int, default=80)
-    parser.add_argument("--pool-lag-steps", type=int, default=256_000)
-    parser.add_argument("--snapshot-every", type=int, default=128_000)
-    parser.add_argument("--bootstrap", choices=["random", "bots"], default="bots")
-    
-    # Fixed mode specific (ignored in selfplay mode)
-    parser.add_argument("--opponent-baseline", type=float, default=0.50)
-    parser.add_argument("--opponent-scientist", type=float, default=0.30)
-    parser.add_argument("--opponent-military", type=float, default=0.20)
-    
-    args = parser.parse_args()
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--mode", choices=["fixed", "selfplay"], default="selfplay")
+    defaults = {"seed": 0, "agent-seat": 0, "total-timesteps": 2_000_000, "n-envs": 2,
+        "rollout-horizon": 256, "batch-size": 256, "minibatch-epochs": 4,
+        "eval-every": 32_768, "log-every": 4096, "save-every": 4096,
+        "eval-games-per-matchup": 10, "eval-seed": 42, "pool-max": 80,
+        "pool-lag-steps": 0, "snapshot-every": 4096, "engine-poll-us": 1000}
+    for name, default in defaults.items():
+        parser.add_argument("--" + name, type=int, default=default)
+    for name, default in {"learning-rate": 3e-4, "gamma": .999, "gae-lambda": .95,
+        "clip-eps": .2, "ent-coef": .01, "vf-coef": .5, "reward-scale": 10.,
+        "opponent-baseline": .5, "opponent-scientist": .3, "opponent-military": .2,
+        "poll-seconds": .001}.items():
+        parser.add_argument("--" + name, type=float, default=default)
+    for name in ("io-root", "out-dir", "league-dir"):
+        parser.add_argument("--" + name)
+    parser.add_argument("--eval-action-mode", choices=["greedy", "stochastic"], default="stochastic")
+    parser.add_argument("--opponent-inference", choices=["batched", "serial"], default="batched",
+                        help="Group frozen neural opponents across environments; serial is the comparison path")
+    args = parser.parse_args(argv)
+    positive = ("total_timesteps", "n_envs", "rollout_horizon", "batch_size", "minibatch_epochs",
+                "eval_every", "log_every", "save_every", "eval_games_per_matchup", "pool_max", "snapshot_every")
+    if any(getattr(args, key) <= 0 for key in positive):
+        parser.error("Counts and intervals must be positive")
+    if args.seed < 0 or args.eval_seed < 0 or args.pool_lag_steps < 0 or args.agent_seat not in (0, 1, 2):
+        parser.error("Invalid seed, pool lag or agent seat")
+    if args.total_timesteps % args.n_envs:
+        parser.error("total-timesteps must be divisible by n-envs")
+    if not all(math.isfinite(v) for v in vars(args).values() if isinstance(v, float)):
+        parser.error("Numeric parameters must be finite")
+    if not 0 <= args.gamma <= 1 or not 0 <= args.gae_lambda <= 1:
+        parser.error("gamma and gae-lambda must be in [0,1]")
+    if args.learning_rate <= 0 or args.reward_scale <= 0 or not 0 < args.clip_eps < 1 or min(args.ent_coef, args.vf_coef) < 0:
+        parser.error("Invalid optimization parameters")
+    weights = (args.opponent_baseline, args.opponent_scientist, args.opponent_military)
+    if min(weights) < 0 or sum(weights) <= 0:
+        parser.error("Opponent weights must be nonnegative with a positive sum")
+    if not 0 <= args.engine_poll_us <= 1_000_000 or args.poll_seconds < 0:
+        parser.error("Invalid polling interval")
+    return args
 
-    np.random.seed(args.seed)
-    torch.manual_seed(args.seed)
 
+def main(argv=None):
+    args = parse_args(argv)
+    torch.set_num_threads(1)
+    if torch.get_num_interop_threads() != 1:
+        torch.set_num_interop_threads(1)
+    torch.use_deterministic_algorithms(True)
     repo_root = Path(__file__).resolve().parents[3]
-    out_dir = Path(args.out_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
-
-    # Build opponent weights for fixed mode
-    opponent_weights = {
-        "baseline": args.opponent_baseline,
-        "mad_scientist": args.opponent_scientist,
-        "military": args.opponent_military,
-    }
-
-    league_dir = Path(args.league_dir) if args.league_dir else out_dir
+    if args.out_dir:
+        out_dir = Path(args.out_dir).expanduser().resolve()
+        if out_dir.exists() and any(out_dir.iterdir()):
+            raise ValueError(f"Output directory is not empty: {out_dir}")
+        out_dir.mkdir(parents=True, exist_ok=True)
+    else:
+        out_dir = run_io_root(Path("runs/ppo_unified"), args.mode)
+    league_dir = Path(args.league_dir).expanduser().resolve() if args.league_dir else out_dir
     league_dir.mkdir(parents=True, exist_ok=True)
-
-    if args.io_root:
-        io_root = Path(args.io_root)
-    else:
-        io_root = repo_root / "io_train"
-    io_root.mkdir(parents=True, exist_ok=True)
-
-    config = vars(args)
-    (out_dir / "config.json").write_text(json.dumps(config, indent=2), encoding="utf-8")
-
-    from sevenwonders_rl.utils.timing import TimingBuckets
+    if args.mode == "selfplay" and any(league_dir.glob("checkpoint_*.pt")):
+        raise ValueError("Self-play requires a fresh league directory for this run")
+    io_root = exchange_io_root(args.io_root, repo_root / "io_train", "training",
+                               prefer_ram=args.mode == "selfplay")
+    config = {**vars(args), "out_dir": str(out_dir), "io_root": str(io_root), "league_dir": str(league_dir)}
+    atomic_json(out_dir / "config.json", config)
+    run_manifest = manifest(repo_root, config)
+    atomic_json(out_dir / "manifest.json", run_manifest)
+    print(f"Exchange: {io_root}; opponents: {args.opponent_inference}; "
+          f"evaluation every {args.eval_every} transitions", flush=True)
     timers = TimingBuckets()
-
-    print("=" * 80)
-    if args.mode == "fixed":
-        print("PPO TRAINING vs FIXED BOTS")
-    else:
-        print("PPO SELF-PLAY TRAINING")
-    print("=" * 80)
-    print(f"Mode: {args.mode}")
-    print(f"Total timesteps: {args.total_timesteps:,}")
-    print(f"Parallel envs: {args.n_envs}")
-    print(f"Eval every: {args.eval_every:,} steps")
-    print(f"Log every: {args.log_every:,} steps")
-    
-    if args.mode == "selfplay":
-        print(f"Snapshot every: {args.snapshot_every:,} steps")
-        print(f"Pool max size: {args.pool_max}")
-        print(f"Pool lag: {args.pool_lag_steps:,} steps")
-        print(f"Bootstrap mode: {args.bootstrap}")
-        print(f"League dir: {league_dir}")
-    else:
-        print(f"Opponent weights: {opponent_weights}")
-    
-    print(f"Output dir: {out_dir}")
-    print(f"Device: cpu")
-    print()
-    print("Creating environments...")
-
-    # Create pool for selfplay mode (unused in fixed mode)
-    pool = OpponentPool(
-        ckpt_dir=str(league_dir),
-        max_size=args.pool_max,
-        min_step_lag=args.pool_lag_steps,
-        latest_k=8,
-    ) if args.mode == "selfplay" else None
-
-    env_rngs = [np.random.default_rng(args.seed + 10_000 + i) for i in range(args.n_envs)]
-    policy_cache: OrderedDict[str, PPOCheckpointPolicy] = OrderedDict()
-
-    envs = []
-    for rank in range(args.n_envs):
-        env_io_dir = io_root / f"env_{rank:03d}" / "io"
-        env_io_dir.mkdir(parents=True, exist_ok=True)
-
-        env = SevenWondersEnv(
-            repo_root=str(repo_root),
-            agent_seat=args.agent_seat,
-            io_dir=str(env_io_dir),
-            opponent_policies=[SeatPolicy("random"), SeatPolicy("random"), SeatPolicy("random")],
-            seed=args.seed,
-            env_id=rank,
-            reward_scale=args.reward_scale,
-            timers=timers,
-        )
-        envs.append(env)
-
-    # Initialize envs with sampled opponents
-    obs_list = []
-    for i, (env, env_rng) in enumerate(zip(envs, env_rngs)):
+    pool = OpponentPool(str(league_dir), max_size=args.pool_max,
+                        min_step_lag=args.pool_lag_steps, latest_k=8) if args.mode == "selfplay" else None
+    env_rngs = [np.random.default_rng(derive_seed(args.seed, "opponents", i)) for i in range(args.n_envs)]
+    minibatch_rng = np.random.default_rng(derive_seed(args.seed, "minibatch"))
+    action_generator = torch.Generator().manual_seed(derive_seed(args.seed, "learner"))
+    weights = {"baseline": args.opponent_baseline, "mad_scientist": args.opponent_scientist, "military": args.opponent_military}
+    policy_cache = OrderedDict()
+    envs, episodes = [], [0] * args.n_envs
+    active_games, checkpoint_hashes = {}, {}
+    neural_plan = None
+    best_selection_score = float("-inf")
+    timestep, updates, best_vp_diff = 0, 0, float("-inf")
+    started = time.perf_counter()
+    status = "failed"
+    next_eval, next_save, next_snapshot = args.eval_every, args.save_every, args.snapshot_every
+    def reset_env(i, final_info=None, terminated=False):
+        if final_info is not None:
+            with (out_dir / "episodes.jsonl").open("a") as f:
+                f.write(json.dumps({**active_games[i],
+                    "status": "completed" if terminated else "truncated",
+                    "totals": final_info.get("final_totals"), "reason": final_info.get("truncated_reason")}) + "\n")
+            episodes[i] += 1
+        seat = args.agent_seat if args.mode == "fixed" else (args.agent_seat + i + episodes[i] * args.n_envs) % 3
+        envs[i].agent_seat = seat
         if args.mode == "fixed":
-            opps = sample_fixed_opponents(opponent_weights, env_rng, args.agent_seat)
+            policies = sample_fixed_opponents(weights, env_rngs[i], seat)
         else:
-            opps = sample_selfplay_opponents(
-                pool=pool,
-                env_rng=env_rng,
-                current_step=0,
-                agent_seat=args.agent_seat,
-                bootstrap_mode=args.bootstrap,
-                policy_cache=policy_cache,
-            )
-        env.opponent_policies = opps
-        obs, info = env.reset(seed=args.seed + i)
-        obs_list.append(obs)
-
-    print(f"✓ Created {args.n_envs} environments")
-    print()
-    print("Initializing model...")
-
-    global_dim = flatten_global(obs_list[0]).shape[0]
-    action_feat_dim = obs_list[0]["action_feats"].shape[1]
-    obs_keys = sorted(list(obs_list[0].keys()))
-
-    device = torch.device("cpu")
-    model = ActorCritic(global_dim, action_feat_dim).to(device)
-    optimizer = optim.Adam(model.parameters(), lr=args.learning_rate)
-
-    log_path = out_dir / "train_log.csv"
-    if not log_path.exists():
-        log_path.write_text("timestep,win_rate,vp_diff_mean,vp_diff_std,agent_vp_mean\n", encoding="utf-8")
-
-    timestep = 0
-    episode_seeds = [args.seed + 1000 + i for i in range(args.n_envs)]
-    best_vp_diff = float("-inf")
-
-    print(f"✓ Model initialized (global_dim={global_dim}, action_feat_dim={action_feat_dim})")
-    print()
-    print("=" * 80)
-    print("STARTING TRAINING")
-    print("=" * 80)
-    print(f"Rollout horizon: {args.rollout_horizon} steps/env")
-    print(f"Learning rate: {args.learning_rate}")
-    print(f"First eval at: {args.eval_every:,} steps")
-    print()
-
-    start_time = time.time()
-    next_eval_at = args.eval_every
-    next_snapshot_at = args.snapshot_every if args.mode == "selfplay" else float('inf')
-    next_log_at = args.log_every
-
-    prev_log_step = 0
-    prev_log_time = start_time
-    ema_steps_per_sec: Optional[float] = None
-
-    episodes_total = 0
-    episodes_selfplay = 0
-
-    while timestep < args.total_timesteps:
-        # Rollout
-        global_buf, action_feats_buf, mask_buf = [], [], []
-        actions_buf, logprob_buf, value_buf = [], [], []
-        reward_buf, done_buf = [], []
-
-        for step_idx in range(args.rollout_horizon):
-            batch_global = []
-            batch_action_feats = []
-            batch_mask = []
-
-            for obs in obs_list:
-                batch_global.append(flatten_global(obs))
-                batch_action_feats.append(obs["action_feats"])
-                batch_mask.append(obs["action_mask"])
-
-            batch_global = torch.tensor(np.array(batch_global), dtype=torch.float32, device=device)
-            batch_action_feats = torch.tensor(np.array(batch_action_feats), dtype=torch.float32, device=device)
-            batch_mask = torch.tensor(np.array(batch_mask), dtype=torch.float32, device=device)
-
-            with torch.no_grad():
-                logits, values = model.forward_batch(batch_global, batch_action_feats)
-                logits = masked_logits(logits, batch_mask)
-
-            dist = torch.distributions.Categorical(logits=logits)
-            actions = dist.sample()
-            logprobs = dist.log_prob(actions)
-
-            # Two-phase stepping
-            prev_turns = []
-            for env_idx, (env, action) in enumerate(zip(envs, actions)):
-                prev_turn = env.send_action(int(action.item()), status=obs_list[env_idx].get("_status"))
-                prev_turns.append(prev_turn)
-
-            new_obs_list = []
-            for env_idx, (env, prev_turn, action) in enumerate(zip(envs, prev_turns, actions)):
-                obs, reward, terminated, truncated, info = env.wait_next(prev_turn)
-                done = terminated or truncated
-
-                global_buf.append(batch_global[env_idx].cpu().numpy())
-                action_feats_buf.append(batch_action_feats[env_idx].cpu().numpy())
-                mask_buf.append(batch_mask[env_idx].cpu().numpy())
-                actions_buf.append(int(action.item()))
-                logprob_buf.append(float(logprobs[env_idx].item()))
-                value_buf.append(float(values[env_idx].item()))
-                reward_buf.append(float(reward))
-                done_buf.append(float(done))
-
-                timestep += 1
-
-                if done:
-                    episode_seeds[env_idx] += args.n_envs
-
-                    # Resample opponents
-                    if args.mode == "fixed":
-                        opps = sample_fixed_opponents(opponent_weights, env_rngs[env_idx], args.agent_seat)
-                    else:
-                        opps = sample_selfplay_opponents(
-                            pool=pool,
-                            env_rng=env_rngs[env_idx],
-                            current_step=timestep,
-                            agent_seat=args.agent_seat,
-                            bootstrap_mode=args.bootstrap,
-                            policy_cache=policy_cache,
-                        )
-
-                    env.opponent_policies = opps
-                    episodes_total += 1
-                    if any(p.name == "ppo_snapshot" for p in opps):
-                        episodes_selfplay += 1
-
-                    obs, info = env.reset(seed=episode_seeds[env_idx])
-
-                new_obs_list.append(obs)
-
-            obs_list = new_obs_list
-
-            if timestep >= next_log_at:
-                elapsed_sec = time.time() - start_time
-                interval_steps = timestep - prev_log_step
-                interval_time = time.time() - prev_log_time
-                interval_sps = interval_steps / interval_time if interval_time > 1e-9 else 0.0
-                ema_steps_per_sec = 0.2 * interval_sps + 0.8 * (ema_steps_per_sec or interval_sps)
-
-                steps_per_sec = ema_steps_per_sec or _training_speed(timestep, elapsed_sec)
-                eta_sec = _eta_seconds(args.total_timesteps, timestep, steps_per_sec)
-                percent = 100.0 * timestep / args.total_timesteps if args.total_timesteps > 0 else 0.0
-                
+            policies = sample_selfplay_opponents(pool, env_rngs[i], timestep, seat, policy_cache)
+        envs[i].opponent_policies = policies
+        seed = derive_seed(args.seed, "engine", i, episodes[i])
+        opponents = {}
+        for opponent_seat, policy in enumerate(policies):
+            if opponent_seat == seat:
+                continue
+            descriptor = {"name": policy.name}
+            if policy.name == "ppo_snapshot":
+                path = str(Path(policy.policy.ckpt_path).resolve())
+                if path not in checkpoint_hashes:
+                    checkpoint_hashes[path] = file_hash(path)
+                descriptor.update(checkpoint=path, sha256=checkpoint_hashes[path])
+            opponents[str(opponent_seat)] = descriptor
+        active_games[i] = {"env": i, "episode": episodes[i], "engine_seed": seed,
+                           "agent_seat": seat, "selection_step": timestep, "opponents": opponents}
+        with (out_dir / "opponents.jsonl").open("a") as f:
+            f.write(json.dumps(active_games[i]) + "\n")
+        obs, _ = envs[i].reset(seed=seed)
+        return obs
+    try:
+        for i in range(args.n_envs):
+            envs.append(SevenWondersEnv(repo_root=str(repo_root), agent_seat=args.agent_seat,
+                io_dir=str(io_root / "train" / f"env_{i:03d}" / "io"),
+                reward_scale=args.reward_scale, invalid_action_fallback="raise", timers=timers,
+                engine_poll_us=args.engine_poll_us, poll_seconds=args.poll_seconds,
+                batch_opponents=args.opponent_inference == "batched"))
+        # Build the initial policy before starting any game: neural self-play is
+        # available from the first action, including with a single snapshot.
+        zero_obs = {key: np.zeros(space.shape, dtype=space.dtype)
+                    for key, space in envs[0].observation_space.spaces.items()}
+        global_dim = len(flatten_global(zero_obs))
+        feature_dim = zero_obs["action_feats"].shape[1]
+        with torch.random.fork_rng(devices=[]):
+            torch.manual_seed(derive_seed(args.seed, "model"))
+            model = ActorCritic(global_dim, feature_dim)
+        optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
+        config.update(global_dim=global_dim, action_feat_dim=feature_dim, hidden=128,
+                      model_architecture_version=model.architecture_version)
+        atomic_json(out_dir / "config.json", config)
+        atomic_json(out_dir / "manifest.json", run_manifest)
+        def save(path, metrics=None):
+            with timers.time("checkpoint"):
+                save_checkpoint(path, model, optimizer, timestep, config, run_manifest, metrics)
+        if args.mode == "selfplay":
+            save(league_dir / "checkpoint_0.pt")
+            reference_dir = out_dir / "references"
+            reference_dir.mkdir()
+            with torch.random.fork_rng(devices=[]):
+                torch.manual_seed(derive_seed(args.seed, "model", 1))
+                independent = ActorCritic(global_dim, feature_dim)
+            independent_path = reference_dir / "independent_initial.pt"
+            save_checkpoint(independent_path, independent, None, 0, config, run_manifest)
+            references = [reference(league_dir / "checkpoint_0.pt"), reference(independent_path)]
+            atomic_json(out_dir / "references.json", {"references": references,
+                "purpose": "fixed initial neural opponents; independent reference excluded from training"})
+            neural_plan = evaluation_plan(references, args.eval_seed, args.eval_games_per_matchup)
+            with timers.time("evaluation"):
+                initial_evaluation = evaluate_model(model, "cpu", neural_plan, repo_root,
+                    io_root / "evaluation" / "0", out_dir / "eval_0.jsonl",
+                    args.eval_action_mode, args.engine_poll_us, args.poll_seconds, "step:0",
+                    batch_opponents=args.opponent_inference == "batched")
+            if not initial_evaluation["valid_for_selection"]:
+                raise RuntimeError("Initial neural evaluation did not complete")
+            initial_evaluation.update(paired_progress(out_dir / "eval_0.jsonl", out_dir / "eval_0.jsonl"))
+            atomic_json(out_dir / "eval_0_summary.json", initial_evaluation)
+            best_selection_score = initial_evaluation["win_share"]
+            best_vp_diff = initial_evaluation["vp_diff_mean"]
+            save(out_dir / "best.pt", initial_evaluation)
+            print(f"Initial neural evaluation: {initial_evaluation}", flush=True)
+        with timers.time("initialization.reset"):
+            observations = [reset_env(i) for i in range(args.n_envs)]
+        while timestep < args.total_timesteps:
+            horizon = min(args.rollout_horizon, (args.total_timesteps - timestep) // args.n_envs)
+            with timers.time("collection"):
+                rollout, observations = collect_rollout(model, envs, observations, horizon,
+                                                        action_generator, reset_env, timers)
+            with timers.time("ppo_update"):
+                metrics = ppo_update(model, optimizer, rollout, args, minibatch_rng)
+            digest = hashlib.sha256()
+            for key in ("global", "features", "masks", "actions", "rewards", "terminated", "truncated"):
+                digest.update(rollout[key].numpy().tobytes())
+            metrics["trajectory_sha256"] = digest.hexdigest()
+            timestep += metrics["transitions"]
+            updates += 1
+            metrics.update(timestep=timestep, update=updates)
+            with (out_dir / "updates.jsonl").open("a") as f:
+                f.write(json.dumps(metrics, allow_nan=False) + "\n")
+            if updates == 1 or timestep >= next_save:
+                save(out_dir / "latest.pt")
+                while next_save <= timestep:
+                    next_save += args.save_every
+            if args.mode == "selfplay" and timestep >= next_snapshot:
+                save(league_dir / f"checkpoint_{timestep}.pt")
+                while next_snapshot <= timestep:
+                    next_snapshot += args.snapshot_every
+            if timestep >= next_eval or (args.mode == "selfplay" and timestep == args.total_timesteps):
+                specs = neural_plan if args.mode == "selfplay" else [{"left": left, "right": right, "agent_seat": args.agent_seat,
+                          "engine_seed": derive_seed(args.eval_seed, "evaluation", i)}
+                         for left, right in EVAL_FIXED_MATCHUPS for i in range(args.eval_games_per_matchup)]
+                with timers.time("evaluation"):
+                    evaluation = evaluate_model(model, "cpu", specs, repo_root,
+                        io_root / "evaluation" / str(timestep), out_dir / f"eval_{timestep}.jsonl",
+                        args.eval_action_mode, args.engine_poll_us, args.poll_seconds, f"step:{timestep}",
+                        batch_opponents=args.opponent_inference == "batched")
                 if args.mode == "selfplay":
-                    frac_selfplay = episodes_selfplay / episodes_total if episodes_total > 0 else 0.0
-                    print(
-                        f"[progress] {percent:5.1f}% | step {timestep:,}/{args.total_timesteps:,} | "
-                        f"speed {steps_per_sec:.0f} steps/s | ETA {_fmt_hours(eta_sec)} | "
-                        f"selfplay {frac_selfplay:.1%} | pool eligible {pool.pool_size(timestep)} / total {pool.total_size()}"
-                    )
-                else:
-                    print(
-                        f"[progress] {percent:5.1f}% | step {timestep:,}/{args.total_timesteps:,} | "
-                        f"speed {steps_per_sec:.0f} steps/s | ETA {_fmt_hours(eta_sec)}"
-                    )
-                
-                prev_log_step = timestep
-                prev_log_time = time.time()
-                while next_log_at <= timestep:
-                    next_log_at += args.log_every
-
-            if timestep >= args.total_timesteps:
-                break
-
-        # Convert buffers
-        global_buf = torch.tensor(np.array(global_buf), dtype=torch.float32, device=device)
-        action_feats_buf = torch.tensor(np.array(action_feats_buf), dtype=torch.float32, device=device)
-        mask_buf = torch.tensor(np.array(mask_buf), dtype=torch.float32, device=device)
-        actions_buf = torch.tensor(np.array(actions_buf), dtype=torch.int64, device=device)
-        logprob_buf = torch.tensor(np.array(logprob_buf), dtype=torch.float32, device=device)
-        value_buf = torch.tensor(np.array(value_buf), dtype=torch.float32, device=device)
-        reward_buf = torch.tensor(np.array(reward_buf), dtype=torch.float32, device=device)
-        done_buf = torch.tensor(np.array(done_buf), dtype=torch.float32, device=device)
-
-        # Compute last values for GAE
-        last_values_list = []
-        for obs in obs_list:
-            global_t = torch.from_numpy(flatten_global(obs)).to(device)
-            action_feats_t = torch.from_numpy(obs["action_feats"]).to(device)
-            with torch.no_grad():
-                _, last_value = model.forward_batch(global_t.unsqueeze(0), action_feats_t.unsqueeze(0))
-                last_values_list.append(float(last_value.item()))
-
-        # GAE
-        advantages = torch.zeros_like(reward_buf)
-        last_adv = 0.0
-        last_value_idx = 0
-
-        for t in reversed(range(len(reward_buf))):
-            mask_next = 1.0 - done_buf[t]
-            if t == len(reward_buf) - 1:
-                next_value = last_values_list[last_value_idx % args.n_envs]
-                last_value_idx += 1
-            else:
-                next_value = value_buf[t + 1]
-
-            delta = reward_buf[t] + args.gamma * next_value * mask_next - value_buf[t]
-
-            if done_buf[t] > 0.5:
-                last_adv = 0.0
-
-            last_adv = delta + args.gamma * args.gae_lambda * mask_next * last_adv
-            advantages[t] = last_adv
-
-        returns = advantages + value_buf
-        advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
-
-        # PPO update
-        batch_size = len(reward_buf)
-        idxs = np.arange(batch_size)
-
-        for _ in range(args.minibatch_epochs):
-            np.random.shuffle(idxs)
-            for start in range(0, batch_size, args.batch_size):
-                end = start + args.batch_size
-                mb = idxs[start:end]
-
-                logits, values = model.forward_batch(global_buf[mb], action_feats_buf[mb])
-                logits = masked_logits(logits, mask_buf[mb])
-                dist = torch.distributions.Categorical(logits=logits)
-
-                new_logprob = dist.log_prob(actions_buf[mb])
-                entropy = dist.entropy().mean()
-
-                ratio = (new_logprob - logprob_buf[mb]).exp()
-                adv = advantages[mb]
-
-                pg_loss_1 = ratio * adv
-                pg_loss_2 = torch.clamp(ratio, 1.0 - args.clip_eps, 1.0 + args.clip_eps) * adv
-                policy_loss = -torch.min(pg_loss_1, pg_loss_2).mean()
-
-                value_loss = ((returns[mb] - values) ** 2).mean()
-
-                loss = policy_loss + args.vf_coef * value_loss - args.ent_coef * entropy
-
-                optimizer.zero_grad()
-                loss.backward()
-                optimizer.step()
-
-        # Save snapshots (selfplay mode only)
-        if args.mode == "selfplay" and timestep >= next_snapshot_at:
-            snapshot_path = league_dir / f"checkpoint_{timestep}.pt"
-            checkpoint = {
-                "state_dict": model.state_dict(),
-                "optimizer_state": optimizer.state_dict(),
-                "timestep": timestep,
-                "config": {**config, "global_dim": global_dim, "action_feat_dim": action_feat_dim, "hidden": 128},
-                "feature_schema_version": 1,
-                "meta": {
-                    "created_at_utc": datetime.now(timezone.utc).isoformat(),
-                    "git_commit": _git_commit(),
-                    "dirty": _git_dirty(),
-                    "feature_schema_hash": _feature_schema_hash(),
-                    "k_action_feats": int(K_ACTION_FEATS),
-                    "timesteps": int(timestep),
-                },
-            }
-            torch.save(checkpoint, snapshot_path)
-            while next_snapshot_at <= timestep:
-                next_snapshot_at += args.snapshot_every
-
-        # Evaluate
-        if timestep >= next_eval_at:
-            metrics = _evaluate_fixed_opponents(model, device, args.agent_seat, timestep, out_dir)
-
-            with (out_dir / "train_log.csv").open("a", encoding="utf-8") as f:
-                f.write(f"{timestep},{metrics['win_rate']:.4f},{metrics['vp_diff_mean']:.4f},{metrics['vp_diff_std']:.4f},{metrics['agent_vp_mean']:.4f}\n")
-
-            checkpoint = {
-                "state_dict": model.state_dict(),
-                "optimizer_state": optimizer.state_dict(),
-                "timestep": timestep,
-                "config": {**config, "global_dim": global_dim, "action_feat_dim": action_feat_dim, "hidden": 128},
-                "feature_schema_version": 1,
-                "meta": {
-                    "created_at_utc": datetime.now(timezone.utc).isoformat(),
-                    "git_commit": _git_commit(),
-                    "dirty": _git_dirty(),
-                    "feature_schema_hash": _feature_schema_hash(),
-                    "k_action_feats": int(K_ACTION_FEATS),
-                    "eval_metrics": metrics,
-                    "timesteps": int(timestep),
-                },
-            }
-
-            torch.save(checkpoint, out_dir / "latest.pt")
-
-            new_best = False
-            if metrics["vp_diff_mean"] > best_vp_diff:
-                best_vp_diff = metrics["vp_diff_mean"]
-                torch.save(checkpoint, out_dir / "best.pt")
-                new_best = True
-
-            _print_eval_block(timestep, args.total_timesteps, start_time, metrics, new_best, best_vp_diff)
-
-            while next_eval_at <= timestep:
-                next_eval_at += args.eval_every
-
-    # Cleanup
-    for env in envs:
-        env.close()
-
-    total_time = time.time() - start_time
-    steps_per_sec = timestep / total_time if total_time > 0 else 0
-
-    print("\n" + "=" * 80)
-    print("TRAINING COMPLETE")
-    print(f"  Total time: {_fmt_hours(total_time)}  |  Total steps: {timestep:,}  |  Speed: {steps_per_sec:.1f} steps/sec")
-    print(f"  Best VP diff: {best_vp_diff:+.2f}")
-    print(f"  Out: {out_dir}  |  best.pt / latest.pt saved")
-    if args.mode == "selfplay":
-        print(f"  Pool dir: {league_dir} | Final pool: {pool.pool_size(timestep)} eligible / {pool.total_size()} total")
-    print("=" * 80)
+                    evaluation.update(paired_progress(out_dir / f"eval_{timestep}.jsonl", out_dir / "eval_0.jsonl"))
+                with (out_dir / "train_log.csv").open("a") as f:
+                    if f.tell() == 0:
+                        f.write("timestep,win_rate,vp_diff_mean,vp_diff_std,agent_vp_mean,completed,truncated,failed,win_share\n")
+                    f.write(",".join(str(v) if v is not None else "" for v in
+                        (timestep, evaluation["win_rate"], evaluation["vp_diff_mean"], evaluation["vp_diff_std"],
+                         evaluation["agent_vp_mean"], evaluation["completed"], evaluation["truncated"], evaluation["failed"],
+                         evaluation["win_share"])) + "\n")
+                score = evaluation["win_share"] if args.mode == "selfplay" else evaluation["vp_diff_mean"]
+                previous_best = best_selection_score if args.mode == "selfplay" else best_vp_diff
+                if evaluation["valid_for_selection"] and score > previous_best:
+                    best_selection_score = score
+                    best_vp_diff = evaluation["vp_diff_mean"]
+                    save(out_dir / "best.pt", evaluation)
+                atomic_json(out_dir / f"eval_{timestep}_summary.json", evaluation)
+                print(f"Evaluation at {timestep}: {evaluation}", flush=True)
+                while next_eval <= timestep:
+                    next_eval += args.eval_every
+            if timestep % args.log_every < args.n_envs * horizon or timestep == args.total_timesteps:
+                print(f"step={timestep}/{args.total_timesteps} updates={updates} "
+                      f"elapsed={time.perf_counter()-started:.2f}s", flush=True)
+        save(out_dir / "latest.pt")
+        status = "completed"
+    except BaseException as exc:
+        for i, env in enumerate(envs):
+            error_log = env.io_dir.parent / "engine_stderr.log"
+            if error_log.exists():
+                shutil.copyfile(error_log, out_dir / f"engine_{i}_stderr.log")
+        atomic_json(out_dir / "failure.json", {"type": type(exc).__name__, "error": str(exc),
+                    "reason": getattr(exc, "reason", None), "last_completed_update": updates,
+                    "timestep": timestep, "pending_rollout_discarded": True,
+                    "last_statuses": [env._last_status for env in envs]})
+        raise
+    finally:
+        for env in envs:
+            env.close()
+        shutil.rmtree(io_root)
+        elapsed = time.perf_counter() - started
+        atomic_json(out_dir / "timing.json", timers.as_dict(elapsed))
+        atomic_json(out_dir / "result.json", {"status": status, "timestep": timestep, "updates": updates,
+                    "elapsed_seconds": elapsed, "steps_per_second": timestep / elapsed,
+                    "best_vp_diff": best_vp_diff if math.isfinite(best_vp_diff) else None,
+                    "selection_metric": "win_share" if args.mode == "selfplay" else "vp_diff_mean",
+                    "best_selection_score": best_selection_score if math.isfinite(best_selection_score) else None})
+    print(f"Saved {out_dir / 'latest.pt'}", flush=True)
+    return out_dir
 
 
 if __name__ == "__main__":

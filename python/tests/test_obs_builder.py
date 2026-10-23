@@ -1,8 +1,10 @@
 import numpy as np
 import pytest
+import copy
 
 from sevenwonders_rl.features.obs_builder import build_obs
 from sevenwonders_rl.features.action_feature_schema import K as K_ACTION_FEATS
+from sevenwonders_rl.utils.ppo_utils import flatten_global
 
 
 pytestmark = pytest.mark.component
@@ -115,3 +117,22 @@ def test_hand_ids_padded_and_matches_status(status_pool):
             expected = hand_ids[:7] + [-1] * max(0, 7 - len(hand_ids))
             got = obs["hand_ids"].astype(int).tolist()
             assert got == expected, f"{path.name}: seat{seat} hand_ids mismatch. got={got} exp={expected}"
+
+
+@pytest.mark.parametrize("resource", ["wood", "ore", "clay", "stone", "loom", "glass", "papyrus"])
+def test_starting_resource_reaches_model_input_for_every_relative_seat(status_age1_turn0, resource):
+    # Keep all public resource totals unchanged except this one starting resource.
+    # Check the flattened network input too, not just an unused observation key.
+    status = copy.deepcopy(status_age1_turn0)
+    for agent_seat in (0, 1, 2):
+        for resource_seat in (0, 1, 2):
+            before = build_obs(status, agent_seat)
+            status["players"][str(resource_seat)]["resources"][resource] += 1
+            after = build_obs(status, agent_seat)
+            row = _rotation_for_seat(agent_seat).index(resource_seat)
+            column = ["wood", "ore", "clay", "stone", "loom", "glass", "papyrus"].index(resource)
+            assert after["table_prod"][row, column] == before["table_prod"][row, column] + 1
+            # Resource totals occupy the third 3x7 block in the global vector.
+            index = 42 + row * 7 + column
+            assert flatten_global(after)[index] == flatten_global(before)[index] + 1
+            status["players"][str(resource_seat)]["resources"][resource] -= 1

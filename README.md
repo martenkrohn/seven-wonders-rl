@@ -4,7 +4,7 @@ A work-in-progress reinforcement-learning project for three-player **7 Wonders**
 
 The simulator comes from [DMAG/UFSM's 7Wonders](https://github.com/dmag-ufsm/7Wonders). This project adds the RL environment, observation and action features, heuristic opponents, training/evaluation tools and snapshot self-play. It also includes a few targeted simulator fixes; it does not implement the original game engine from scratch.
 
-**Status:** the environment, feature extraction and simulator regression tests work, but training remains experimental. A known multi-environment advantage-calculation issue needs correction before learning curves can be used as evidence of PPO performance. No validated trained agent or benchmark result is published here. See [known issues and development priorities](docs/KNOWN_ISSUES.md).
+**Status:** neural-only self-play, corrected PPO/GAE and seeded evaluation are implemented. Two short training runs show learning on separate test seeds against initial and trained intermediate opponents; this is initial proof-of-concept evidence, not a general playing-strength benchmark. RAM exchange and grouped opponent inference are enabled for self-play. See the [experiment guide](docs/SELFPLAY_POC.md), [learning results](docs/SELFPLAY_POC_RESULTS_2026-10-23.md), [validation record](docs/VALIDATION.md) and [remaining limitations](docs/KNOWN_ISSUES.md).
 
 ## How it works
 
@@ -27,12 +27,12 @@ The environment exposes 28 action slots: four action types for each of seven han
 | --- | --- |
 | Core C++ simulator and file protocol | DMAG/UFSM's upstream project |
 | Most engine source and bundled JSON headers | Preserved from upstream |
-| Small engine corrections | Downstream changes to selectable production, neighbor trading and Gizah B's fourth stage |
+| Engine corrections and protocol v2 | Selectable production, trading, Gizah B, final status, seeded RNG and atomic publication |
 | Gymnasium wrapper, masks and feature extraction | RL extension in this project |
 | PyTorch actor-critic, PPO scripts, opponent policies and self-play pool | RL extension in this project |
 | Python tests, C++ regression checks and CI setup | Downstream development and validation |
 
-The [origin record](docs/ORIGIN.md) pins the upstream commit and lists the changed engine files. This distinguishes inherited implementation from downstream work; it does not claim that every line of the extension was written manually. Development has used coding assistants.
+The [origin record](docs/ORIGIN.md) pins the upstream commit. The [simulator change log](docs/SIMULATOR_CHANGES.md) documents each C++ correction, with an exact patch and checked file inventory. This distinguishes inherited implementation from downstream work; it does not claim that every line of the extension was written manually. Development has used coding assistants.
 
 ## Setup
 
@@ -71,10 +71,10 @@ python scripts/ppo_training/eval_ppo_descriptives.py --help
 ```
 
 - **Fixed opponents:** `--mode fixed` trains against a mixture of heuristic policies.
-- **Snapshot self-play:** `--mode selfplay` adds frozen checkpoints to an opponent pool; heuristic opponents provide the initial bootstrap.
+- **Neural-only self-play:** `--mode selfplay` starts against its random initial neural checkpoint, trains against frozen same-run snapshots and evaluates against fixed neural references. See the [proof-of-concept guide](docs/SELFPLAY_POC.md) for pilots, separate holdout evaluation and a moderate training budget.
 - **Evaluation:** the detailed evaluator records per-game outcomes and action statistics for a checkpoint or run directory.
 
-Training code and old experiments are exploratory. Fix the advantage calculation before starting substantial new training or interpreting existing curves. Old checkpoints may use a different feature schema; none are bundled. The [script index](python/scripts/README.md) separates the main tools from diagnostics and older trainers.
+Training and old experiments remain exploratory. Historical results used incorrect GAE and premature scoring and must be re-evaluated. Current checkpoints carry feature semantics and schema metadata; historical inference requires an explicit `--allow-legacy` override and is not directly comparable. No checkpoints are bundled. The [script index](python/scripts/README.md) separates the main tools from diagnostics and older trainers.
 
 ## Repository layout
 
@@ -85,6 +85,7 @@ python/src/sevenwonders_rl/
   envs/                          Gymnasium wrapper and engine transport
   features/                      Observations, action features and trade estimates
   policies/                      Heuristics and checkpoint-backed opponents
+  evaluation/                    Shared completion and outcome handling
   selfplay/                      Frozen-checkpoint opponent pool
   utils/                         Actor-critic model and PPO utilities
   data/                          Engine-derived card/wonder data and mechanics

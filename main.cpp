@@ -1,6 +1,13 @@
+// Downstream runtime changes for Seven Wonders RL, 2026-10-23.
+// Derived from DMAG/UFSM 7Wonders; see NOTICE and docs/ORIGIN.md (GPLv3).
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <random>
+#include <chrono>
+#include <thread>
+#include <cstdint>
+#include <stdexcept>
 #include <card.h>
 #include <player.h>
 #include <wonder.h>
@@ -22,6 +29,7 @@ using namespace std;
 using namespace DMAG;
 
 class Game{
+    friend struct GameTestAccess;
     private:
         vector<Player*> player_list;
         unsigned char number_of_players;
@@ -32,6 +40,10 @@ class Game{
         vector<Card> discard_pile; // need to change to Deck discard_pile;
 
         Filer fp;
+        std::mt19937_64 rng;
+        uint64_t engine_seed;
+        unsigned int poll_us;
+        json last_actions = json::object();
 
     public:
 
@@ -70,7 +82,8 @@ class Game{
         /*
          * Initializes the game variables.
          */
-        Game(){
+        Game(uint64_t seed, unsigned int wait_us = 1000)
+            : rng(seed), engine_seed(seed), poll_us(wait_us) {
             this->number_of_players = NUM_PLAYERS;
             this->era = 1;
             this->turn = 0;
@@ -160,7 +173,7 @@ class Game{
             vector<Card> cards;
             int card_idx = 0;
 
-            random_shuffle(deck[era-1].begin(), deck[era-1].end());
+            std::shuffle(deck[era-1].begin(), deck[era-1].end(), rng);
 
             for (Player* & player : player_list) {
                 cards.clear();
@@ -181,7 +194,7 @@ class Game{
 
             for (Player* & player : player_list) {
                 while (true) {
-                    int n = rand() % 14;
+                    int n = std::uniform_int_distribution<int>(0, 13)(rng);
                     if (wonder_availability[n % 7]) {
                         player->SetWonder(wonders[n]);
                         wonder_availability[n % 7] = false;
@@ -316,8 +329,7 @@ class Game{
             }
 
             // add guild cards to deck (5 cards to 3 players, 6 cards to 4 players, ...)
-            srand(time(0));
-            random_shuffle(guild_cards.begin(), guild_cards.end());
+            std::shuffle(guild_cards.begin(), guild_cards.end(), rng);
             for (int i = 0; i < this->number_of_players + 2; i++) {
                 deck[2].push_back(guild_cards[i]);
             }
@@ -377,6 +389,11 @@ class Game{
             std::vector<int> card_ids;
             std::map<int, int> resources;
             DMAG::Wonder* wonder;
+
+            status["protocol_version"] = 2;
+            status["game"]["phase"] = InGame() ? "playing" : "finished";
+            status["game"]["engine_seed"] = engine_seed;
+            status["last_actions"] = last_actions;
 
             status["game"]["era"] = era;
             status["game"]["turn"] = turn;
@@ -488,24 +505,40 @@ class Game{
                 }
 
                 cout << "<Waiting players...>" << endl;
-                while(!fp.ArePlayersReady());
+                while (!fp.ArePlayersReady()) {
+                    if (poll_us) std::this_thread::sleep_for(std::chrono::microseconds(poll_us));
+                }
+                last_actions = json::object();
 
                 for(int i = 0; i < number_of_players; i++){
                     json_object = fp.ReadMessages(i);
+                    if (json_object.contains("turn") && json_object["turn"].get<int>() != turn)
+                        throw std::runtime_error("Action belongs to a different turn");
                     // handle command inside json_object
                     command = json_object["command"]["subcommand"];
                     argument = json_object["command"]["argument"];
 
                     // Only the player with Halikarnassos will have something written on extra.
                     extra = json_object["command"]["extra"];
+                    last_actions[to_string(i)] = {{"requested", command}, {"executed", command},
+                                                   {"status", "applied"}, {"turn", turn}};
 
                     // Turns 6 13 and 20 -> last card in hand card.
                     // If the player doesn't have the ability to play the seventh card,
                     // just skip the turn (i.e. don't do anything).
                     if (this->turn == 6 || this->turn == 13 || this->turn == 20) {
-                        if (!player_list[i]->PlaySeventh()) continue;
+                        if (!player_list[i]->PlaySeventh()) {
+                            last_actions[to_string(i)]["status"] = "skipped";
+                            last_actions[to_string(i)]["executed"] = nullptr;
+                            continue;
+                        }
                     }
 
+                    // Choice allocations belong to one player's purchase, not
+                    // the entire simultaneous turn. Another player may use or
+                    // buy the same production independently. See ENG-006 in
+                    // docs/SIMULATOR_CHANGES.md and joint_action_resources test.
+                    for (Player* player : player_list) player->ResetUsed();
                     Card card_played = GetCardByName(argument);
                     hand_cards_bkp = player_list[i]->GetHandCards();
 
@@ -539,6 +572,9 @@ class Game{
                         cout << "<Discard OK>" << endl;
                         discard_pile.push_back(card_played);
                     }
+                    last_actions[to_string(i)]["executed"] = command;
+                    if (last_actions[to_string(i)]["requested"] != command)
+                        last_actions[to_string(i)]["status"] = "fallback_discard";
 
                     // fp.WriteLog(era, turn, player_list[i]->GetId(), hand_cards_bkp, command, argument);
                 }
@@ -575,9 +611,10 @@ class Game{
             std::ofstream results;
             results.open("results.txt");
 
+            for (Player* player : player_list) player->CopyGuild();
+            // Publish only after the final action, age-III battles and all guild copies.
+            WriteGameStatus();
             for(int i = 0; i< NUM_PLAYERS; ++i){
-                // Copies a neighbor guild before scoring if the player has the ability to do so.
-                player_list[i]->CopyGuild();
                 results << "Player " << i+1 << " score: " << player_list[i]->CalculateScore() << std::endl;
             }
 
@@ -601,7 +638,27 @@ class Game{
     */
 int main(int argc, char **argv)
 {
-    Game g;
+    try {
+    uint64_t seed = (uint64_t(std::random_device{}()) << 32) ^ std::random_device{}();
+    unsigned int poll_us = 1000;
+    bool quiet = false;
+    for (int i = 1; i < argc; ++i) {
+        std::string arg = argv[i];
+        if (arg == "--quiet") { quiet = true; continue; }
+        if ((arg != "--seed" && arg != "--poll-us") || i + 1 >= argc)
+            throw std::invalid_argument("Usage: 7Wonders [--seed UINT64] [--poll-us 0..1000000] [--quiet]");
+        std::string value = argv[++i];
+        if (value.empty() || value.find_first_not_of("0123456789") != std::string::npos)
+            throw std::invalid_argument("Expected unsigned integer for " + arg);
+        uint64_t parsed = std::stoull(value);
+        if (arg == "--seed") seed = parsed;
+        else {
+            if (parsed > 1000000) throw std::invalid_argument("poll-us exceeds 1000000");
+            poll_us = static_cast<unsigned int>(parsed);
+        }
+    }
+    if (quiet) std::cout.setstate(std::ios_base::failbit);
+    Game g(seed, poll_us);
 
     g.Init();
     g.NewGame(NUM_PLAYERS);
@@ -611,4 +668,8 @@ int main(int argc, char **argv)
     g.Close();
 
     return 0;
+    } catch (const std::exception& error) {
+        std::cerr << error.what() << std::endl;
+        return 1;
+    }
 }

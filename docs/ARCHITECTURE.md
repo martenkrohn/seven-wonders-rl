@@ -1,23 +1,39 @@
-# Environment and engine interface
+# Environment and training contracts
 
-## Turn exchange
+## Protocol v2
 
-`SevenWondersEnv` starts `build/7Wonders` with a per-environment working directory. The existing simulator expects an `io/` directory relative to that working directory.
+Each environment has its own working directory ending in `io/`. C++ publishes JSON using a temporary file and atomic rename; Python publishes all three player commands before the ready signal. Commands carry the expected turn. Status includes `protocol_version=2`, `game.engine_seed`, `game.phase` and `last_actions` acknowledgements (`applied`, `skipped`, `fallback_discard`). The wrapper requires a matching seed and exactly the next turn. It re-reads once after observing process exit to cover final publication between read and poll.
 
-1. C++ publishes `game_status.json` with players, cards, resources and legal/available actions.
-2. Python builds relative-seat observations and a mask for each controlled seat.
-3. The learner or opponent policy selects an encoded action.
-4. Python writes `player_1.json`, `player_2.json` and `player_3.json`, then signals readiness through `ready.txt`.
-5. The engine advances and publishes the next status; Python waits for the turn change.
+Statuses for turns 0 through 20 are action requests. The final status is turn 21, era 4, phase `finished`, after the last action, final battles and all guild copies. Terminal masks are empty. No further policy selection or value bootstrap is performed for a terminal state. There are 21 engine exchanges, generally 18 applied actions per ordinary player; seventh-card abilities can add actions.
 
-The file protocol is inherited from the simulator. The Python environment is the RL bridge around it. A RAM-backed `--io-root` retains the same protocol and must be kept separate from persistent logs and checkpoints.
+Timeouts and engine/protocol failures are never fabricated transitions. The wrapper reports a cached diagnostic observation with `transition_valid=false` for failed waits; other engine errors raise `EngineError`. The trainer rejects the pending rollout, records diagnostics and closes every engine. It never assigns a terminal reward to a timeout. Startup failures close the process and stderr handle. Timeouts use monotonic clocks.
 
-## Action and observation contracts
+## Observations and GAE
 
-The action index is `action_type * 7 + hand_slot`. Types represent structure building, wonder building, free building from the hand and discarding. Unused slots and unavailable actions are masked. Feature ordering is defined in `features/action_feature_schema.py`; observation construction is in `features/obs_builder.py`.
+Action indices remain `action_type * 7 + hand_slot`, with 28 slots. Global observations use relative seats `[self, left, right]`. Feature schema names/order and a separate semantic version are checked when loading a checkpoint. Era, round, coins, shields and selected-seat hand size use actual engine fields. Greedy choice-resource ties use a stable resource order rather than Python set iteration.
 
-`SevenWondersEnv` controls all seats to advance the simulator, but exposes the learner's selected seat as the Gymnasium agent. Other seats use heuristic or checkpoint-backed policies. A terminal reward uses the learner's victory-point difference against its strongest opponent, divided by `reward_scale`.
+The 90-dimensional global vector includes `table_prod` in resource order `[wood, ore, clay, stone, loom, glass, papyrus]` for all three relative seats. The engine adds each wonder's starting resource before the initial status, so it is already visible to the model through production totals. Wonder identities and future-stage costs/effects are not added; migration of wonder stages to the newer edition is deferred.
 
-## Training
+ActorCritic architecture v2 combines action and global embeddings through `Linear(2H,H) -> ReLU -> Linear(H,1)`. This permits state-dependent action preferences; a single linear head would cancel the shared global contribution in softmax. The value branch remains unchanged. Model architecture versions are recorded separately from feature semantics in the run manifest, configuration and checkpoints. Loading an old linear-head checkpoint requires `--allow-legacy` and reconstructs architecture v1 for historical inference, preserving its predictions; it is not a conversion or training resume.
 
-The shared actor-critic scores the action representation and estimates state value. `train_unified.py` supports fixed heuristic mixtures and an opponent pool of frozen snapshots. Evaluation tools report game outcomes and action statistics. These are implemented experimental components; [known issues](KNOWN_ISSUES.md) currently prevent a validated learning claim.
+Rollouts retain `[T,N,...]` axes. Every transition stores pre-reset next values; terminal next values are zero. GAE runs separately in each environment. Termination cuts bootstrap and trace; a valid external truncation bootstraps from the real final observation and cuts only the trace. Transport failures are rejected before GAE. Returns use raw advantages; only the policy advantages are normalized, using population standard deviation to handle one sample. Flattening happens immediately before PPO minibatches.
+
+## Randomness and artifacts
+
+`derive_seed(master, role, indices...)` uses NumPy SeedSequence with a versioned role map. Engine games use a local `mt19937_64`; the learner uses an explicit Torch generator; minibatches, opponents and evaluation have separate NumPy streams. Evaluation and checkpoint loading preserve the learner's global Torch RNG. Reproducibility is scoped to the same software/toolchain and CPU configuration.
+
+The run manifest records source revision/dirty status, engine hash, dependency versions, seed version, feature semantics and configuration. Outputs are unique by default and an explicit nonempty output directory is rejected. Checkpoints are atomically replaced and include dimensions, hidden size, semantics and model/optimizer weights. Successful training always saves `latest.pt`, even before the first evaluation. `best.pt` requires a fully completed evaluation plan. Exact resume is not implemented.
+
+## Evaluation and timing
+
+Training version 3 implements neural-only self-play. A fresh `checkpoint_0.pt` is saved before any game, and the initial snapshot remains eligible even with positive pool lag. No minimum pool size or heuristic/random fallback exists. Each completed game's opponents are fixed snapshots; start/completion logs carry their paths and SHA-256 hashes, the learner seat and engine seed. Learner seats are distributed across environments and episodes. Loading errors stop the run with the opponent path in diagnostics.
+
+Self-play evaluation uses the fixed initial learner and an independently initialized, evaluation-only neural reference. All three learner positions and both mixed-opponent orders are covered on each seed. The initial learner is evaluated before updates; subsequent summaries report paired changes against it with whole-seed-block bootstrap intervals. `best.pt` uses tied-VP-win share on the unchanged plan, with the initial policy as incumbent. Separate `scripts/eval_selfplay.py` holdout runs can substitute trained same-run references and compare the final candidate with its untrained baseline. The VP-margin training reward is unchanged. See [SELFPLAY_POC.md](SELFPLAY_POC.md) for the staged experiment.
+
+Both central evaluators use `evaluation.runner.run_game`. Every attempt has completed/truncated/failed status; partial scores are null. Strict VP wins and VP ties are separate. Summary metrics only use completed games and report their denominator and failure counts. Empty completed sets yield null metrics. Greedy and seeded stochastic evaluation are explicit modes. Action records distinguish requested and applied/skipped actions; missing optional features never alias another column.
+
+Persistent output is separate from exchange files. Training, fixed evaluation and detailed evaluation accept the I/O root and use isolated descendants. Owned exchange directories are removed after diagnostic/result persistence. Timing reports label overlapping inclusive scopes, use real wall time as denominator and report means and recent quantiles. The paired benchmark measures transport separately from full training and compares behavior fingerprints.
+
+Self-play training and its holdout CLI automatically attempt RAM exchange under `/dev/shm/sevenwonders`; missing/unwritable shared memory falls back to disk. Explicit I/O roots propagate failures instead of changing storage silently. Checkpoints, episode records and diagnostics remain persistent. The default training evaluation interval is 32,768 transitions, with initial and final neural evaluation retained.
+
+Frozen neural opponent requests are grouped by cached policy identity across collector environments. Every observation is built from that environment's pre-turn status and each decision draws from its original seat-local NumPy RNG. The group performs one policy forward pass, then validated action overrides are injected into `send_action()` without resampling. Distinct policy objects are not combined; ordinary policies and legacy opponent samplers use the original serial selection. Standalone game steps can group the two opponents within one game. `--opponent-inference serial` disables grouping in training and evaluation for comparisons. Timing separates opponent preparation, inference groups and number of requests. Learner inference, PPO/GAE, reward and model architecture are unchanged.

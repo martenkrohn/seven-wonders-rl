@@ -45,6 +45,7 @@ from sevenwonders_rl.policies import HeuristicPolicy
 from sevenwonders_rl.policies.registry import make_policy
 from sevenwonders_rl.features.action_feature_schema import FEATURE_NAMES, K as K_ACTION_FEATS, IDX
 from sevenwonders_rl.utils.ppo_model import ActorCritic
+from sevenwonders_rl.utils.checkpoints import load_model
 from sevenwonders_rl.utils.ppo_utils import select_action_from_obs
 from sevenwonders_rl.data.cards import by_id
 
@@ -272,6 +273,7 @@ def evaluate_with_traces(
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate with trace logging")
     parser.add_argument("--checkpoint", type=str, required=True, help="Path to .pt checkpoint")
+    parser.add_argument("--allow-legacy", action="store_true", help="Allow historical model/feature versions for inference")
     parser.add_argument("--seeds", type=str, default="42,43,44,45,46", help="Comma-separated seed list")
     parser.add_argument("--opponents", type=str, default="baseline,baseline", help="left,right opponent names")
     parser.add_argument("--out-dir", type=str, default="runs/traces", help="Output directory")
@@ -280,20 +282,9 @@ def main() -> None:
     
     # Load checkpoint
     device = torch.device(args.device)
-    ckpt = torch.load(args.checkpoint, map_location=device)
-    
-    cfg = ckpt.get("config", {})
-    global_dim = int(cfg.get("global_dim", 0))
-    action_feat_dim = int(cfg.get("action_feat_dim", 0))
-    hidden = int(cfg.get("hidden", 128))
+    model = load_model(args.checkpoint, device, allow_legacy=args.allow_legacy)
+    ckpt = torch.load(args.checkpoint, map_location=device, weights_only=True)
     checkpoint_step = int(ckpt.get("timestep", 0))
-    
-    if global_dim <= 0 or action_feat_dim <= 0:
-        raise ValueError("Checkpoint config missing global_dim or action_feat_dim")
-    
-    model = ActorCritic(global_dim, action_feat_dim, hidden=hidden).to(device)
-    model.load_state_dict(ckpt["state_dict"])
-    model.eval()
     
     # Parse seeds
     seeds = [int(s.strip()) for s in args.seeds.split(",")]

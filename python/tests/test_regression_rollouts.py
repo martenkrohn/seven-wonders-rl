@@ -70,10 +70,10 @@ def test_rollout_smoke_n_games(require_engine, tmp_path):
 
     # Very light invariants across episodes
     for summ in summaries:
-        assert summ["terminated"] is True or summ["truncated"] is True
+        assert summ["terminated"] is True and summ["truncated"] is False
         era, turn, clockwise = summ["final_game_meta"]
-        assert era in (1, 2, 3)
-        assert 0 <= turn <= 40  # loose upper bound
+        assert era == 4
+        assert turn == 21
         assert clockwise in (0, 1)
 
         # Coins should be non-negative for all 3 players at end.

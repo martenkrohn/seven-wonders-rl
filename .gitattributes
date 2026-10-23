@@ -1,0 +1,2 @@
+# Preserve the exact upstream diff, including original source whitespace.
+docs/simulator/upstream.patch -whitespace

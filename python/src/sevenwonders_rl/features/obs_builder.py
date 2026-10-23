@@ -37,6 +37,8 @@ def compute_action_mask(status: Dict[str, Any], seat_id: int) -> np.ndarray:
     Returns:
         Binary mask of shape (28,) where 1 = legal action
     """
+    if status.get("game", {}).get("phase") == "finished":
+        return np.zeros((N_ACTIONS,), dtype=np.int8)
     p = status["players"][str(seat_id)]
     hand: List[str] = p["cards_hand"]
     playable = set(p["cards_playable"])
@@ -73,7 +75,8 @@ def build_table_features(status: Dict[str, Any], agent_seat: int) -> Dict[str, n
     
     Returns dict with:
         - table_basic: [coins, shields, gear, compass, tablet] for each player (3, 5)
-        - table_prod: [wood, ore, clay, stone, loom, glass, papyrus] for each player (3, 7)
+        - table_prod: [wood, ore, clay, stone, loom, glass, papyrus] for each player (3, 7),
+          including the wonder's starting resource in the engine resource totals
         - wonder_stage: current wonder stage for each player (3,)
         - table_points: [civilian, commercial, guild, military, scientific, wonder, total] (3, 7)
         - table_amount: [civilian, commercial, guild, military, scientific, raw_material, manufactured_goods] (3, 7)

@@ -203,7 +203,10 @@ def estimate_trade_cost(
         # Find the resource in this choice set with highest remaining need
         best_res = None
         best_remaining = -1
-        for res in choice_set:
+        # Resolve equal needs in schema order, independent of PYTHONHASHSEED.
+        for res in RESOURCE_ORDER:
+            if res not in choice_set:
+                continue
             res_idx = _resource_to_idx(res)
             if remaining_vec[res_idx] > best_remaining:
                 best_remaining = remaining_vec[res_idx]
