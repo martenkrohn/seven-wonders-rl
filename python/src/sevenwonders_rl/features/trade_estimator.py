@@ -133,7 +133,7 @@ def _get_neighbor_discount(resource: str, direction: str, player_flags: set[str]
     
     Args:
         resource: Resource name
-        direction: 'left' or 'right' (west/east)
+        direction: 'left' or 'right'; observation order is engine east/west
         player_flags: Set of discount flags the player has
     
     Returns:
@@ -145,9 +145,9 @@ def _get_neighbor_discount(resource: str, direction: str, player_flags: set[str]
     
     # Check for applicable discount flags
     if resource_kind(resource) == 'raw':
-        if direction == 'left' and 'raw_cheap_west' in player_flags:
+        if direction == 'left' and 'raw_cheap_east' in player_flags:
             return discount_cost
-        if direction == 'right' and 'raw_cheap_east' in player_flags:
+        if direction == 'right' and 'raw_cheap_west' in player_flags:
             return discount_cost
     else:  # manuf
         if 'manuf_cheap' in player_flags:

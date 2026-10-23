@@ -7,17 +7,20 @@ import torch
 from sevenwonders_rl.envs.sevenwonders_env import EngineError
 from sevenwonders_rl.utils.timing import TimingBuckets
 from test_training_contracts import trainer_module
+from sevenwonders_rl.features.action_feature_schema import K
 
 pytestmark = pytest.mark.component
 
 
 def observation(value):
     return {"global_table": np.full((3, 7), value, np.float32),
+            "science_jokers": np.zeros(3, np.int32),
+            "table_discounts": np.zeros((3, 3), np.int32),
             "table_points": np.zeros((3, 7), np.float32),
             "table_prod": np.zeros((3, 7), np.float32),
             "table_amount": np.zeros((3, 7), np.float32),
             "wonder_stage": np.zeros(3, np.float32), "game_meta": np.zeros(3, np.float32),
-            "action_feats": np.zeros((28, 92), np.float32), "action_mask": np.ones(28, np.int8)}
+            "action_feats": np.zeros((28, K), np.float32), "action_mask": np.ones(28, np.int8)}
 
 
 class ValueModel:

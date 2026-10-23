@@ -1,3 +1,5 @@
+from sevenwonders_rl.features.obs_builder import GLOBAL_DIM
+from sevenwonders_rl.features.action_feature_schema import K
 import copy
 import importlib.util
 from types import SimpleNamespace
@@ -38,7 +40,7 @@ def test_game_features_use_engine_fields_and_requested_seat(status_age3_turn0):
 def test_seed_roles_and_local_policy_rng_preserve_global_torch_state(status_age1_turn0):
     assert derive_seed(0, "engine", 1, 2) == derive_seed(0, "engine", 1, 2)
     assert derive_seed(0, "engine", 1, 2) != derive_seed(0, "policy", 1, 2)
-    model = ActorCritic(90, 92)
+    model = ActorCritic(GLOBAL_DIM, K)
     obs = build_obs(status_age1_turn0, 0)
     state = torch.get_rng_state().clone()
     first = [select_action_from_obs(obs, model, "cpu", rng=np.random.default_rng(s)) for s in range(8)]
@@ -49,11 +51,11 @@ def test_seed_roles_and_local_policy_rng_preserve_global_torch_state(status_age1
 
 
 def test_checkpoint_roundtrip_semantics_hidden_size_and_rng(tmp_path):
-    model = ActorCritic(90, 92, hidden=16)
+    model = ActorCritic(GLOBAL_DIM, K, hidden=16)
     optimizer = torch.optim.Adam(model.parameters())
     path = tmp_path / "latest.pt"
     meta = {"feature_schema_hash": schema_hash(), "feature_semantics_version": FEATURE_SEMANTICS_VERSION}
-    save_checkpoint(path, model, optimizer, 4, {"global_dim": 90, "action_feat_dim": 92, "hidden": 16}, meta)
+    save_checkpoint(path, model, optimizer, 4, {"global_dim": GLOBAL_DIM, "action_feat_dim": K, "hidden": 16}, meta)
     before = torch.get_rng_state().clone()
     loaded = load_model(path)
     checkpoint = torch.load(path, weights_only=True)
@@ -62,25 +64,25 @@ def test_checkpoint_roundtrip_semantics_hidden_size_and_rng(tmp_path):
     torch.testing.assert_close(before, torch.get_rng_state())
     for a, b in zip(model.parameters(), loaded.parameters()):
         torch.testing.assert_close(a, b)
-    inputs, actions = torch.randn(2, 90), torch.randn(2, 28, 92)
+    inputs, actions = torch.randn(2, GLOBAL_DIM), torch.randn(2, 28, K)
     for expected, actual in zip(model.forward_batch(inputs, actions), loaded.forward_batch(inputs, actions)):
         torch.testing.assert_close(expected, actual)
     from sevenwonders_rl.policies.ppo_checkpoint_policy import PPOCheckpointPolicy
     policy = PPOCheckpointPolicy(str(path))
     policy.set_seed(123)
     assert policy.model.global_mlp[0].out_features == 16
-    save_checkpoint(path, model, optimizer, 4, {"global_dim": 90, "action_feat_dim": 92, "hidden": 16}, {})
+    save_checkpoint(path, model, optimizer, 4, {"global_dim": GLOBAL_DIM, "action_feat_dim": K, "hidden": 16}, {})
     with pytest.raises(ValueError, match="semantics"):
         load_model(path)
     load_model(path, allow_legacy=True)
 
 
 def test_old_linear_head_requires_legacy_override_and_preserves_predictions(tmp_path):
-    old = ActorCritic(90, 92, hidden=8, architecture_version=1)
+    old = ActorCritic(GLOBAL_DIM, K, hidden=8, architecture_version=1)
     path = tmp_path / "old.pt"
     # Before architecture versioning, even feature-v2 checkpoints had no model version.
     payload = {"state_dict": old.state_dict(),
-               "config": {"global_dim": 90, "action_feat_dim": 92, "hidden": 8},
+               "config": {"global_dim": GLOBAL_DIM, "action_feat_dim": K, "hidden": 8},
                "meta": {"feature_schema_hash": schema_hash(),
                         "feature_semantics_version": FEATURE_SEMANTICS_VERSION}}
     torch.save(payload, path)
@@ -90,7 +92,7 @@ def test_old_linear_head_requires_legacy_override_and_preserves_predictions(tmp_
     loaded = load_model(path, allow_legacy=True)
     torch.testing.assert_close(before, torch.get_rng_state())
     assert loaded.architecture_version == 1
-    inputs, actions = torch.randn(2, 90), torch.randn(2, 28, 92)
+    inputs, actions = torch.randn(2, GLOBAL_DIM), torch.randn(2, 28, K)
     for expected, actual in zip(old.forward_batch(inputs, actions), loaded.forward_batch(inputs, actions)):
         torch.testing.assert_close(expected, actual)
     payload["config"]["model_architecture_version"] = MODEL_ARCHITECTURE_VERSION

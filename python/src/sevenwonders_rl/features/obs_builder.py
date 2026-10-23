@@ -7,9 +7,11 @@ from __future__ import annotations
 from typing import Any, Dict, List, Literal
 import numpy as np
 from sevenwonders_rl.features.action_features import build_action_feats
+from sevenwonders_rl.features.player_state import science_state, discount_flags, DISCOUNTS
 
 N_SLOTS = 7
 N_ACTIONS = 28
+GLOBAL_DIM = 102
 
 
 def _seat_order(agent_seat: int) -> List[int]:
@@ -64,7 +66,7 @@ def compute_action_mask(status: Dict[str, Any], seat_id: int) -> np.ndarray:
             mask[1 * 7 + slot] = 1
             
         # Build hand free if can_build_hand_free flag set
-        if can_free:
+        if can_free and card not in p.get('cards_played', []):
             mask[2 * 7 + slot] = 1
 
     return mask
@@ -85,6 +87,8 @@ def build_table_features(status: Dict[str, Any], agent_seat: int) -> Dict[str, n
 
     # Basic table: [coins, shields, gear, compass, tablet]
     basic = np.zeros((3, 5), dtype=np.int32)
+    jokers = np.zeros(3, dtype=np.int32)
+    discounts = np.zeros((3, 3), dtype=np.int32)
 
     # Production by resource: [wood, ore, clay, stone, loom, glass, papyrus]
     prod = np.zeros((3, 7), dtype=np.int32)
@@ -103,9 +107,12 @@ def build_table_features(status: Dict[str, Any], agent_seat: int) -> Dict[str, n
         r = p["resources"]
         pt = p["points"]
         am = p["amount"]
+        science, jokers[i] = science_state(p)
+        held = discount_flags(p)
+        discounts[i] = [int(flag in held) for flag in DISCOUNTS]
 
         basic[i, :] = np.array(
-            [r["coins"], r["shields"], r["gear"], r["compass"], r["tablet"]],
+            [r["coins"], r["shields"], science['gear'], science['compass'], science['tablet']],
             dtype=np.int32
         )
 
@@ -128,6 +135,8 @@ def build_table_features(status: Dict[str, Any], agent_seat: int) -> Dict[str, n
 
     return {
         "table_basic": basic,
+        "science_jokers": jokers,
+        "table_discounts": discounts,
         "table_prod": prod,
         "wonder_stage": stages,
         "table_points": points,
@@ -158,14 +167,14 @@ def build_obs(
     Args:
         status: game_status.json dict
         agent_seat: player seat (0, 1, or 2)
-        feature_version: "v2" for per-resource features (92 dims). Legacy "v1" no longer supported.
+        feature_version: "v2" for per-resource features (99 dims). Legacy "v1" no longer supported.
     
     Returns observation dict with keys:
         - global_table: (3, 7) int32 - backward compatible summary
         - wonder_stage: (3,) int32 - wonder stages rotated
         - hand_ids: (7,) int32 - agent's hand card IDs
         - action_mask: (28,) int8 - legal actions for agent
-        - action_feats: (28, 92) float32 - per-action features with per-resource breakdown
+        - action_feats: (28, 99) float32 - per-action features with per-resource breakdown
         - table_points: (3, 7) int32 - points breakdown per player
         - table_prod: (3, 7) int32 - resource production per player
         - table_amount: (3, 7) int32 - card counts per player
@@ -175,7 +184,7 @@ def build_obs(
     mask = compute_action_mask(status, agent_seat)
     hand_ids = build_hand_ids(status, agent_seat)
     
-    # Use v2 action features (92 dimensions per action)
+    # Use v2 action features (99 dimensions per action)
     action_feats = build_action_feats(status, agent_seat, mask)
 
     # Backward compatible global_table: [coins, shields, gear, compass, tablet, raw_total, manu_total]
@@ -195,6 +204,8 @@ def build_obs(
     obs = {
         # Backward compatible keys (keep for existing tests)
         "global_table": global_table.astype(np.int32),
+        "science_jokers": feat['science_jokers'],
+        "table_discounts": feat['table_discounts'],
         "wonder_stage": feat["wonder_stage"],
         "hand_ids": hand_ids,
         "action_mask": mask,

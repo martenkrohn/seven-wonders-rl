@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; object-src 'none'">
+<title>7 Wonders · Self-Play-Auswertung</title>
+<script>/* DASHBOARD_THEME */</script>
+<style>/* DASHBOARD_CSS */</style>
+</head>
+<body>
+<aside class="sidebar">
+  <a href="#overview" class="brand"><span class="brand-mark">VII</span><span>7 WONDERS<small>SELF-PLAY LABOR</small></span></a>
+  <div class="sidebar-label">AUSWERTUNG</div>
+  <nav aria-label="Auswertungsbereiche" id="navigation"></nav>
+  <div class="sidebar-footer"><span class="status-dot"></span> Lokale Auswertung<br><small>Alle Daten bleiben in deinem Browser.</small></div>
+</aside>
+<main>
+  <header class="topbar">
+    <span class="eyebrow">TRAINING VERSTEHEN</span>
+    <div class="topbar-actions">
+      <button id="theme-toggle" type="button" aria-pressed="false">Dark Mode</button>
+      <label class="import-button">+ Auswertung hinzufügen<input id="import-file" type="file" accept=".json,application/json" multiple></label>
+    </div>
+  </header>
+  <div class="page-header"><div><p class="kicker">7 WONDERS / ANALYSE</p><h1 id="page-title">Überblick</h1><p id="page-description" class="muted"></p></div><span class="pill">SELF-PLAY</span></div>
+  <div id="error" role="alert" hidden></div>
+  <!-- DASHBOARD_INTRODUCTION -->
+  <section class="selectors" aria-label="Datenauswahl">
+    <label>Auswertung<select id="report-select"></select></label>
+    <label>Modellstand<select id="model-select"></select></label>
+    <span id="dataset-meta" class="dataset-meta"></span>
+  </section>
+  <div id="content"></div>
+  <footer>7 Wonders · Lokale Trainingsanalyse <span>Sortieren · Filtern · Vergleichen</span></footer>
+</main>
+<noscript>Bitte JavaScript aktivieren, um Tabellen zu sortieren und die Auswertung anzuzeigen.</noscript>
+<script id="evaluation-data" type="application/json">DASHBOARD_DATA</script>
+<script>/* DASHBOARD_JS */</script>
+</body>
+</html>

@@ -19,6 +19,7 @@ from sevenwonders_rl.features.action_feature_schema import (
     CARD_COLORS, ACTION_TYPES, CARD_ERAS, DISCOUNT_FLAGS
 )
 from sevenwonders_rl.features.trade_estimator import estimate_trade_cost, TradeEstimate
+from sevenwonders_rl.features.player_state import science_state, discount_flags, chain_free, built_ids
 
 N_SLOTS = 7
 N_ACTIONS = 28
@@ -83,11 +84,7 @@ def _seat_order(agent_seat: int) -> List[int]:
 
 def _resolve_built_card_ids(status_player: Dict[str, Any]) -> List[int]:
     """Resolve card IDs from played card names."""
-    card_ids = []
-    for card_name in status_player.get('cards_played', []):
-        card = by_name_strict(card_name)
-        card_ids.append(card['id'])
-    return card_ids
+    return built_ids(status_player)
 
 
 def _get_card_production(card_id: int) -> Dict[str, int]:
@@ -248,7 +245,7 @@ def _compute_tradable_supply(
     
     # Add wonder starting resource (always available, tradable)
     wonder_id = player.get('wonder_id')
-    if wonder_id:
+    if wonder_id is not None:
         wonder = wonder_by_id(wonder_id)
         if wonder:
             starting_res = wonder.get('starting_resource')
@@ -302,6 +299,7 @@ def _extract_card_effects(card_id: int) -> Dict[str, int]:
     science = effects.get('science', []) or []
     for sym in SCIENCE_SYMBOLS:
         deltas[f'delta_science_{sym}'] = 1 if sym in science else 0
+    deltas['delta_science_jokers'] = int('sci_extra' in science)
     
     # Production deltas
     for res in RESOURCE_ORDER:
@@ -309,10 +307,10 @@ def _extract_card_effects(card_id: int) -> Dict[str, int]:
         deltas[f'delta_prod_{res}'] = prod.get(res, 0)
     
     # Choice production
-    choice_prod = effects.get('choice_production', {}) or {}
+    choice_prod = effects.get('produces_choice') or []
     if choice_prod:
         # Check if it's raw or manufactured
-        options = choice_prod.get('options', [])
+        options = choice_prod
         raw_options = sum(1 for r in options if resource_kind(r) == 'raw')
         manuf_options = sum(1 for r in options if resource_kind(r) == 'manuf')
         
@@ -321,32 +319,13 @@ def _extract_card_effects(card_id: int) -> Dict[str, int]:
         if manuf_options > 0:
             deltas['delta_prod_choice_manuf'] = 1
         
-        deltas['delta_choice_tradable'] = 1 if choice_prod.get('tradable', False) else 0
+        deltas['delta_choice_tradable'] = int(bool(effects.get('choice_tradable')))
     else:
         deltas['delta_prod_choice_raw'] = 0
         deltas['delta_prod_choice_manuf'] = 0
         deltas['delta_choice_tradable'] = 0
     
     return deltas
-
-
-def _extract_science_counts(built_card_ids: List[int]) -> Dict[str, int]:
-    """Extract current science symbol counts from built cards."""
-    counts = {sym: 0 for sym in SCIENCE_SYMBOLS}
-    
-    for card_id in built_card_ids:
-        card = by_id(card_id)
-        if not card:
-            continue
-        
-        effects = card.get('effects', {}) or {}
-        science = effects.get('science', []) or []  # List of symbols
-        
-        for sym in SCIENCE_SYMBOLS:
-            if sym in science:
-                counts[sym] += 1
-    
-    return counts
 
 
 def _build_player_context(
@@ -372,13 +351,7 @@ def _build_player_context(
     current_coins = p.get('resources', {}).get('coins', 0)
     
     # Discount flags
-    discount_flags = set()
-    if p.get('flags', {}).get('raw_cheap_east', False):
-        discount_flags.add('raw_cheap_east')
-    if p.get('flags', {}).get('raw_cheap_west', False):
-        discount_flags.add('raw_cheap_west')
-    if p.get('flags', {}).get('manuf_cheap', False):
-        discount_flags.add('manuf_cheap')
+    held_discounts = discount_flags(p)
     
     # Own production (all production, including non-tradable)
     own_production = {}
@@ -397,7 +370,7 @@ def _build_player_context(
     own_shields = p.get('resources', {}).get('shields', 0)
     
     # Science
-    own_science = _extract_science_counts(built_card_ids)
+    own_science, own_jokers = science_state(p)
     
     # Neighbor supply (tradable only)
     if player_idx == 0:
@@ -420,8 +393,8 @@ def _build_player_context(
         left_shields = left_p.get('resources', {}).get('shields', 0)
         right_shields = right_p.get('resources', {}).get('shields', 0)
         
-        left_science = _extract_science_counts(left_built)
-        right_science = _extract_science_counts(right_built)
+        left_science, left_jokers = science_state(left_p)
+        right_science, right_jokers = science_state(right_p)
         
         # Wonder progress
         left_wonder = wonder_by_id(left_p.get('wonder_id', 0))
@@ -447,10 +420,11 @@ def _build_player_context(
         right_wonder_max_stages = 1
         left_choice_supply = []
         right_choice_supply = []
+        left_jokers = right_jokers = 0
     
-    return PlayerContext(
+    context = PlayerContext(
         current_coins=current_coins,
-        discount_flags=discount_flags,
+        discount_flags=held_discounts,
         built_card_ids=built_card_ids,
         own_production=own_production,
         own_choice_resources=own_choice_resources,
@@ -471,6 +445,10 @@ def _build_player_context(
         right_wonder_stages=right_wonder_stages,
         right_wonder_max_stages=right_wonder_max_stages,
     )
+    context.own_science_jokers = own_jokers
+    context.left_science_jokers = left_jokers
+    context.right_science_jokers = right_jokers
+    return context
 
 
 def _fill_game_state_feats(
@@ -509,6 +487,10 @@ def _fill_science_state_feats(
     """Fill current science state features."""
     for sym in SCIENCE_SYMBOLS:
         feats[action_idx, IDX[f'own_science_{sym}']] = float(ctx.own_science.get(sym, 0))
+    for role in ('own', 'left', 'right'):
+        feats[action_idx, IDX[f'{role}_science_jokers']] = getattr(ctx, f'{role}_science_jokers')
+    for flag in DISCOUNT_FLAGS:
+        feats[action_idx, IDX[f'own_discount_{flag}']] = float(flag in ctx.discount_flags)
 
 
 def _fill_opponent_state_feats(
@@ -558,6 +540,7 @@ def _fill_build_structure_feats(
     card_name: str,
     ctx: PlayerContext,
     playable_set: Set[str],
+    free_action: bool = False,
 ) -> None:
     """Fill features for building a structure (card from hand)."""
     # Card identity
@@ -565,10 +548,13 @@ def _fill_build_structure_feats(
     
     # Card costs - PER RESOURCE (not aggregated!)
     cost_dict = card.get('cost', {})
-    coins_cost = cost_dict.get('coins', 0)
+    chained = chain_free(card, ctx.built_card_ids)
+    # Describe the actual chosen action: chains and explicit free construction
+    # have neither resource requirements nor coin payments.
+    coins_cost = 0 if chained or free_action else cost_dict.get('coins', 0)
     
     for res in RESOURCE_ORDER:
-        feats[action_idx, IDX[f'card_cost_{res}']] = float(cost_dict.get(res, 0))
+        feats[action_idx, IDX[f'card_cost_{res}']] = 0.0 if chained or free_action else float(cost_dict.get(res, 0))
     
     feats[action_idx, IDX['card_cost_coins']] = float(coins_cost)
     
@@ -583,7 +569,7 @@ def _fill_build_structure_feats(
     
     # Trade estimation
     is_playable = (card_name in playable_set)
-    if is_playable:
+    if is_playable and not chained and not free_action:
         trade_est = estimate_trade_cost(
             required=cost_dict,
             own_production=ctx.own_production,
@@ -614,15 +600,13 @@ def _fill_build_structure_feats(
     for flag in DISCOUNT_FLAGS:
         flag_key = f'adds_discount_{flag}'
         if flag_key in IDX:
-            card_flags = card.get('flags', {})
-            feats[action_idx, IDX[flag_key]] = 1.0 if card_flags.get(flag, False) else 0.0
+            card_flags = card.get('effects', {}).get('discount_flags') or []
+            feats[action_idx, IDX[flag_key]] = float(flag in card_flags)
     
     # Chain features
-    chain_prereq = card.get('chain_prerequisite', '')
-    if chain_prereq:
-        feats[action_idx, IDX['is_chain_free_now']] = 1.0 if card_name in playable_set else 0.0
+    feats[action_idx, IDX['is_chain_free_now']] = float(chained)
     
-    chain_to_count = get_chain_to_count(card['id'])
+    chain_to_count = get_chain_to_count(card['id_name'])
     feats[action_idx, IDX['enables_chain_to_count']] = float(chain_to_count)
 
 
@@ -715,7 +699,7 @@ def build_action_feats(
         
         elif action_type == 2:  # build_hand_free
             # Same as build_structure but free
-            _fill_build_structure_feats(feats, action_idx, card, card_name, ctx, playable_set)
+            _fill_build_structure_feats(feats, action_idx, card, card_name, ctx, playable_set, free_action=True)
         
         elif action_type == 3:  # discard
             _fill_discard_feats(feats, action_idx, status)

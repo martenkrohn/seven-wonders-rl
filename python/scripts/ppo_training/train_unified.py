@@ -17,7 +17,7 @@ import torch
 from sevenwonders_rl.envs import SevenWondersEnv, SeatPolicy
 from sevenwonders_rl.envs.sevenwonders_env import EngineError
 from sevenwonders_rl.evaluation.runner import evaluate_model
-from sevenwonders_rl.evaluation.selfplay import reference, evaluation_plan, paired_progress
+from sevenwonders_rl.evaluation.selfplay import reference, evaluation_plan, paired_progress, rolling_references, plan_identity
 from sevenwonders_rl.policies.registry import make_policy
 from sevenwonders_rl.policies.ppo_checkpoint_policy import PPOCheckpointPolicy
 from sevenwonders_rl.policies.opponent_batch import opponent_actions_batch
@@ -29,6 +29,8 @@ from sevenwonders_rl.utils.seeding import derive_seed
 from sevenwonders_rl.utils.checkpoints import manifest, save_checkpoint, file_hash
 from sevenwonders_rl.utils.runtime import atomic_json, run_io_root, exchange_io_root
 from sevenwonders_rl.utils.timing import TimingBuckets
+from sevenwonders_rl.utils.training_console import TrainingConsole
+from sevenwonders_rl.evaluation.telemetry import status_snapshot
 
 EVAL_FIXED_MATCHUPS = [("baseline", "baseline"), ("mad_scientist", "mad_scientist"),
                        ("military", "military"), ("random", "random")]
@@ -245,12 +247,11 @@ def main(argv=None):
         raise ValueError("Self-play requires a fresh league directory for this run")
     io_root = exchange_io_root(args.io_root, repo_root / "io_train", "training",
                                prefer_ram=args.mode == "selfplay")
-    config = {**vars(args), "out_dir": str(out_dir), "io_root": str(io_root), "league_dir": str(league_dir)}
+    config = {"evaluation_strategy": "rolling_trained_snapshots" if args.mode == "selfplay" else "fixed_bots", **vars(args), "out_dir": str(out_dir), "io_root": str(io_root), "league_dir": str(league_dir)}
     atomic_json(out_dir / "config.json", config)
     run_manifest = manifest(repo_root, config)
     atomic_json(out_dir / "manifest.json", run_manifest)
-    print(f"Exchange: {io_root}; opponents: {args.opponent_inference}; "
-          f"evaluation every {args.eval_every} transitions", flush=True)
+    console = TrainingConsole(args, out_dir, io_root)
     timers = TimingBuckets()
     pool = OpponentPool(str(league_dir), max_size=args.pool_max,
                         min_step_lag=args.pool_lag_steps, latest_k=8) if args.mode == "selfplay" else None
@@ -261,8 +262,9 @@ def main(argv=None):
     policy_cache = OrderedDict()
     envs, episodes = [], [0] * args.n_envs
     active_games, checkpoint_hashes = {}, {}
-    neural_plan = None
-    best_selection_score = float("-inf")
+    previous_evaluation_path = None
+    previous_plan_id = None
+    latest_evaluated_step = None
     timestep, updates, best_vp_diff = 0, 0, float("-inf")
     started = time.perf_counter()
     status = "failed"
@@ -272,7 +274,8 @@ def main(argv=None):
             with (out_dir / "episodes.jsonl").open("a") as f:
                 f.write(json.dumps({**active_games[i],
                     "status": "completed" if terminated else "truncated",
-                    "totals": final_info.get("final_totals"), "reason": final_info.get("truncated_reason")}) + "\n")
+                    "totals": final_info.get("final_totals"), "reason": final_info.get("truncated_reason"),
+                    "final_state": status_snapshot(final_info['status'], 3) if terminated else None}) + "\n")
             episodes[i] += 1
         seat = args.agent_seat if args.mode == "fixed" else (args.agent_seat + i + episodes[i] * args.n_envs) % 3
         envs[i].agent_seat = seat
@@ -334,21 +337,9 @@ def main(argv=None):
             save_checkpoint(independent_path, independent, None, 0, config, run_manifest)
             references = [reference(league_dir / "checkpoint_0.pt"), reference(independent_path)]
             atomic_json(out_dir / "references.json", {"references": references,
-                "purpose": "fixed initial neural opponents; independent reference excluded from training"})
-            neural_plan = evaluation_plan(references, args.eval_seed, args.eval_games_per_matchup)
-            with timers.time("evaluation"):
-                initial_evaluation = evaluate_model(model, "cpu", neural_plan, repo_root,
-                    io_root / "evaluation" / "0", out_dir / "eval_0.jsonl",
-                    args.eval_action_mode, args.engine_poll_us, args.poll_seconds, "step:0",
-                    batch_opponents=args.opponent_inference == "batched")
-            if not initial_evaluation["valid_for_selection"]:
-                raise RuntimeError("Initial neural evaluation did not complete")
-            initial_evaluation.update(paired_progress(out_dir / "eval_0.jsonl", out_dir / "eval_0.jsonl"))
-            atomic_json(out_dir / "eval_0_summary.json", initial_evaluation)
-            best_selection_score = initial_evaluation["win_share"]
-            best_vp_diff = initial_evaluation["vp_diff_mean"]
-            save(out_dir / "best.pt", initial_evaluation)
-            print(f"Initial neural evaluation: {initial_evaluation}", flush=True)
+                "purpose": "optional post-training initial references; in-training evaluation uses rolling trained snapshots"})
+            print("Checkpoint-Evaluationen: trainierte Vorgänger; keine Anfangsevaluation. "
+                  "Erste Messung, sobald ältere trainierte Snapshots vorhanden sind.", flush=True)
         with timers.time("initialization.reset"):
             observations = [reset_env(i) for i in range(args.n_envs)]
         while timestep < args.total_timesteps:
@@ -376,36 +367,55 @@ def main(argv=None):
                 while next_snapshot <= timestep:
                     next_snapshot += args.snapshot_every
             if timestep >= next_eval or (args.mode == "selfplay" and timestep == args.total_timesteps):
-                specs = neural_plan if args.mode == "selfplay" else [{"left": left, "right": right, "agent_seat": args.agent_seat,
+                references = rolling_references(league_dir, timestep) if args.mode == 'selfplay' else None
+                specs = evaluation_plan(references, args.eval_seed, args.eval_games_per_matchup) if references else []
+                if args.mode == 'fixed':
+                    specs = [{"left": left, "right": right, "agent_seat": args.agent_seat,
                           "engine_seed": derive_seed(args.eval_seed, "evaluation", i)}
                          for left, right in EVAL_FIXED_MATCHUPS for i in range(args.eval_games_per_matchup)]
-                with timers.time("evaluation"):
-                    evaluation = evaluate_model(model, "cpu", specs, repo_root,
-                        io_root / "evaluation" / str(timestep), out_dir / f"eval_{timestep}.jsonl",
-                        args.eval_action_mode, args.engine_poll_us, args.poll_seconds, f"step:{timestep}",
-                        batch_opponents=args.opponent_inference == "batched")
-                if args.mode == "selfplay":
-                    evaluation.update(paired_progress(out_dir / f"eval_{timestep}.jsonl", out_dir / "eval_0.jsonl"))
-                with (out_dir / "train_log.csv").open("a") as f:
-                    if f.tell() == 0:
-                        f.write("timestep,win_rate,vp_diff_mean,vp_diff_std,agent_vp_mean,completed,truncated,failed,win_share\n")
-                    f.write(",".join(str(v) if v is not None else "" for v in
-                        (timestep, evaluation["win_rate"], evaluation["vp_diff_mean"], evaluation["vp_diff_std"],
-                         evaluation["agent_vp_mean"], evaluation["completed"], evaluation["truncated"], evaluation["failed"],
-                         evaluation["win_share"])) + "\n")
-                score = evaluation["win_share"] if args.mode == "selfplay" else evaluation["vp_diff_mean"]
-                previous_best = best_selection_score if args.mode == "selfplay" else best_vp_diff
-                if evaluation["valid_for_selection"] and score > previous_best:
-                    best_selection_score = score
-                    best_vp_diff = evaluation["vp_diff_mean"]
-                    save(out_dir / "best.pt", evaluation)
-                atomic_json(out_dir / f"eval_{timestep}_summary.json", evaluation)
-                print(f"Evaluation at {timestep}: {evaluation}", flush=True)
+                current_plan_id = plan_identity(specs, args.eval_action_mode)
+                if not specs:
+                    print(f"Evaluation bei Schritt {timestep} verschoben: noch kein älterer trainierter Snapshot.", flush=True)
+                else:
+                    console.evaluation_start(timestep, len(specs), references=references)
+                    with timers.time("evaluation"):
+                        evaluation = evaluate_model(model, "cpu", specs, repo_root,
+                            io_root / "evaluation" / str(timestep), out_dir / f"eval_{timestep}.jsonl",
+                            args.eval_action_mode, args.engine_poll_us, args.poll_seconds, f"step:{timestep}",
+                            batch_opponents=args.opponent_inference == "batched")
+                    evaluation.update(plan_id=current_plan_id, references=references, step=timestep,
+                                      evaluation_strategy=config['evaluation_strategy'])
+                    if previous_plan_id == current_plan_id and previous_evaluation_path is not None:
+                        evaluation.update(paired_progress(out_dir / f"eval_{timestep}.jsonl", previous_evaluation_path))
+                        evaluation['comparison_label'] = 'Gegenüber vorheriger Evaluation'
+                    previous_plan_id = current_plan_id
+                    previous_evaluation_path = out_dir / f"eval_{timestep}.jsonl"
+                    with (out_dir / "train_log.csv").open("a") as f:
+                        if f.tell() == 0:
+                            f.write("timestep,win_rate,vp_diff_mean,vp_diff_std,agent_vp_mean,completed,truncated,failed,win_share,plan_id,reference_steps\n")
+                        f.write(",".join(str(v) if v is not None else "" for v in
+                            (timestep, evaluation["win_rate"], evaluation["vp_diff_mean"], evaluation["vp_diff_std"],
+                             evaluation["agent_vp_mean"], evaluation["completed"], evaluation["truncated"], evaluation["failed"],
+                             evaluation["win_share"], current_plan_id,
+                             ';'.join(str(r['step']) for r in references or []))) + "\n")
+                    new_best = False
+                    if args.mode == 'selfplay':
+                        if evaluation['valid_for_selection']:
+                            save(out_dir / 'evaluated.pt', evaluation)
+                            latest_evaluated_step = timestep
+                            evaluation['saved_evaluated_checkpoint'] = True
+                    else:
+                        score = evaluation['vp_diff_mean']
+                        new_best = evaluation['valid_for_selection'] and score > best_vp_diff
+                        if new_best:
+                            best_vp_diff = score
+                            save(out_dir / 'best.pt', evaluation)
+                    atomic_json(out_dir / f"eval_{timestep}_summary.json", evaluation)
+                    console.evaluation_end(evaluation, new_best=new_best)
                 while next_eval <= timestep:
                     next_eval += args.eval_every
             if timestep % args.log_every < args.n_envs * horizon or timestep == args.total_timesteps:
-                print(f"step={timestep}/{args.total_timesteps} updates={updates} "
-                      f"elapsed={time.perf_counter()-started:.2f}s", flush=True)
+                console.progress(timestep, updates)
         save(out_dir / "latest.pt")
         status = "completed"
     except BaseException as exc:
@@ -427,9 +437,10 @@ def main(argv=None):
         atomic_json(out_dir / "result.json", {"status": status, "timestep": timestep, "updates": updates,
                     "elapsed_seconds": elapsed, "steps_per_second": timestep / elapsed,
                     "best_vp_diff": best_vp_diff if math.isfinite(best_vp_diff) else None,
-                    "selection_metric": "win_share" if args.mode == "selfplay" else "vp_diff_mean",
-                    "best_selection_score": best_selection_score if math.isfinite(best_selection_score) else None})
-    print(f"Saved {out_dir / 'latest.pt'}", flush=True)
+                    "selection_metric": "latest_valid_evaluation" if args.mode == "selfplay" else "vp_diff_mean",
+                    "latest_evaluated_step": latest_evaluated_step,
+                    "best_selection_score": best_vp_diff if math.isfinite(best_vp_diff) else None})
+    console.finish(out_dir)
     return out_dir
 
 

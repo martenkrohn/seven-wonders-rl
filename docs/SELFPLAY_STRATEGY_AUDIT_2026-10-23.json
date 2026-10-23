@@ -1,0 +1,1271 @@
+{
+  "run": "python/runs/poc-moderate-seed31-v2",
+  "holdout": "python/runs/poc-moderate-seed31-v2-holdout",
+  "method": "Completed games only; arithmetic per-game means; descriptive subgroups; no causal interpretation. Commercial includes treasury points. No coins, all-player breakdowns or age snapshots available in these records.",
+  "initial": {
+    "attempted": 480,
+    "completed": 480,
+    "seed_blocks": 40,
+    "breakdown_sum_mismatches": 0,
+    "category_statistics": {
+      "civilian": {
+        "mean": 3.1354166666666665,
+        "std_population": 3.594033805218804,
+        "median": 2.0,
+        "minimum": 0,
+        "maximum": 17,
+        "zero_fraction": 0.39375
+      },
+      "commercial": {
+        "mean": 9.125,
+        "std_population": 4.012610330778042,
+        "median": 9.0,
+        "minimum": 0,
+        "maximum": 21,
+        "zero_fraction": 0.00625
+      },
+      "military": {
+        "mean": -4.80625,
+        "std_population": 2.7458230589084454,
+        "median": -6.0,
+        "minimum": -6,
+        "maximum": 15,
+        "zero_fraction": 0.014583333333333334
+      },
+      "scientific": {
+        "mean": 1.78125,
+        "std_population": 2.6378776388414984,
+        "median": 1.0,
+        "minimum": 0,
+        "maximum": 16,
+        "zero_fraction": 0.33958333333333335
+      },
+      "guild": {
+        "mean": 1.6791666666666667,
+        "std_population": 3.198499539714763,
+        "median": 0.0,
+        "minimum": 0,
+        "maximum": 20,
+        "zero_fraction": 0.7125
+      },
+      "wonder": {
+        "mean": 6.675,
+        "std_population": 3.9373478806594338,
+        "median": 7.0,
+        "minimum": 0,
+        "maximum": 20,
+        "zero_fraction": 0.06041666666666667
+      }
+    },
+    "total_points": {
+      "mean": 17.589583333333334,
+      "median": 17.0,
+      "minimum": 4,
+      "maximum": 34,
+      "p10": 11.0,
+      "p90": 25.0
+    },
+    "action_means": {
+      "prod_build": 1.84375,
+      "other": 3.997916666666667,
+      "discard": 9.841666666666667,
+      "build_wonder": 2.3291666666666666
+    }
+  },
+  "candidate": {
+    "attempted": 480,
+    "completed": 480,
+    "seed_blocks": 40,
+    "breakdown_sum_mismatches": 0,
+    "category_statistics": {
+      "civilian": {
+        "mean": 13.19375,
+        "std_population": 6.307565108991477,
+        "median": 13.0,
+        "minimum": 0,
+        "maximum": 33,
+        "zero_fraction": 0.03125
+      },
+      "commercial": {
+        "mean": 8.96875,
+        "std_population": 4.872655686327529,
+        "median": 9.0,
+        "minimum": 0,
+        "maximum": 25,
+        "zero_fraction": 0.016666666666666666
+      },
+      "military": {
+        "mean": 9.0125,
+        "std_population": 6.334417396256739,
+        "median": 10.0,
+        "minimum": -6,
+        "maximum": 18,
+        "zero_fraction": 0.052083333333333336
+      },
+      "scientific": {
+        "mean": 0.14166666666666666,
+        "std_population": 0.41424295072121897,
+        "median": 0.0,
+        "minimum": 0,
+        "maximum": 4,
+        "zero_fraction": 0.8708333333333333
+      },
+      "guild": {
+        "mean": 3.2125,
+        "std_population": 4.373767683588144,
+        "median": 0.0,
+        "minimum": 0,
+        "maximum": 22,
+        "zero_fraction": 0.5583333333333333
+      },
+      "wonder": {
+        "mean": 6.972916666666666,
+        "std_population": 4.106561801116463,
+        "median": 7.0,
+        "minimum": 0,
+        "maximum": 20,
+        "zero_fraction": 0.03125
+      }
+    },
+    "total_points": {
+      "mean": 41.50208333333333,
+      "median": 41.5,
+      "minimum": 23,
+      "maximum": 64,
+      "p10": 31.900000000000006,
+      "p90": 51.0
+    },
+    "action_means": {
+      "prod_build": 1.16875,
+      "other": 12.829166666666667,
+      "discard": 1.5958333333333334,
+      "build_wonder": 2.4375
+    }
+  },
+  "candidate_by_opponents": {
+    "65536/65536": {
+      "attempted": 120,
+      "completed": 120,
+      "seed_blocks": 40,
+      "breakdown_sum_mismatches": 0,
+      "category_statistics": {
+        "civilian": {
+          "mean": 12.166666666666666,
+          "std_population": 5.93623524541345,
+          "median": 12.0,
+          "minimum": 0,
+          "maximum": 31,
+          "zero_fraction": 0.03333333333333333
+        },
+        "commercial": {
+          "mean": 9.433333333333334,
+          "std_population": 5.131168374638362,
+          "median": 9.0,
+          "minimum": 0,
+          "maximum": 25,
+          "zero_fraction": 0.008333333333333333
+        },
+        "military": {
+          "mean": 11.058333333333334,
+          "std_population": 5.819931032428325,
+          "median": 12.0,
+          "minimum": -6,
+          "maximum": 18,
+          "zero_fraction": 0.016666666666666666
+        },
+        "scientific": {
+          "mean": 0.09166666666666666,
+          "std_population": 0.2885548282196797,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 1,
+          "zero_fraction": 0.9083333333333333
+        },
+        "guild": {
+          "mean": 3.075,
+          "std_population": 4.305350353532993,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 22,
+          "zero_fraction": 0.5583333333333333
+        },
+        "wonder": {
+          "mean": 6.608333333333333,
+          "std_population": 3.9608413107430707,
+          "median": 7.0,
+          "minimum": 0,
+          "maximum": 20,
+          "zero_fraction": 0.041666666666666664
+        }
+      },
+      "total_points": {
+        "mean": 42.43333333333333,
+        "median": 42.0,
+        "minimum": 26,
+        "maximum": 64,
+        "p10": 33.0,
+        "p90": 51.0
+      },
+      "action_means": {
+        "prod_build": 1.125,
+        "other": 13.266666666666667,
+        "discard": 1.325,
+        "build_wonder": 2.3
+      }
+    },
+    "131072/131072": {
+      "attempted": 120,
+      "completed": 120,
+      "seed_blocks": 40,
+      "breakdown_sum_mismatches": 0,
+      "category_statistics": {
+        "civilian": {
+          "mean": 14.616666666666667,
+          "std_population": 6.426745331468765,
+          "median": 15.0,
+          "minimum": 0,
+          "maximum": 33,
+          "zero_fraction": 0.016666666666666666
+        },
+        "commercial": {
+          "mean": 7.991666666666666,
+          "std_population": 4.4599996885899245,
+          "median": 8.0,
+          "minimum": 0,
+          "maximum": 20,
+          "zero_fraction": 0.025
+        },
+        "military": {
+          "mean": 6.95,
+          "std_population": 6.349343798115414,
+          "median": 8.0,
+          "minimum": -6,
+          "maximum": 18,
+          "zero_fraction": 0.10833333333333334
+        },
+        "scientific": {
+          "mean": 0.15833333333333333,
+          "std_population": 0.4829740043614033,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 4,
+          "zero_fraction": 0.8666666666666667
+        },
+        "guild": {
+          "mean": 3.1083333333333334,
+          "std_population": 4.402264253262809,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 18,
+          "zero_fraction": 0.5583333333333333
+        },
+        "wonder": {
+          "mean": 7.175,
+          "std_population": 4.032498191774755,
+          "median": 7.0,
+          "minimum": 0,
+          "maximum": 20,
+          "zero_fraction": 0.008333333333333333
+        }
+      },
+      "total_points": {
+        "mean": 40.0,
+        "median": 40.0,
+        "minimum": 23,
+        "maximum": 56,
+        "p10": 31.0,
+        "p90": 51.0
+      },
+      "action_means": {
+        "prod_build": 1.2333333333333334,
+        "other": 12.35,
+        "discard": 1.925,
+        "build_wonder": 2.5416666666666665
+      }
+    },
+    "65536/131072": {
+      "attempted": 120,
+      "completed": 120,
+      "seed_blocks": 40,
+      "breakdown_sum_mismatches": 0,
+      "category_statistics": {
+        "civilian": {
+          "mean": 12.358333333333333,
+          "std_population": 5.43261114832351,
+          "median": 12.5,
+          "minimum": 0,
+          "maximum": 25,
+          "zero_fraction": 0.03333333333333333
+        },
+        "commercial": {
+          "mean": 9.65,
+          "std_population": 4.643364441149686,
+          "median": 9.0,
+          "minimum": 0,
+          "maximum": 21,
+          "zero_fraction": 0.025
+        },
+        "military": {
+          "mean": 9.133333333333333,
+          "std_population": 6.193993506257136,
+          "median": 10.0,
+          "minimum": -6,
+          "maximum": 18,
+          "zero_fraction": 0.03333333333333333
+        },
+        "scientific": {
+          "mean": 0.125,
+          "std_population": 0.33071891388307384,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 1,
+          "zero_fraction": 0.875
+        },
+        "guild": {
+          "mean": 3.2416666666666667,
+          "std_population": 4.293397709144692,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 16,
+          "zero_fraction": 0.55
+        },
+        "wonder": {
+          "mean": 7.091666666666667,
+          "std_population": 4.112979117649665,
+          "median": 7.0,
+          "minimum": 0,
+          "maximum": 20,
+          "zero_fraction": 0.041666666666666664
+        }
+      },
+      "total_points": {
+        "mean": 41.6,
+        "median": 42.0,
+        "minimum": 23,
+        "maximum": 64,
+        "p10": 33.0,
+        "p90": 50.0
+      },
+      "action_means": {
+        "prod_build": 1.1416666666666666,
+        "other": 12.866666666666667,
+        "discard": 1.5666666666666667,
+        "build_wonder": 2.4583333333333335
+      }
+    },
+    "131072/65536": {
+      "attempted": 120,
+      "completed": 120,
+      "seed_blocks": 40,
+      "breakdown_sum_mismatches": 0,
+      "category_statistics": {
+        "civilian": {
+          "mean": 13.633333333333333,
+          "std_population": 7.00824910769841,
+          "median": 13.0,
+          "minimum": 0,
+          "maximum": 33,
+          "zero_fraction": 0.041666666666666664
+        },
+        "commercial": {
+          "mean": 8.8,
+          "std_population": 5.052392172690741,
+          "median": 9.0,
+          "minimum": 0,
+          "maximum": 23,
+          "zero_fraction": 0.008333333333333333
+        },
+        "military": {
+          "mean": 8.908333333333333,
+          "std_population": 6.283570950414174,
+          "median": 10.0,
+          "minimum": -6,
+          "maximum": 18,
+          "zero_fraction": 0.05
+        },
+        "scientific": {
+          "mean": 0.19166666666666668,
+          "std_population": 0.504906481990037,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 4,
+          "zero_fraction": 0.8333333333333334
+        },
+        "guild": {
+          "mean": 3.425,
+          "std_population": 4.482674982641503,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 16,
+          "zero_fraction": 0.5666666666666667
+        },
+        "wonder": {
+          "mean": 7.016666666666667,
+          "std_population": 4.289489739144065,
+          "median": 7.0,
+          "minimum": 0,
+          "maximum": 20,
+          "zero_fraction": 0.03333333333333333
+        }
+      },
+      "total_points": {
+        "mean": 41.975,
+        "median": 42.0,
+        "minimum": 25,
+        "maximum": 59,
+        "p10": 31.0,
+        "p90": 51.0
+      },
+      "action_means": {
+        "prod_build": 1.175,
+        "other": 12.833333333333334,
+        "discard": 1.5666666666666667,
+        "build_wonder": 2.45
+      }
+    }
+  },
+  "candidate_by_outcome": {
+    "strict_win": {
+      "attempted": 265,
+      "completed": 265,
+      "seed_blocks": 40,
+      "breakdown_sum_mismatches": 0,
+      "category_statistics": {
+        "civilian": {
+          "mean": 13.6,
+          "std_population": 6.370213704540016,
+          "median": 14.0,
+          "minimum": 0,
+          "maximum": 33,
+          "zero_fraction": 0.033962264150943396
+        },
+        "commercial": {
+          "mean": 9.10943396226415,
+          "std_population": 4.834555808787456,
+          "median": 9.0,
+          "minimum": 0,
+          "maximum": 25,
+          "zero_fraction": 0.01509433962264151
+        },
+        "military": {
+          "mean": 11.256603773584906,
+          "std_population": 5.502846928154803,
+          "median": 12.0,
+          "minimum": -4,
+          "maximum": 18,
+          "zero_fraction": 0.022641509433962263
+        },
+        "scientific": {
+          "mean": 0.12830188679245283,
+          "std_population": 0.39638810717007383,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 4,
+          "zero_fraction": 0.8830188679245283
+        },
+        "guild": {
+          "mean": 3.950943396226415,
+          "std_population": 4.764793156789147,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 22,
+          "zero_fraction": 0.5056603773584906
+        },
+        "wonder": {
+          "mean": 7.747169811320755,
+          "std_population": 4.223948067039995,
+          "median": 8.0,
+          "minimum": 0,
+          "maximum": 20,
+          "zero_fraction": 0.011320754716981131
+        }
+      },
+      "total_points": {
+        "mean": 45.79245283018868,
+        "median": 45.0,
+        "minimum": 28,
+        "maximum": 64,
+        "p10": 40.0,
+        "p90": 53.0
+      },
+      "action_means": {
+        "prod_build": 1.1358490566037736,
+        "other": 13.026415094339622,
+        "discard": 1.3132075471698113,
+        "build_wonder": 2.543396226415094
+      }
+    },
+    "loss": {
+      "attempted": 188,
+      "completed": 188,
+      "seed_blocks": 39,
+      "breakdown_sum_mismatches": 0,
+      "category_statistics": {
+        "civilian": {
+          "mean": 12.691489361702128,
+          "std_population": 6.00890579437151,
+          "median": 12.0,
+          "minimum": 0,
+          "maximum": 33,
+          "zero_fraction": 0.026595744680851064
+        },
+        "commercial": {
+          "mean": 8.691489361702128,
+          "std_population": 4.932580774903808,
+          "median": 8.0,
+          "minimum": 0,
+          "maximum": 21,
+          "zero_fraction": 0.02127659574468085
+        },
+        "military": {
+          "mean": 5.7287234042553195,
+          "std_population": 6.0288159512924775,
+          "median": 6.0,
+          "minimum": -6,
+          "maximum": 16,
+          "zero_fraction": 0.0851063829787234
+        },
+        "scientific": {
+          "mean": 0.1595744680851064,
+          "std_population": 0.4449047588580104,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 4,
+          "zero_fraction": 0.8563829787234043
+        },
+        "guild": {
+          "mean": 2.4574468085106385,
+          "std_population": 3.5956974691600316,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 16,
+          "zero_fraction": 0.5957446808510638
+        },
+        "wonder": {
+          "mean": 5.962765957446808,
+          "std_population": 3.720800761519785,
+          "median": 5.0,
+          "minimum": 0,
+          "maximum": 15,
+          "zero_fraction": 0.06382978723404255
+        }
+      },
+      "total_points": {
+        "mean": 35.691489361702125,
+        "median": 36.0,
+        "minimum": 23,
+        "maximum": 51,
+        "p10": 29.0,
+        "p90": 42.0
+      },
+      "action_means": {
+        "prod_build": 1.1861702127659575,
+        "other": 12.622340425531915,
+        "discard": 1.9361702127659575,
+        "build_wonder": 2.2925531914893615
+      }
+    },
+    "top_vp_tie": {
+      "attempted": 27,
+      "completed": 27,
+      "seed_blocks": 18,
+      "breakdown_sum_mismatches": 0,
+      "category_statistics": {
+        "civilian": {
+          "mean": 12.703703703703704,
+          "std_population": 7.347535816780696,
+          "median": 11.0,
+          "minimum": 0,
+          "maximum": 26,
+          "zero_fraction": 0.037037037037037035
+        },
+        "commercial": {
+          "mean": 9.518518518518519,
+          "std_population": 4.716954214794954,
+          "median": 9.0,
+          "minimum": 3,
+          "maximum": 23,
+          "zero_fraction": 0.0
+        },
+        "military": {
+          "mean": 9.851851851851851,
+          "std_population": 6.150601919979225,
+          "median": 10.0,
+          "minimum": -4,
+          "maximum": 18,
+          "zero_fraction": 0.1111111111111111
+        },
+        "scientific": {
+          "mean": 0.14814814814814814,
+          "std_population": 0.3552467795046459,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 1,
+          "zero_fraction": 0.8518518518518519
+        },
+        "guild": {
+          "mean": 1.2222222222222223,
+          "std_population": 3.735052514215914,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 18,
+          "zero_fraction": 0.8148148148148148
+        },
+        "wonder": {
+          "mean": 6.407407407407407,
+          "std_population": 3.8706804766781926,
+          "median": 3.0,
+          "minimum": 2,
+          "maximum": 15,
+          "zero_fraction": 0.0
+        }
+      },
+      "total_points": {
+        "mean": 39.851851851851855,
+        "median": 40.0,
+        "minimum": 31,
+        "maximum": 47,
+        "p10": 36.0,
+        "p90": 45.800000000000004
+      },
+      "action_means": {
+        "prod_build": 1.3703703703703705,
+        "other": 12.333333333333334,
+        "discard": 2.0,
+        "build_wonder": 2.4074074074074074
+      }
+    }
+  },
+  "training_evaluations_against_initial_references": {
+    "eval_0": {
+      "attempted": 144,
+      "completed": 144,
+      "seed_blocks": 12,
+      "breakdown_sum_mismatches": 0,
+      "category_statistics": {
+        "civilian": {
+          "mean": 2.826388888888889,
+          "std_population": 3.1520052284024755,
+          "median": 2.0,
+          "minimum": 0,
+          "maximum": 12,
+          "zero_fraction": 0.4236111111111111
+        },
+        "commercial": {
+          "mean": 12.041666666666666,
+          "std_population": 4.278296324992513,
+          "median": 12.0,
+          "minimum": 3,
+          "maximum": 24,
+          "zero_fraction": 0.0
+        },
+        "military": {
+          "mean": 4.534722222222222,
+          "std_population": 7.480449699090109,
+          "median": 3.0,
+          "minimum": -5,
+          "maximum": 18,
+          "zero_fraction": 0.0
+        },
+        "scientific": {
+          "mean": 1.1597222222222223,
+          "std_population": 2.91229003640998,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 16,
+          "zero_fraction": 0.5486111111111112
+        },
+        "guild": {
+          "mean": 0.3958333333333333,
+          "std_population": 1.2203070538006227,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 7,
+          "zero_fraction": 0.875
+        },
+        "wonder": {
+          "mean": 3.7708333333333335,
+          "std_population": 3.610783906116048,
+          "median": 3.0,
+          "minimum": 0,
+          "maximum": 13,
+          "zero_fraction": 0.2986111111111111
+        }
+      },
+      "total_points": {
+        "mean": 24.729166666666668,
+        "median": 25.0,
+        "minimum": 13,
+        "maximum": 44,
+        "p10": 15.0,
+        "p90": 36.0
+      },
+      "action_means": {
+        "prod_build": 2.2777777777777777,
+        "other": 3.5555555555555554,
+        "discard": 10.63888888888889,
+        "build_wonder": 1.5416666666666667
+      }
+    },
+    "eval_32768": {
+      "attempted": 144,
+      "completed": 144,
+      "seed_blocks": 12,
+      "breakdown_sum_mismatches": 0,
+      "category_statistics": {
+        "civilian": {
+          "mean": 20.694444444444443,
+          "std_population": 6.278576645335949,
+          "median": 20.0,
+          "minimum": 11,
+          "maximum": 34,
+          "zero_fraction": 0.0
+        },
+        "commercial": {
+          "mean": 6.097222222222222,
+          "std_population": 3.87355608303211,
+          "median": 6.0,
+          "minimum": 0,
+          "maximum": 15,
+          "zero_fraction": 0.041666666666666664
+        },
+        "military": {
+          "mean": 16.59722222222222,
+          "std_population": 2.630799003166477,
+          "median": 18.0,
+          "minimum": 7,
+          "maximum": 18,
+          "zero_fraction": 0.0
+        },
+        "scientific": {
+          "mean": 0.6388888888888888,
+          "std_population": 0.917508031384097,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 4,
+          "zero_fraction": 0.5416666666666666
+        },
+        "guild": {
+          "mean": 3.3402777777777777,
+          "std_population": 4.328784783356327,
+          "median": 2.0,
+          "minimum": 0,
+          "maximum": 21,
+          "zero_fraction": 0.3888888888888889
+        },
+        "wonder": {
+          "mean": 1.9305555555555556,
+          "std_population": 1.8916952192330392,
+          "median": 3.0,
+          "minimum": 0,
+          "maximum": 10,
+          "zero_fraction": 0.4097222222222222
+        }
+      },
+      "total_points": {
+        "mean": 49.298611111111114,
+        "median": 48.0,
+        "minimum": 29,
+        "maximum": 63,
+        "p10": 41.0,
+        "p90": 60.0
+      },
+      "action_means": {
+        "prod_build": 3.7430555555555554,
+        "other": 12.631944444444445,
+        "discard": 0.7222222222222222,
+        "build_wonder": 0.9166666666666666
+      }
+    },
+    "eval_65536": {
+      "attempted": 144,
+      "completed": 144,
+      "seed_blocks": 12,
+      "breakdown_sum_mismatches": 0,
+      "category_statistics": {
+        "civilian": {
+          "mean": 21.180555555555557,
+          "std_population": 7.975355075496446,
+          "median": 20.0,
+          "minimum": 4,
+          "maximum": 47,
+          "zero_fraction": 0.0
+        },
+        "commercial": {
+          "mean": 6.541666666666667,
+          "std_population": 4.345935201746315,
+          "median": 6.0,
+          "minimum": 0,
+          "maximum": 19,
+          "zero_fraction": 0.04861111111111111
+        },
+        "military": {
+          "mean": 16.38888888888889,
+          "std_population": 2.53067599420675,
+          "median": 18.0,
+          "minimum": 7,
+          "maximum": 18,
+          "zero_fraction": 0.0
+        },
+        "scientific": {
+          "mean": 0.5277777777777778,
+          "std_population": 0.8970975145530634,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 4,
+          "zero_fraction": 0.625
+        },
+        "guild": {
+          "mean": 2.7152777777777777,
+          "std_population": 3.556416725137748,
+          "median": 1.0,
+          "minimum": 0,
+          "maximum": 12,
+          "zero_fraction": 0.4652777777777778
+        },
+        "wonder": {
+          "mean": 3.1666666666666665,
+          "std_population": 3.545341231030441,
+          "median": 3.0,
+          "minimum": 0,
+          "maximum": 13,
+          "zero_fraction": 0.375
+        }
+      },
+      "total_points": {
+        "mean": 50.520833333333336,
+        "median": 50.0,
+        "minimum": 35,
+        "maximum": 74,
+        "p10": 41.0,
+        "p90": 61.400000000000034
+      },
+      "action_means": {
+        "prod_build": 3.798611111111111,
+        "other": 12.041666666666666,
+        "discard": 0.8680555555555556,
+        "build_wonder": 1.2916666666666667
+      }
+    },
+    "eval_98304": {
+      "attempted": 144,
+      "completed": 144,
+      "seed_blocks": 12,
+      "breakdown_sum_mismatches": 0,
+      "category_statistics": {
+        "civilian": {
+          "mean": 17.90277777777778,
+          "std_population": 7.2114101761302605,
+          "median": 16.0,
+          "minimum": 4,
+          "maximum": 41,
+          "zero_fraction": 0.0
+        },
+        "commercial": {
+          "mean": 6.791666666666667,
+          "std_population": 4.144733941333803,
+          "median": 6.0,
+          "minimum": 0,
+          "maximum": 20,
+          "zero_fraction": 0.034722222222222224
+        },
+        "military": {
+          "mean": 16.97222222222222,
+          "std_population": 1.9928498732428266,
+          "median": 18.0,
+          "minimum": 9,
+          "maximum": 18,
+          "zero_fraction": 0.0
+        },
+        "scientific": {
+          "mean": 0.7222222222222222,
+          "std_population": 1.7773436970051548,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 10,
+          "zero_fraction": 0.6527777777777778
+        },
+        "guild": {
+          "mean": 2.8402777777777777,
+          "std_population": 3.290692249116447,
+          "median": 1.0,
+          "minimum": 0,
+          "maximum": 11,
+          "zero_fraction": 0.3263888888888889
+        },
+        "wonder": {
+          "mean": 2.7222222222222223,
+          "std_population": 2.8295181284992985,
+          "median": 3.0,
+          "minimum": 0,
+          "maximum": 10,
+          "zero_fraction": 0.3611111111111111
+        }
+      },
+      "total_points": {
+        "mean": 47.951388888888886,
+        "median": 46.5,
+        "minimum": 29,
+        "maximum": 63,
+        "p10": 38.0,
+        "p90": 59.70000000000002
+      },
+      "action_means": {
+        "prod_build": 3.8402777777777777,
+        "other": 12.256944444444445,
+        "discard": 0.7986111111111112,
+        "build_wonder": 1.1041666666666667
+      }
+    },
+    "eval_131072": {
+      "attempted": 144,
+      "completed": 144,
+      "seed_blocks": 12,
+      "breakdown_sum_mismatches": 0,
+      "category_statistics": {
+        "civilian": {
+          "mean": 20.22222222222222,
+          "std_population": 7.904327616042265,
+          "median": 19.0,
+          "minimum": 4,
+          "maximum": 44,
+          "zero_fraction": 0.0
+        },
+        "commercial": {
+          "mean": 6.75,
+          "std_population": 4.386690729417285,
+          "median": 6.0,
+          "minimum": 0,
+          "maximum": 16,
+          "zero_fraction": 0.0625
+        },
+        "military": {
+          "mean": 16.75,
+          "std_population": 2.994207370536947,
+          "median": 18.0,
+          "minimum": 5,
+          "maximum": 18,
+          "zero_fraction": 0.0
+        },
+        "scientific": {
+          "mean": 0.5555555555555556,
+          "std_population": 1.7864372434237252,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 10,
+          "zero_fraction": 0.7916666666666666
+        },
+        "guild": {
+          "mean": 2.673611111111111,
+          "std_population": 3.4091988736177514,
+          "median": 1.0,
+          "minimum": 0,
+          "maximum": 11,
+          "zero_fraction": 0.4236111111111111
+        },
+        "wonder": {
+          "mean": 2.3819444444444446,
+          "std_population": 3.0754325074734923,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 10,
+          "zero_fraction": 0.5138888888888888
+        }
+      },
+      "total_points": {
+        "mean": 49.333333333333336,
+        "median": 50.0,
+        "minimum": 29,
+        "maximum": 64,
+        "p10": 40.0,
+        "p90": 60.0
+      },
+      "action_means": {
+        "prod_build": 3.388888888888889,
+        "other": 13.097222222222221,
+        "discard": 0.5555555555555556,
+        "build_wonder": 0.9583333333333334
+      }
+    },
+    "eval_163840": {
+      "attempted": 144,
+      "completed": 144,
+      "seed_blocks": 12,
+      "breakdown_sum_mismatches": 0,
+      "category_statistics": {
+        "civilian": {
+          "mean": 20.020833333333332,
+          "std_population": 7.205773871232245,
+          "median": 19.0,
+          "minimum": 4,
+          "maximum": 44,
+          "zero_fraction": 0.0
+        },
+        "commercial": {
+          "mean": 6.493055555555555,
+          "std_population": 3.829702134808662,
+          "median": 7.0,
+          "minimum": 0,
+          "maximum": 17,
+          "zero_fraction": 0.041666666666666664
+        },
+        "military": {
+          "mean": 16.993055555555557,
+          "std_population": 2.8320990639496864,
+          "median": 18.0,
+          "minimum": 1,
+          "maximum": 18,
+          "zero_fraction": 0.0
+        },
+        "scientific": {
+          "mean": 0.1736111111111111,
+          "std_population": 0.5692326842034213,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 4,
+          "zero_fraction": 0.875
+        },
+        "guild": {
+          "mean": 1.9930555555555556,
+          "std_population": 2.596730122721057,
+          "median": 1.0,
+          "minimum": 0,
+          "maximum": 11,
+          "zero_fraction": 0.4722222222222222
+        },
+        "wonder": {
+          "mean": 2.3402777777777777,
+          "std_population": 2.9513725489743763,
+          "median": 2.0,
+          "minimum": 0,
+          "maximum": 13,
+          "zero_fraction": 0.4930555555555556
+        }
+      },
+      "total_points": {
+        "mean": 48.013888888888886,
+        "median": 48.0,
+        "minimum": 31,
+        "maximum": 64,
+        "p10": 38.3,
+        "p90": 57.0
+      },
+      "action_means": {
+        "prod_build": 2.4166666666666665,
+        "other": 13.88888888888889,
+        "discard": 0.7013888888888888,
+        "build_wonder": 1.0486111111111112
+      }
+    },
+    "eval_196608": {
+      "attempted": 144,
+      "completed": 144,
+      "seed_blocks": 12,
+      "breakdown_sum_mismatches": 0,
+      "category_statistics": {
+        "civilian": {
+          "mean": 18.791666666666668,
+          "std_population": 6.675905057243799,
+          "median": 16.0,
+          "minimum": 8,
+          "maximum": 39,
+          "zero_fraction": 0.0
+        },
+        "commercial": {
+          "mean": 6.3125,
+          "std_population": 3.932536554184843,
+          "median": 6.0,
+          "minimum": 0,
+          "maximum": 18,
+          "zero_fraction": 0.027777777777777776
+        },
+        "military": {
+          "mean": 17.166666666666668,
+          "std_population": 1.9965247584518233,
+          "median": 18.0,
+          "minimum": 7,
+          "maximum": 18,
+          "zero_fraction": 0.0
+        },
+        "scientific": {
+          "mean": 0.09722222222222222,
+          "std_population": 0.2962601251069658,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 1,
+          "zero_fraction": 0.9027777777777778
+        },
+        "guild": {
+          "mean": 2.0625,
+          "std_population": 2.4782911619366543,
+          "median": 1.0,
+          "minimum": 0,
+          "maximum": 11,
+          "zero_fraction": 0.4166666666666667
+        },
+        "wonder": {
+          "mean": 2.9791666666666665,
+          "std_population": 3.103467482779007,
+          "median": 3.0,
+          "minimum": 0,
+          "maximum": 13,
+          "zero_fraction": 0.3333333333333333
+        }
+      },
+      "total_points": {
+        "mean": 47.40972222222222,
+        "median": 48.0,
+        "minimum": 32,
+        "maximum": 67,
+        "p10": 40.0,
+        "p90": 54.0
+      },
+      "action_means": {
+        "prod_build": 2.3958333333333335,
+        "other": 13.527777777777779,
+        "discard": 0.8819444444444444,
+        "build_wonder": 1.25
+      }
+    },
+    "eval_229376": {
+      "attempted": 144,
+      "completed": 144,
+      "seed_blocks": 12,
+      "breakdown_sum_mismatches": 0,
+      "category_statistics": {
+        "civilian": {
+          "mean": 17.666666666666668,
+          "std_population": 7.292499952386394,
+          "median": 16.0,
+          "minimum": 6,
+          "maximum": 39,
+          "zero_fraction": 0.0
+        },
+        "commercial": {
+          "mean": 7.055555555555555,
+          "std_population": 3.973484647876921,
+          "median": 8.0,
+          "minimum": 0,
+          "maximum": 17,
+          "zero_fraction": 0.013888888888888888
+        },
+        "military": {
+          "mean": 16.993055555555557,
+          "std_population": 2.358485059247007,
+          "median": 18.0,
+          "minimum": 7,
+          "maximum": 18,
+          "zero_fraction": 0.0
+        },
+        "scientific": {
+          "mean": 0.10416666666666667,
+          "std_population": 0.3054766312211496,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 1,
+          "zero_fraction": 0.8958333333333334
+        },
+        "guild": {
+          "mean": 1.7361111111111112,
+          "std_population": 2.1825892851506263,
+          "median": 1.0,
+          "minimum": 0,
+          "maximum": 11,
+          "zero_fraction": 0.4652777777777778
+        },
+        "wonder": {
+          "mean": 2.3333333333333335,
+          "std_population": 3.0595932917809696,
+          "median": 2.0,
+          "minimum": 0,
+          "maximum": 13,
+          "zero_fraction": 0.4791666666666667
+        }
+      },
+      "total_points": {
+        "mean": 45.888888888888886,
+        "median": 46.0,
+        "minimum": 30,
+        "maximum": 67,
+        "p10": 37.3,
+        "p90": 52.0
+      },
+      "action_means": {
+        "prod_build": 2.576388888888889,
+        "other": 13.777777777777779,
+        "discard": 0.6944444444444444,
+        "build_wonder": 1.0069444444444444
+      }
+    },
+    "eval_262144": {
+      "attempted": 144,
+      "completed": 144,
+      "seed_blocks": 12,
+      "breakdown_sum_mismatches": 0,
+      "category_statistics": {
+        "civilian": {
+          "mean": 18.569444444444443,
+          "std_population": 7.102085743891032,
+          "median": 18.0,
+          "minimum": 0,
+          "maximum": 44,
+          "zero_fraction": 0.006944444444444444
+        },
+        "commercial": {
+          "mean": 6.402777777777778,
+          "std_population": 3.9216624954724315,
+          "median": 6.0,
+          "minimum": 0,
+          "maximum": 17,
+          "zero_fraction": 0.020833333333333332
+        },
+        "military": {
+          "mean": 17.04861111111111,
+          "std_population": 2.911495084409934,
+          "median": 18.0,
+          "minimum": 1,
+          "maximum": 18,
+          "zero_fraction": 0.0
+        },
+        "scientific": {
+          "mean": 0.034722222222222224,
+          "std_population": 0.18307536564533425,
+          "median": 0.0,
+          "minimum": 0,
+          "maximum": 1,
+          "zero_fraction": 0.9652777777777778
+        },
+        "guild": {
+          "mean": 2.111111111111111,
+          "std_population": 2.6407887897555846,
+          "median": 1.0,
+          "minimum": 0,
+          "maximum": 11,
+          "zero_fraction": 0.4583333333333333
+        },
+        "wonder": {
+          "mean": 2.298611111111111,
+          "std_population": 2.67207748222009,
+          "median": 2.0,
+          "minimum": 0,
+          "maximum": 10,
+          "zero_fraction": 0.4513888888888889
+        }
+      },
+      "total_points": {
+        "mean": 46.46527777777778,
+        "median": 47.0,
+        "minimum": 29,
+        "maximum": 64,
+        "p10": 38.3,
+        "p90": 54.0
+      },
+      "action_means": {
+        "prod_build": 2.388888888888889,
+        "other": 13.6875,
+        "discard": 0.9444444444444444,
+        "build_wonder": 0.9791666666666666
+      }
+    }
+  }
+}

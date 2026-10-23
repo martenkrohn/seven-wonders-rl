@@ -1,3 +1,5 @@
+from sevenwonders_rl.features.obs_builder import GLOBAL_DIM
+from sevenwonders_rl.features.action_feature_schema import K
 import importlib.util
 import json
 from pathlib import Path
@@ -24,7 +26,7 @@ def detail_module():
 @pytest.mark.integration
 def test_evaluators_agree_and_do_not_consume_training_rng(require_engine, tmp_path):
     root = Path(__file__).parents[2]
-    model = ActorCritic(90, 92, hidden=16)
+    model = ActorCritic(GLOBAL_DIM, K, hidden=16)
     model.train()
     before = torch.get_rng_state().clone()
     specs = [{"engine_seed": derive_seed(123, "evaluation", i), "left": "baseline", "right": "baseline"}

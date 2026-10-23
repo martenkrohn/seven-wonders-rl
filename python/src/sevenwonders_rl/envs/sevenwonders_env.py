@@ -216,6 +216,8 @@ class SevenWondersEnv(gym.Env):
             {
                 # Backward compatible keys
                 "global_table": spaces.Box(low=-1000, high=10000, shape=(3, 7), dtype=np.int32),
+                "science_jokers": spaces.Box(low=0, high=10, shape=(3,), dtype=np.int32),
+                "table_discounts": spaces.Box(low=0, high=1, shape=(3, 3), dtype=np.int32),
                 "wonder_stage": spaces.Box(low=0, high=10, shape=(3,), dtype=np.int32),
                 "hand_ids": spaces.Box(low=-1, high=10000, shape=(7,), dtype=np.int32),
                 "action_mask": spaces.Box(low=0, high=1, shape=(N_ACTIONS,), dtype=np.int8),

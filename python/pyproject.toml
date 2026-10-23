@@ -30,4 +30,4 @@ license-files = ["LICENSE"]
 where = ["src"]
 
 [tool.setuptools.package-data]
-sevenwonders_rl = ["data/*.json"]
+sevenwonders_rl = ["data/*.json", "evaluation/assets/*.html", "evaluation/assets/*.css", "evaluation/assets/*.js"]

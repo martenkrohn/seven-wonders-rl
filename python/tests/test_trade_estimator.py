@@ -85,7 +85,7 @@ def test_left_raw_discount_applies_only_left():
         left_choice_supply=[],
         right_supply={"wood": 1},
         right_choice_supply=[],
-        player_flags={"raw_cheap_west"},
+        player_flags={"raw_cheap_east"},
     )
     _assert_invariants(est)
     _assert_plan_not_exceed_supply(est, {"wood": 1}, [], {"wood": 1}, [])
@@ -105,7 +105,7 @@ def test_right_raw_discount_applies_only_right():
         left_choice_supply=[],
         right_supply={"wood": 1},
         right_choice_supply=[],
-        player_flags={"raw_cheap_east"},
+        player_flags={"raw_cheap_west"},
     )
     _assert_invariants(est)
     _assert_plan_not_exceed_supply(est, {"wood": 1}, [], {"wood": 1}, [])

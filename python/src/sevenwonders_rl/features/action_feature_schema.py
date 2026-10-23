@@ -232,6 +232,12 @@ def _build_feature_names() -> tuple[List[str], Dict[str, int]]:
     # ========================================================================
     idx['discard_delta_coins'] = len(names)
     names.append('discard_delta_coins')
+
+    # Explicit flexible science and held discounts (feature semantics v3).
+    for name in ('own_science_jokers', 'left_science_jokers', 'right_science_jokers',
+                 'delta_science_jokers', *(f'own_discount_{flag}' for flag in DISCOUNT_FLAGS)):
+        idx[name] = len(names)
+        names.append(name)
     
     return names, idx
 

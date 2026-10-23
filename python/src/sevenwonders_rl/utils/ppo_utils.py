@@ -16,6 +16,8 @@ def flatten_global(obs: Dict[str, Any]) -> np.ndarray:
         obs["table_amount"].astype(np.float32).reshape(-1),
         obs["wonder_stage"].astype(np.float32).reshape(-1),
         obs["game_meta"].astype(np.float32).reshape(-1),
+        obs['science_jokers'].astype(np.float32).reshape(-1),
+        obs['table_discounts'].astype(np.float32).reshape(-1),
     ]
     return np.concatenate(parts, axis=0)
 

@@ -1,4 +1,4 @@
-"""Fixed neural reference plans and paired, seed-block learning diagnostics."""
+"""Neural reference plans and paired, seed-block learning diagnostics."""
 from collections import defaultdict
 import json
 from pathlib import Path
@@ -12,6 +12,34 @@ from sevenwonders_rl.utils.seeding import derive_seed
 def reference(path):
     path = Path(path).resolve()
     return {"checkpoint": str(path), "sha256": file_hash(path)}
+
+
+def rolling_references(directory, current_step):
+    """Latest strictly older trained snapshot plus a roughly half-age reference.
+
+    Never evaluate against the current learner or the untrained step-zero model.
+    One trained snapshot is enough; no eligible snapshot means defer evaluation.
+    """
+    snapshots = []
+    for path in Path(directory).glob('checkpoint_*.pt'):
+        suffix = path.stem.removeprefix('checkpoint_')
+        if suffix.isdigit() and 0 < int(suffix) < current_step:
+            snapshots.append((int(suffix), path))
+    snapshots.sort()
+    if not snapshots:
+        return []
+    latest = snapshots[-1]
+    others = snapshots[:-1]
+    selected = [latest]
+    if others:
+        selected.append(min(others, key=lambda pair: (abs(pair[0] - current_step / 2), pair[0])))
+    return [{**reference(path), 'step': step} for step, path in selected]
+
+
+def plan_identity(plan, action_mode):
+    import hashlib
+    return hashlib.sha256(json.dumps({'plan': plan, 'action_mode': action_mode},
+                                    sort_keys=True).encode()).hexdigest()
 
 
 def evaluation_plan(references, seed, blocks):

@@ -13,7 +13,7 @@ from sevenwonders_rl.features.action_feature_schema import FEATURE_NAMES
 from sevenwonders_rl.utils.ppo_model import ActorCritic, MODEL_ARCHITECTURE_VERSION
 from sevenwonders_rl.utils.seeding import SEED_VERSION
 
-FEATURE_SEMANTICS_VERSION = 2  # correct era/round/seat; final state after scoring
+FEATURE_SEMANTICS_VERSION = 3  # shared science/jokers, chains, discounts and effective costs
 TRAINING_VERSION = 3          # neural-only self-play, audited opponents and fixed neural evaluation
 
 
@@ -64,7 +64,7 @@ def load_model(path, device="cpu", allow_legacy=False):
     meta = checkpoint.get("meta", {})
     if not allow_legacy and (meta.get("feature_schema_hash") != schema_hash()
                             or meta.get("feature_semantics_version") != FEATURE_SEMANTICS_VERSION):
-        raise ValueError("Checkpoint feature semantics/schema mismatch; use explicit legacy override for historical inference")
+        raise ValueError("Checkpoint feature semantics/schema mismatch; start a fresh training run with current features")
     cfg = checkpoint["config"]
     # Older checkpoints have no architecture metadata. Their linear head has
     # different state-dict keys; never reinterpret those weights as the new head.

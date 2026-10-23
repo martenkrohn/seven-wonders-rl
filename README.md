@@ -4,7 +4,9 @@ A work-in-progress reinforcement-learning project for three-player **7 Wonders**
 
 The simulator comes from [DMAG/UFSM's 7Wonders](https://github.com/dmag-ufsm/7Wonders). This project adds the RL environment, observation and action features, heuristic opponents, training/evaluation tools and snapshot self-play. It also includes a few targeted simulator fixes; it does not implement the original game engine from scratch.
 
-**Status:** neural-only self-play, corrected PPO/GAE and seeded evaluation are implemented. Two short training runs show learning on separate test seeds against initial and trained intermediate opponents; this is initial proof-of-concept evidence, not a general playing-strength benchmark. RAM exchange and grouped opponent inference are enabled for self-play. See the [experiment guide](docs/SELFPLAY_POC.md), [learning results](docs/SELFPLAY_POC_RESULTS_2026-10-23.md), [validation record](docs/VALIDATION.md) and [remaining limitations](docs/KNOWN_ISSUES.md).
+**Current stage:** self-play training has demonstrated learning in the tested setting, with gains over untrained policies and trained predecessors on separate evaluation seeds. Detailed evaluation also revealed limited strategic diversity. The next development focus is long-term strategy discovery and the classic **deep exploration** challenge: trying sequences of decisions whose benefits only emerge later.
+
+Neural-only self-play, corrected PPO/GAE, rolling trained evaluation opponents and a local analysis dashboard are implemented. RAM exchange and grouped opponent inference support longer runs. See the [experiment guide](docs/SELFPLAY_POC.md), [moderate-run results](docs/SELFPLAY_MODERATE_RESULTS_2026-10-23.md), [feature corrections](docs/FEATURE_CORRECTIONS_2026-10-23.md), [validation record](docs/VALIDATION.md) and [remaining limitations](docs/KNOWN_ISSUES.md). These results establish a proof of concept, not a general playing-strength benchmark.
 
 ## How it works
 
@@ -30,6 +32,7 @@ The environment exposes 28 action slots: four action types for each of seven han
 | Engine corrections and protocol v2 | Selectable production, trading, Gizah B, final status, seeded RNG and atomic publication |
 | Gymnasium wrapper, masks and feature extraction | RL extension in this project |
 | PyTorch actor-critic, PPO scripts, opponent policies and self-play pool | RL extension in this project |
+| Detailed evaluation, strategy telemetry and interactive HTML dashboard | RL extension in this project |
 | Python tests, C++ regression checks and CI setup | Downstream development and validation |
 
 The [origin record](docs/ORIGIN.md) pins the upstream commit. The [simulator change log](docs/SIMULATOR_CHANGES.md) documents each C++ correction, with an exact patch and checked file inventory. This distinguishes inherited implementation from downstream work; it does not claim that every line of the extension was written manually. Development has used coding assistants.
@@ -63,18 +66,36 @@ Unit/component tests use recorded game-state fixtures. Integration tests require
 
 ## Training and evaluation
 
-The main entry points are in `python/scripts/ppo_training/`. From `python/`:
+The main training and evaluation entry points are below. From `python/`:
 
 ```sh
 python scripts/ppo_training/train_unified.py --help
-python scripts/ppo_training/eval_ppo_descriptives.py --help
+python scripts/eval_selfplay.py --help
+python scripts/build_dashboard.py --help
 ```
 
 - **Fixed opponents:** `--mode fixed` trains against a mixture of heuristic policies.
-- **Neural-only self-play:** `--mode selfplay` starts against its random initial neural checkpoint, trains against frozen same-run snapshots and evaluates against fixed neural references. See the [proof-of-concept guide](docs/SELFPLAY_POC.md) for pilots, separate holdout evaluation and a moderate training budget.
-- **Evaluation:** the detailed evaluator records per-game outcomes and action statistics for a checkpoint or run directory.
+- **Neural-only self-play:** `--mode selfplay` starts against its random initial neural checkpoint, trains against frozen same-run snapshots and evaluates against rolling trained predecessors. See the [proof-of-concept guide](docs/SELFPLAY_POC.md) for pilots, separate holdout evaluation and a moderate training budget.
+- **Training evaluation:** readable console summaries show victory-point sources, score distributions and science participation. Opponent identities are recorded; changing reference opponents are not presented as directly comparable progress measurements.
+- **Detailed evaluation:** the separate evaluator compares final and intermediate models on the same opponent, seed and seat plan. Reports include score categories, age-by-age development, card choices relative to legal opportunities, and bootstrap uncertainty intervals over engine-seed blocks. See the [evaluation guide](docs/EVALUATION.md).
 
-Training and old experiments remain exploratory. Historical results used incorrect GAE and premature scoring and must be re-evaluated. Current checkpoints carry feature semantics and schema metadata; historical inference requires an explicit `--allow-legacy` override and is not directly comparable. No checkpoints are bundled. The [script index](python/scripts/README.md) separates the main tools from diagnostics and older trainers.
+Current feature semantics are **version 3**: science symbols and jokers, building chains, trade discounts and production features have been corrected. New training runs require fresh output directories and compatible checkpoints. The documented moderate-run results predate these corrections and do not establish their effect. Earlier exploratory results affected by incorrect GAE or premature scoring are separate from the corrected proof-of-concept runs. No checkpoints are bundled. The [script index](python/scripts/README.md) separates the main tools from diagnostics and older trainers.
+
+## Analysis dashboard
+
+[**Explore the evaluation dashboard →**](https://martenkrohn.github.io/seven-wonders-rl/)
+
+The public example contains a detailed evaluation of the Seed 47 experiment, before the latest observation corrections. It demonstrates the analysis tools and observed strategy limitations. See the [snapshot and update guide](docs/DASHBOARD_DEMO.md) for experiment context and how the example is replaced as new results become available.
+
+Each detailed evaluation produces a standalone `dashboard.html` that opens directly in a browser, without a server or external dependencies. It provides sortable tables, card search and filters, score distributions, age-by-age summaries, model comparisons and CSV exports. Additional evaluation reports can be loaded locally. Light and dark themes follow the system preference until a manual choice is saved.
+
+Existing evaluation data can be turned into a dashboard without replaying games or loading model weights. From `python/`, replace the example directory with an evaluation directory containing `analysis.json`:
+
+```sh
+python scripts/build_dashboard.py --evaluation-dir runs/YOUR-EVALUATION
+```
+
+Open `runs/YOUR-EVALUATION/dashboard.html` in your browser. The [evaluation guide](docs/EVALUATION.md#interaktives-dashboard) explains report comparison, available metrics and how missing data are handled. Training logs, checkpoints and routine generated dashboards remain local; only the explicitly selected public demo snapshot is bundled in `demo/`.
 
 ## Repository layout
 
@@ -85,11 +106,13 @@ python/src/sevenwonders_rl/
   envs/                          Gymnasium wrapper and engine transport
   features/                      Observations, action features and trade estimates
   policies/                      Heuristics and checkpoint-backed opponents
-  evaluation/                    Shared completion and outcome handling
+  evaluation/                    Game telemetry, evaluation reports and dashboard
   selfplay/                      Frozen-checkpoint opponent pool
   utils/                         Actor-critic model and PPO utilities
   data/                          Engine-derived card/wonder data and mechanics
 python/scripts/ppo_training/     Main training and evaluation tools
+python/scripts/eval_selfplay.py  Detailed self-play evaluation and report rendering
+python/scripts/build_dashboard.py  Dashboard generation from saved analysis
 python/tests/                   Python tests and a selected fixture pool
 docs/                            Origin, architecture and known issues
 ```

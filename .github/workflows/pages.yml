@@ -1,0 +1,46 @@
+name: Dashboard demo
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'demo/index.html'
+      - 'demo/snapshot.json'
+      - 'demo/.nojekyll'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select the public snapshot only
+        run: |
+          test -s demo/index.html
+          test -s demo/snapshot.json
+          mkdir -p "$RUNNER_TEMP/dashboard-demo"
+          cp demo/index.html demo/snapshot.json demo/.nojekyll "$RUNNER_TEMP/dashboard-demo/"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ runner.temp }}/dashboard-demo
+      - name: Publish demo
+        id: deployment
+        uses: actions/deploy-pages@v5

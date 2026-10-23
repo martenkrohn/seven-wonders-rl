@@ -17,15 +17,16 @@ from sevenwonders_rl.utils.checkpoints import file_hash
 from sevenwonders_rl.utils.ppo_utils import select_action_from_obs
 from sevenwonders_rl.utils.runtime import seat_order
 from sevenwonders_rl.utils.seeding import derive_seed
+from sevenwonders_rl.evaluation.telemetry import status_snapshot, action_event, category_statistics
 
 
-def run_game(env, select_action, record, on_step=None):
+def run_game(env, select_action, record, on_step=None, *, detailed=False):
     """Execute one attempt; only a final protocol state supplies result fields.
 
     Expected transport failures become records; programming errors propagate.
     on_step observes requested actions and the engine's acknowledgement.
     """
-    result = {**record, "schema_version": 2, "status": "failed", "reason": None,
+    result = {**record, "schema_version": 3, "status": "failed", "reason": None,
               "steps": 0, "totals": None, "agent_vp": None, "vp_diff": None,
               "win": None, "win_share": None, "vp_tie": None, "action_counts": {}}
     start = time.perf_counter()
@@ -33,12 +34,24 @@ def run_game(env, select_action, record, on_step=None):
     stage = "startup"
     try:
         obs, info = env.reset(seed=record["engine_seed"])
+        if detailed:
+            result.update(age_states=[], actions=[], initial_state=status_snapshot(info.get('status', {})))
         stage = "step"
         for _ in range(22):
             before = obs
+            before_status = info.get('status', {})
             action = int(select_action(obs))
             obs, reward, terminated, truncated, info = env.step(action)
             result["steps"] += 1
+            after_status = info.get('status', {})
+            if detailed and info.get('transition_valid', True) and before_status and after_status:
+                event = action_event(before_status, after_status, before, action, env.agent_seat)
+                if event is not None:
+                    result['actions'].append(event)
+                old_age = before_status.get('game', {}).get('era')
+                new_age = after_status.get('game', {}).get('era')
+                if old_age in (1, 2, 3) and (new_age != old_age or terminated):
+                    result['age_states'].append(status_snapshot(after_status, old_age))
             if on_step is not None and info.get("transition_valid", True):
                 on_step(before, action, info)
             if terminated:
@@ -53,6 +66,7 @@ def run_game(env, select_action, record, on_step=None):
                               vp_diff=diff, win=int(diff > 0), vp_tie=int(diff == 0),
                               win_share=(1. / sum(t == max(totals) for t in totals) if diff >= 0 else 0.),
                               points_breakdown=players[str(agent)]["points"],
+                              final_state=status_snapshot(status, 3),
                               winner_seats=[s for s, t in enumerate(totals) if t == max(totals)])
                 break
             if truncated:
@@ -92,12 +106,13 @@ def aggregate(records):
         "total_games": len(completed),
         "valid_for_selection": bool(records) and len(completed) == len(records),
         "failure_reasons": dict(Counter(r["reason"] for r in records if r["status"] != "completed")),
+        "categories": category_statistics(records),
     }
 
 
 def evaluate_model(model, device, specs, repo_root, io_root, jsonl_path,
                    action_mode="greedy", engine_poll_us=1000, poll_seconds=.001,
-                   checkpoint_id=None, *, batch_opponents=True):
+                   checkpoint_id=None, *, batch_opponents=True, detailed=False, progress_callback=None):
     """Evaluate an explicit, fixed game plan without consuming training RNGs."""
     records = []
     snapshot_cache = {}
@@ -146,12 +161,15 @@ def evaluate_model(model, device, specs, repo_root, io_root, jsonl_path,
                      "agent_seat": agent, "policy_seeds": policy_seeds,
                      "checkpoint_id": checkpoint_id, "action_selection_mode": action_mode,
                      "opponents": {"left": spec["left"], "right": spec["right"]},
-                     "opponents_by_seat": {str(s): opponents[s].name for s in (left, right)}}, on_step)
+                     "opponents_by_seat": {str(s): opponents[s].name for s in (left, right)}}, on_step,
+                    detailed=detailed)
                 record["action_counts"] = dict(counts)
                 output.write(json.dumps(record, allow_nan=False) + "\n")
                 output.flush()
                 records.append(record)
                 shutil.rmtree(env.io_dir.parent)
+                if progress_callback is not None:
+                    progress_callback(game_id + 1, len(specs))
     finally:
         model.train(previous_training)
     return {**aggregate(records), "jsonl_path": str(jsonl_path)}

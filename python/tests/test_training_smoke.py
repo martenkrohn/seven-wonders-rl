@@ -78,11 +78,11 @@ spec.loader.exec_module(trainer)
 def no_bots(*args, **kwargs):
     raise AssertionError("Heuristic/random factory must not run in neural self-play")
 trainer.make_policy = runner.make_policy = no_bots
-trainer.main(["--mode", "selfplay", "--seed", "7", "--total-timesteps", "256",
+trainer.main(["--mode", "selfplay", "--seed", "7", "--total-timesteps", "512",
               "--n-envs", "2", "--rollout-horizon", "64", "--snapshot-every", "64",
-              "--eval-every", "1000", "--eval-games-per-matchup", "1", "--out-dir", sys.argv[1]])
+              "--eval-every", "256", "--eval-games-per-matchup", "1", "--out-dir", sys.argv[1]])
 '''
-    subprocess.run([sys.executable, "-c", code, str(output)], cwd=root,
+    process = subprocess.run([sys.executable, "-c", code, str(output)], cwd=root,
                    capture_output=True, text=True, check=True, timeout=60)
     selections = [json.loads(line) for line in (output / "opponents.jsonl").read_text().splitlines()]
     episodes = [json.loads(line) for line in (output / "episodes.jsonl").read_text().splitlines()]
@@ -98,10 +98,20 @@ trainer.main(["--mode", "selfplay", "--seed", "7", "--total-timesteps", "256",
     refs = json.loads((output / "references.json").read_text())["references"]
     assert all(ref["sha256"] == file_hash(ref["checkpoint"]) for ref in refs)
     assert not (output / "eval_128.jsonl").exists()
-    for step in (0, 256):
-        summary = json.loads((output / f"eval_{step}_summary.json").read_text())
-        assert summary["completed"] == 12 and summary["paired_valid"]
+    assert not (output / 'eval_0.jsonl').exists()
+    summary = json.loads((output / 'eval_256_summary.json').read_text())
+    assert summary['completed'] == 3
+    assert [r['step'] for r in summary['references']] == [128]
+    assert 'paired_valid' not in summary
+    final = json.loads((output / 'eval_512_summary.json').read_text())
+    assert final['completed'] == 12
+    assert [r['step'] for r in final['references']] == [384, 256]
+    assert final['plan_id'] != summary['plan_id']
+    assert 'paired_valid' not in final
+    assert 'kein direkter Fortschrittsvergleich' in process.stdout
+    assert json.loads((output / 'result.json').read_text())['latest_evaluated_step'] == 512
     assert load_model(output / "latest.pt").architecture_version == 2
-    assert (output / "best.pt").exists()
+    assert (output / "evaluated.pt").exists()
+    assert not (output / 'best.pt').exists()
     timing = json.loads((output / "timing.json").read_text())["buckets"]
     assert timing["policies.opponents.requests"]["calls"] > timing["policies.opponents.inference"]["calls"]
