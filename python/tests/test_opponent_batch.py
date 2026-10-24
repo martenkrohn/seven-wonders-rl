@@ -29,20 +29,38 @@ def test_shared_snapshot_batches_four_seats_without_mixing_rngs_or_states(tmp_pa
             for index, (status, seat) in enumerate(zip(statuses, (0, 2)))]
     serial_rngs = [[np.random.default_rng(100 * index + s) for s in range(3)] for index in range(2)]
     calls = []
+    predictions = []
     forward = policy.model.forward_batch
     def observed(global_obs, features):
         calls.append(len(global_obs))
-        return forward(global_obs, features)
+        result = forward(global_obs, features)
+        predictions.append(tuple(value.detach().clone() for value in result))
+        return result
     monkeypatch.setattr(policy.model, "forward_batch", observed)
     before = torch.get_rng_state().clone()
     expected = [{seat: policy.select_action(build_obs(status, seat), serial_rngs[index][seat])
                  for seat in range(3) if seat != envs[index].agent_seat}
                 for index, status in enumerate(statuses)]
     assert calls == [1, 1, 1, 1]
+    serial_predictions = tuple(torch.cat([prediction[i] for prediction in predictions]) for i in (0, 1))
     calls.clear()
+    predictions.clear()
     timers = TimingBuckets()
     actual = opponent_actions_batch(envs, timers=timers)
-    assert actual == expected
+    # Batch-sized matrix multiplication can round identical/near-tied greedy
+    # scores differently. Compare every score/value, and only permit a changed
+    # deterministic choice when both scores are equal at float32 precision.
+    torch.testing.assert_close(predictions[0], serial_predictions, rtol=1e-5, atol=1e-6)
+    if deterministic:
+        row = 0
+        for index, seats in enumerate(expected):
+            assert actual[index].keys() == seats.keys()
+            for seat, action in seats.items():
+                logits = serial_predictions[0][row]
+                torch.testing.assert_close(logits[actual[index][seat]], logits[action], rtol=0, atol=1e-6)
+                row += 1
+    else:
+        assert actual == expected
     assert calls == [4]
     assert timers.buckets["policies.opponents.requests"].calls == 4
     assert timers.buckets["policies.opponents.inference"].calls == 1
