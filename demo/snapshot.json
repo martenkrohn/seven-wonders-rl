@@ -1,23 +1,23 @@
 {
-  "title": "Self-play evaluation — Seed 47",
-  "description": "Training seed 47; 262,144 transitions. Evaluation seed 39001, 40 engine-seed blocks and 480 attempted games per model against checkpoints at 65,536 and 131,072 transitions. This experiment predates feature semantics v3: science, chain and production observations were subsequently corrected. The results show learning with limited strategic diversity; they do not establish the effect of those corrections or general playing strength. Data-quality limitation: initial: 479/480 games completed. See the data-quality view; incomplete results are not a fully paired baseline comparison.",
-  "exported_at": "2026-10-23T19:17:18+00:00",
-  "source_analysis_sha256": "7ace695742fc0427af64806d8ed03059a89ea242876e17ab1b5f97b55f681e5c",
-  "evaluation_seed": 39001,
+  "title": "Self-play evaluation — Seed 31 · Feature semantics v3",
+  "description": "Completed training run: seed 31, 262,144 transitions, feature semantics v3. Evaluation seed 59001: 40 engine-seed blocks, 480 games each for the initial, 65,536-step, 131,072-step and final models, all against the same frozen 65,536/131,072 opponents and seat plan. All 1,920 games completed without failures. Final win share: 43.5%; early science remains rare. Same-line opponents and one training seed do not establish general playing strength or isolate the effect of feature corrections.",
+  "exported_at": "2026-10-24T05:17:57+00:00",
+  "source_analysis_sha256": "e27c47cea1d894e29a703c13b048902a8288bc3c191731b654cca9b086501604",
+  "evaluation_seed": 59001,
   "provenance": {
-    "feature_semantics_version": 2,
+    "feature_semantics_version": 3,
     "model_architecture_version": 2,
     "training_version": 3,
     "engine_sha256": "16c3bb014b4c9723e4e3542a1531b6d5e5d3473f1f514dadb621524023452216",
     "card_database_sha256": "f2607b5400ae1e2c9e5890abd02207df31a44072938a4668ba76cf9e816fd8c8",
-    "git_commit": "99829bbd3f0ea88df9564a7a70cc3840c49800d4",
-    "dirty": true
+    "git_commit": "dd9c3fc2f57dd0b60fca03a7126b07a62da7cee3",
+    "dirty": false
   },
   "evaluation_failures": {
     "initial": {
       "attempted": 480,
-      "completed": 479,
-      "failed": 1,
+      "completed": 480,
+      "failed": 0,
       "truncated": 0
     },
     "comparison_1": {

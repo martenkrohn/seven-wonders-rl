@@ -7,6 +7,15 @@ the snapshot at the same URL; it does not change training or model weights.
 Expected URL after Pages deployment:
 <https://martenkrohn.github.io/seven-wonders-rl/>
 
+## Current example
+
+The completed Seed-31 restart uses feature semantics v3 and 262,144 training
+transitions. Its detailed evaluation uses seed 59001, 40 engine-seed blocks
+and the same frozen opponents and seat rotations for all four tested models.
+Findings are documented in the [assessment](SELFPLAY_FEATURE_V3_RESULTS_2026-10-24.md).
+The original local dashboard is generated alongside its `analysis.json` in
+`python/runs/poc-moderate-features-v3-seed31-restart1-detailed/`.
+
 ## Replace the example after the current training run
 
 1. Finish training and run the separate detailed evaluation. Training checkpoint
