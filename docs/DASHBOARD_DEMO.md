@@ -49,8 +49,18 @@ observed results from hypotheses and state which feature version was trained.
 Only derived statistics and selected provenance are embedded. Checkpoint paths
 become filenames; local file references are removed. Model and engine hashes
 remain available for identification. Raw logs and model weights stay local.
-The public interface currently uses the same German labels as the local dashboard;
-the introductory experiment context is in English.
+Both the local and public dashboard default to English. The language selector
+switches all interface labels, model identities, number formatting and CSV
+headings/values between English and German; a manual selection is saved locally.
+The theme selection is independent. Report/model selection, card filters,
+table sorting/pagination and subgroup controls survive a language switch.
+Raw experiment statistics and technical identifiers remain unchanged.
+
+For bilingual public experiment context, add `--title-de` and `--description-de`
+to the exporter command. `--title` and `--description` contain the English
+version. The current public snapshot supplies both versions. Imported file
+names and user-authored descriptions are preserved rather than automatically
+translated.
 
 ## GitHub Pages setup
 

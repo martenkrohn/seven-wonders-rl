@@ -1,40 +1,42 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; object-src 'none'">
-<title>7 Wonders · Self-Play-Auswertung</title>
+<title data-i18n="7 Wonders · Self-Play-Auswertung">7 Wonders · Self-play evaluation</title>
+<script>/* DASHBOARD_I18N */</script>
 <script>/* DASHBOARD_THEME */</script>
 <style>/* DASHBOARD_CSS */</style>
 </head>
 <body>
 <aside class="sidebar">
-  <a href="#overview" class="brand"><span class="brand-mark">VII</span><span>7 WONDERS<small>SELF-PLAY LABOR</small></span></a>
-  <div class="sidebar-label">AUSWERTUNG</div>
-  <nav aria-label="Auswertungsbereiche" id="navigation"></nav>
-  <div class="sidebar-footer"><span class="status-dot"></span> Lokale Auswertung<br><small>Alle Daten bleiben in deinem Browser.</small></div>
+  <a href="#overview" class="brand"><span class="brand-mark">VII</span><span>7 WONDERS<small data-i18n="SELF-PLAY LABOR">SELF-PLAY LAB</small></span></a>
+  <div class="sidebar-label" data-i18n="AUSWERTUNG">EVALUATION</div>
+  <nav aria-label="Evaluation sections" data-i18n-aria-label="Auswertungsbereiche" id="navigation"></nav>
+  <div class="sidebar-footer"><span class="status-dot"></span> <span data-i18n="Lokale Auswertung">Local evaluation</span><br><small data-i18n="Alle Daten bleiben in deinem Browser.">All data stays in your browser.</small></div>
 </aside>
 <main>
   <header class="topbar">
-    <span class="eyebrow">TRAINING VERSTEHEN</span>
+    <span class="eyebrow" data-i18n="TRAINING VERSTEHEN">UNDERSTANDING TRAINING</span>
     <div class="topbar-actions">
-      <button id="theme-toggle" type="button" aria-pressed="false">Dark Mode</button>
-      <label class="import-button">+ Auswertung hinzufügen<input id="import-file" type="file" accept=".json,application/json" multiple></label>
+      <label class="language-control"><span data-i18n="Sprache">Language</span><select id="language-select" aria-label="Language" data-i18n-aria-label="Sprache"><option value="en" lang="en">English</option><option value="de" lang="de">Deutsch</option></select></label>
+      <button id="theme-toggle" type="button" aria-pressed="false">Dark mode</button>
+      <label class="import-button"><span data-i18n="+ Auswertung hinzufügen">+ Add evaluation</span><input id="import-file" type="file" accept=".json,application/json" multiple></label>
     </div>
   </header>
-  <div class="page-header"><div><p class="kicker">7 WONDERS / ANALYSE</p><h1 id="page-title">Überblick</h1><p id="page-description" class="muted"></p></div><span class="pill">SELF-PLAY</span></div>
+  <div class="page-header"><div><p class="kicker" data-i18n="7 WONDERS / ANALYSE">7 WONDERS / ANALYSIS</p><h1 id="page-title">Overview</h1><p id="page-description" class="muted"></p></div><span class="pill">SELF-PLAY</span></div>
   <div id="error" role="alert" hidden></div>
   <!-- DASHBOARD_INTRODUCTION -->
-  <section class="selectors" aria-label="Datenauswahl">
-    <label>Auswertung<select id="report-select"></select></label>
-    <label>Modellstand<select id="model-select"></select></label>
+  <section class="selectors" aria-label="Data selection" data-i18n-aria-label="Datenauswahl">
+    <label><span data-i18n="Auswertung">Evaluation</span><select id="report-select"></select></label>
+    <label><span data-i18n="Modellstand">Model checkpoint</span><select id="model-select"></select></label>
     <span id="dataset-meta" class="dataset-meta"></span>
   </section>
   <div id="content"></div>
-  <footer>7 Wonders · Lokale Trainingsanalyse <span>Sortieren · Filtern · Vergleichen</span></footer>
+  <footer><span data-i18n="7 Wonders · Lokale Trainingsanalyse">7 Wonders · Local training analysis</span><span data-i18n="Sortieren · Filtern · Vergleichen">Sort · Filter · Compare</span></footer>
 </main>
-<noscript>Bitte JavaScript aktivieren, um Tabellen zu sortieren und die Auswertung anzuzeigen.</noscript>
+<noscript>Enable JavaScript to sort tables and view the evaluation. / Bitte JavaScript aktivieren, um die Auswertung anzuzeigen.</noscript>
 <script id="evaluation-data" type="application/json">DASHBOARD_DATA</script>
 <script>/* DASHBOARD_JS */</script>
 </body>

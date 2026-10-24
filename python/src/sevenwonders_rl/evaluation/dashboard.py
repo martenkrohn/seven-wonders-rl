@@ -31,25 +31,32 @@ def render_dashboard(entries, *, demo=None):
     # JSON is embedded in a script data block, never interpreted as HTML/code.
     payload = payload.replace('&', '\\u0026').replace('<', '\\u003c').replace('>', '\\u003e')
     template = (assets / 'dashboard.html').read_text(encoding='utf-8')
+    if demo:
+        template = (template
+            .replace('data-i18n="Lokale Auswertung">Local evaluation', 'data-i18n="Öffentliche Beispieldaten">Public example data')
+            .replace('data-i18n="Alle Daten bleiben in deinem Browser.">All data stays in your browser.',
+                     'data-i18n="Zusätzliche Dateien bleiben im Browser.">Additional files stay in your browser.')
+            .replace('data-i18n="7 Wonders · Lokale Trainingsanalyse">7 Wonders · Local training analysis',
+                     'data-i18n="7 Wonders · Öffentliche Demo · Trainingsanalyse">7 Wonders · Public demo · Training analysis'))
     introduction = ''
     if demo:
+        localized = lambda key: (f'data-language-en="{escape(demo[key], quote=True)}" '
+                                 f'data-language-de="{escape(demo.get(key + "_de") or demo[key], quote=True)}"')
         introduction = (
-            '<section class="notice demo-context" aria-label="Public demo context">'
-            f'<h2>{escape(demo["title"])}</h2><p>{escape(demo["description"])}</p>'
-            '<p>Public experiment snapshot · exploratory results, not a general playing-strength benchmark. '
-            f'Exported {escape(demo["exported_at"])}. '
-            '<a href="https://github.com/martenkrohn/seven-wonders-rl">Source code &amp; experiment documentation</a>.</p>'
-            '<p>The example data is public. Additional files you open are processed locally in your browser.</p>'
+            '<section class="notice demo-context" aria-label="Public demo context" data-i18n-aria-label="Öffentlicher Demokontext">'
+            f'<h2 {localized("title")}>{escape(demo["title"])}</h2>'
+            f'<p {localized("description")}>{escape(demo["description"])}</p>'
+            '<p><span data-i18n="Öffentlicher Experimentstand · explorative Ergebnisse, kein allgemeiner Spielstärke-Benchmark.">Public experiment snapshot · exploratory results, not a general playing-strength benchmark.</span> '
+            f'<span data-i18n="Exportiert: ">Exported: </span>{escape(demo["exported_at"])}. '
+            '<a href="https://github.com/martenkrohn/seven-wonders-rl" data-i18n="Quellcode und Experimentdokumentation">Source code &amp; experiment documentation</a>.</p>'
+            '<p data-i18n="Die Beispieldaten sind öffentlich. Zusätzlich geöffnete Dateien werden lokal im Browser verarbeitet.">The example data is public. Additional files you open are processed locally in your browser.</p>'
             '</section>')
     document = (template.replace('/* DASHBOARD_CSS */', (assets / 'dashboard.css').read_text(encoding='utf-8'))
+                .replace('/* DASHBOARD_I18N */', (assets / 'i18n.js').read_text(encoding='utf-8'))
                 .replace('/* DASHBOARD_THEME */', (assets / 'theme.js').read_text(encoding='utf-8'))
                 .replace('/* DASHBOARD_JS */', (assets / 'dashboard.js').read_text(encoding='utf-8'))
                 .replace('<!-- DASHBOARD_INTRODUCTION -->', introduction)
                 .replace('DASHBOARD_DATA', payload))
-    if demo:
-        document = document.replace('Lokale Auswertung', 'Öffentliche Beispieldaten')
-        document = document.replace('Alle Daten bleiben in deinem Browser.', 'Zusätzliche Dateien bleiben im Browser.')
-        document = document.replace('Lokale Trainingsanalyse', 'Öffentliche Demo · Trainingsanalyse')
     return document
 
 

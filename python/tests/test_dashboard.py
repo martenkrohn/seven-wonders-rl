@@ -45,6 +45,10 @@ def test_self_contained_dashboard_escapes_data_and_preserves_missing_values(tmp_
     assert malicious not in text
     assert 'DASHBOARD_DATA' not in text
     assert '/* DASHBOARD_JS */' not in text
+    assert '/* DASHBOARD_I18N */' not in text
+    assert '<html lang="en">' in text
+    assert 'id="language-select"' in text
+    assert '<option value="en" lang="en">English</option>' in text
     assert 'fetch(' not in text
     assert 'Trainingsende – Schritt 262.144' in text
     parser = DashboardParser()

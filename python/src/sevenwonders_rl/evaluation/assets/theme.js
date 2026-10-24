@@ -10,12 +10,13 @@
   const media = typeof matchMedia === 'function' ? matchMedia('(prefers-color-scheme: dark)') : null;
   let theme = preference || (media?.matches ? 'dark' : 'light');
   let toggle = null;
+  const t = key => globalThis.SevenWondersI18n?.t(key)??key;
   function apply() {
     document.documentElement.setAttribute('data-theme', theme);
     if (toggle) {
-      toggle.textContent = theme === 'dark' ? 'Dark Mode: an' : 'Dark Mode: aus';
+      toggle.textContent = t(theme === 'dark' ? 'Dark Mode: an' : 'Dark Mode: aus');
       toggle.setAttribute('aria-pressed', String(theme === 'dark'));
-      toggle.title = theme === 'dark' ? 'Zu heller Darstellung wechseln' : 'Zu dunkler Darstellung wechseln';
+      toggle.title = t(theme === 'dark' ? 'Zu heller Darstellung wechseln' : 'Zu dunkler Darstellung wechseln');
     }
   }
   media?.addEventListener?.('change', event => {
@@ -34,5 +35,6 @@
       apply();
     }
   };
+  globalThis.SevenWondersI18n?.subscribe(apply);
   apply();
 })();

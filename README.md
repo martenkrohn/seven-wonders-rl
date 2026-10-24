@@ -87,7 +87,7 @@ Current feature semantics are **version 3**: science symbols and jokers, buildin
 
 The public example contains the completed **Seed 31, feature semantics v3** experiment: 262,144 training transitions, followed by a detailed evaluation of the initial, intermediate and final models against trained predecessors on a shared test plan. See the [latest assessment](docs/SELFPLAY_FEATURE_V3_RESULTS_2026-10-24.md) for findings and the [snapshot and update guide](docs/DASHBOARD_DEMO.md) for how the example is replaced as new results become available.
 
-Each detailed evaluation produces a standalone `dashboard.html` that opens directly in a browser, without a server or external dependencies. It provides sortable tables, card search and filters, score distributions, age-by-age summaries, model comparisons and CSV exports. Additional evaluation reports can be loaded locally. Light and dark themes follow the system preference until a manual choice is saved.
+Each detailed evaluation produces a standalone `dashboard.html` that opens directly in a browser, without a server or external dependencies. It provides sortable tables, card search and filters, score distributions, age-by-age summaries, model comparisons and CSV exports. Additional evaluation reports can be loaded locally. English is the default; an English/German selector updates labels, number formatting and CSV exports and remembers a manual choice. Both languages are available locally and in the public demo. Light and dark themes follow the system preference until a manual choice is saved.
 
 Existing evaluation data can be turned into a dashboard without replaying games or loading model weights. From `python/`, replace the example directory with an evaluation directory containing `analysis.json`:
 

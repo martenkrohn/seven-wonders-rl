@@ -138,6 +138,11 @@ cd /home/marten/dev/7Wonders/python
 ```
 
 Die erzeugte HTML-Datei direkt im Browser öffnen (zum Beispiel über Strg+O).
+Standardmäßig öffnet sie auf Englisch. Über „Language“ lässt sich zwischen
+English und Deutsch wechseln; eine manuelle Auswahl wird lokal gespeichert.
+Beschriftungen, Modellnamen, Zahlenformate und CSV-Ausgaben passen sich an.
+Die Auswahl von Auswertung/Modell, Kartenfilter und Tabellensortierung bleiben
+beim Sprachwechsel erhalten. Die Trainingskonsole bleibt unverändert.
 Oben rechts lässt sich der Dark Mode umschalten; zunächst gilt die
 Systemeinstellung, eine manuelle Auswahl wird lokal gespeichert.
 Die öffentliche Beispieldemo und ihr Aktualisierungsablauf stehen in

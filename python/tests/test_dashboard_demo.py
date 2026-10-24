@@ -36,11 +36,14 @@ def test_demo_exports_statistics_without_local_paths_or_raw_artifacts(tmp_path):
     (source / 'analysis.json').write_text(raw)
     (source / 'candidate.jsonl').write_text('private raw games')
     (source / 'manifest.json').write_text(json.dumps({'feature_semantics_version': 3, 'io_root': '/home/private/io'}))
-    destination = exporter().prepare_demo(source, output, title='Example <experiment>', description='Context <script>')
+    destination = exporter().prepare_demo(source, output, title='Example <experiment>', description='Context <script>',
+                                         title_de='Beispiel <Experiment>', description_de='Kontext <script>')
     text = destination.read_text()
     assert '/home/private' not in text
     assert 'private-run' not in text
     assert 'Context &lt;script&gt;' in text
+    assert 'data-language-de="Kontext &lt;script&gt;"' in text
+    assert '<html lang="en">' in text
     assert 'Public experiment snapshot' in text
     assert 'Öffentliche Beispieldaten' in text
     parser = DashboardParser()
@@ -48,6 +51,7 @@ def test_demo_exports_statistics_without_local_paths_or_raw_artifacts(tmp_path):
     entry, = json.loads(parser.payload)
     assert entry['report']['references'][0]['checkpoint'] == 'checkpoint_65536.pt'
     assert entry['provenance']['feature_semantics_version'] == 3
+    assert entry['title_de'] == 'Beispiel <Experiment>'
     assert entry['report']['models']['candidate']['categories']['science']['mean'] == 0
     assert {p.name for p in output.iterdir()} == {'index.html', 'snapshot.json', '.nojekyll'}
     assert (source / 'analysis.json').read_text() == raw

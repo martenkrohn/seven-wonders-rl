@@ -1,7 +1,9 @@
 {
   "title": "Self-play evaluation — Seed 31 · Feature semantics v3",
   "description": "Completed training run: seed 31, 262,144 transitions, feature semantics v3. Evaluation seed 59001: 40 engine-seed blocks, 480 games each for the initial, 65,536-step, 131,072-step and final models, all against the same frozen 65,536/131,072 opponents and seat plan. All 1,920 games completed without failures. Final win share: 43.5%; early science remains rare. Same-line opponents and one training seed do not establish general playing strength or isolate the effect of feature corrections.",
-  "exported_at": "2026-10-24T05:17:57+00:00",
+  "title_de": "Self-Play-Auswertung — Seed 31 · Merkmalsversion v3",
+  "description_de": "Abgeschlossener Trainingslauf: Seed 31, 262.144 Schritte, Merkmalsversion v3. Test-Seed 59001: 40 Engine-Seed-Blöcke, jeweils 480 Spiele für das untrainierte Modell, die Stände bei 65.536 und 131.072 Schritten sowie das finale Modell. Alle spielen gegen dieselben eingefrorenen Gegner bei 65.536/131.072 Schritten und auf demselben Positionsplan. Alle 1.920 Spiele wurden ohne Fehler abgeschlossen. Finaler Sieganteil: 43,5 %; frühe Wissenschaft bleibt selten. Gegner derselben Trainingslinie und ein einzelner Trainings-Seed belegen weder allgemeine Spielstärke noch den isolierten Effekt der Merkmalskorrekturen.",
+  "exported_at": "2026-10-24T05:36:45+00:00",
   "source_analysis_sha256": "e27c47cea1d894e29a703c13b048902a8288bc3c191731b654cca9b086501604",
   "evaluation_seed": 59001,
   "provenance": {

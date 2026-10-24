@@ -29,7 +29,8 @@ def public_copy(value):
     return value
 
 
-def prepare_demo(evaluation_dir, output, *, title, description, allow_evaluation_failures=False):
+def prepare_demo(evaluation_dir, output, *, title, description, allow_evaluation_failures=False,
+                 title_de=None, description_de=None):
     evaluation_dir, output = Path(evaluation_dir).resolve(), Path(output).resolve()
     if output == evaluation_dir or evaluation_dir in output.parents or output in evaluation_dir.parents:
         raise ValueError('The public output and private evaluation directories must be separate')
@@ -52,8 +53,11 @@ def prepare_demo(evaluation_dir, output, *, title, description, allow_evaluation
             raise ValueError('Resolve evaluation data-quality errors before exporting the demo')
     entry = public_copy(entry_from_directory(report, evaluation_dir))
     entry['title'] = title.strip()
+    if title_de:
+        entry['title_de'] = title_de
     metadata = public_copy({
         'title': title.strip(), 'description': description.strip(),
+        'title_de': title_de, 'description_de': description_de,
         'exported_at': datetime.now(timezone.utc).isoformat(timespec='seconds'),
         'source_analysis_sha256': hashlib.sha256(raw).hexdigest(),
         'evaluation_seed': report.get('seed'),
@@ -68,6 +72,10 @@ def prepare_demo(evaluation_dir, output, *, title, description, allow_evaluation
                   for key, model in models.items() if model.get('attempted') != model.get('completed')]
     if incomplete:
         metadata['description'] += ' Data-quality limitation: ' + '; '.join(incomplete) + '. See the data-quality view; incomplete results are not a fully paired baseline comparison.'
+        if description_de:
+            metadata['description_de'] += ' Einschränkung der Datenqualität: ' + '; '.join(
+                f'{key}: {model.get("completed", 0)}/{model.get("attempted", 0)} Spiele abgeschlossen'
+                for key, model in models.items() if model.get('attempted') != model.get('completed')) + '. Siehe Datenqualität; der Vergleich zum Ausgangsmodell ist nicht vollständig gepaart.'
     document = render_dashboard([entry], demo=metadata)
     output.mkdir(parents=True, exist_ok=True)
     (output / 'index.html').write_text(document, encoding='utf-8')
@@ -82,12 +90,15 @@ def main(argv=None):
     parser.add_argument('--out-dir', default=str(Path(__file__).resolve().parents[2] / 'demo'))
     parser.add_argument('--title', required=True)
     parser.add_argument('--description', required=True, help='Public experiment context and limitations')
+    parser.add_argument('--title-de', help='German translation of the public experiment title')
+    parser.add_argument('--description-de', help='German translation of the public experiment description')
     parser.add_argument('--allow-evaluation-failures', action='store_true',
                         help='Explicitly publish a report with failed games, retaining counts and a visible warning')
     args = parser.parse_args(argv)
     try:
         destination = prepare_demo(args.evaluation_dir, args.out_dir, title=args.title, description=args.description,
-                                   allow_evaluation_failures=args.allow_evaluation_failures)
+                                   allow_evaluation_failures=args.allow_evaluation_failures,
+                                   title_de=args.title_de, description_de=args.description_de)
     except (ValueError, OSError) as error:
         parser.error(str(error))
     print(f'Öffentliche Demo vorbereitet: {destination}\nVorschau: {destination.as_uri()}\nNoch nicht veröffentlicht: Export prüfen, committen und pushen.')
