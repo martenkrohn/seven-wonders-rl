@@ -23,6 +23,8 @@ described in the [memory guide](OBSERVATION_MEMORY.md).
 From the repository root:
 
 ```sh
+git submodule update --init --recursive
+python3 python/scripts/check_engine.py
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --parallel 2
 ctest --test-dir build --output-on-failure
@@ -31,6 +33,9 @@ cd python
 ```
 
 The existing C++ assert-based tests retain assertions in Release builds. The final-status C++ regression constructs a controlled last turn and verifies the seventh card, age-III victory/defeat tokens, guild copying and skipped actions. Python tests cover mathematical GAE cases, reset/terminal/truncation boundaries, engine failures, final-publication races, replays, RNG isolation and short complete training.
+
+Engine changes are maintained in the separate `engine/` submodule; see the
+[engine workflow](ENGINE.md) for version updates and the migration boundary.
 
 ## 2. Short training checks
 

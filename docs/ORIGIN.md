@@ -1,5 +1,17 @@
 # Source origin and downstream changes
 
+## Standalone engine, 5 November 2026
+
+The simulator is now maintained in the separate
+[seven-wonders-engine fork](https://github.com/martenkrohn/seven-wonders-engine),
+included here as the `engine/` Git submodule. The pinned contract is in
+[engine.lock.json](../engine.lock.json). Engine source paths in the historical
+record below are relative to that submodule. Its [origin record](../engine/docs/ORIGIN.md),
+[change log](../engine/docs/SIMULATOR_CHANGES.md) and exact patch/inventory now
+belong to the engine repository. Python/RL code, derived databases and research
+remain here. The source split preserves game behavior; second-edition migration
+is a later change. See the [engine workflow](guides/ENGINE.md).
+
 ## Baseline
 
 For the complete current, function-level change log and exact source comparison, see [SIMULATOR_CHANGES.md](SIMULATOR_CHANGES.md), its [upstream patch](simulator/upstream.patch) and [file checksum inventory](simulator/manifest.json). The table below retains the historical comparison from 19 October; it is not the current full diff.

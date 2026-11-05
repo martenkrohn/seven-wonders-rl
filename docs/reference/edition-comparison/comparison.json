@@ -233,13 +233,13 @@
   "input_sha256": {
     "references/cards.csv": "d52ec9b855cf7dedd809e8f2ecd1055ebeaa3ed9db6a9b2bfa66ff2376f60a8f",
     "00_marten/final_cards.csv": "6ca1f35b4e9cb620310afcebf57ad559306870952e342780ff206dafe53c4876",
-    "main.cpp": "1972f8db8909b39fa9086ebce0eebf62d4e1c9694b56cfcf8f425e34b845a4bb",
-    "src/player.cpp": "461568f1e7630cca688c1af667a92b8ea500c5abff3745ac8cafa80a1f48b2b0",
-    "src/wonder.cpp": "e7565a10464a2a629220fefe05ea5e7f78c363149f9d7bda8e9ae9f5a2caafbb",
+    "engine/main.cpp": "1972f8db8909b39fa9086ebce0eebf62d4e1c9694b56cfcf8f425e34b845a4bb",
+    "engine/src/player.cpp": "461568f1e7630cca688c1af667a92b8ea500c5abff3745ac8cafa80a1f48b2b0",
+    "engine/src/wonder.cpp": "e7565a10464a2a629220fefe05ea5e7f78c363149f9d7bda8e9ae9f5a2caafbb",
     "python/src/sevenwonders_rl/data/card_db.json": "f2607b5400ae1e2c9e5890abd02207df31a44072938a4668ba76cf9e816fd8c8",
     "python/src/sevenwonders_rl/data/wonder_db.json": "fa5e244feefa98120ebdfb84f31476a4aaef280e715be7dc1010e6791b16fa7f",
     "docs/reference/edition-comparison/catalog_2020.json": "0d44bf2c1d7b4460757be33ca1cf9efeaa3896c1aa32d5c77e7f30869d9f95a4",
-    "python/scripts/build_edition_comparison.py": "3d230ad72c39e71742b7f51f1f6a320897208e37f11650eb82af71ad941df0c6",
+    "python/scripts/build_edition_comparison.py": "c454649cb24e9ce74fc5d62273f8230226b567583dde4bb432ce88c8d73443b8",
     "python/scripts/edition_comparison/report.html": "f816da9af8fc310d23acca0ac1fc524e70aa1daddf3300a89b4a87087cc34bed"
   },
   "cards": [

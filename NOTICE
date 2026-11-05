@@ -1,6 +1,9 @@
 Seven Wonders RL — source origin and licensing
 
-This is a modified version of DMAG/UFSM's 7Wonders simulator:
+This RL project consumes a separately maintained fork of DMAG/UFSM's simulator:
+https://github.com/martenkrohn/seven-wonders-engine
+The engine is pinned as the engine/ Git submodule; see engine.lock.json.
+Original upstream:
 https://github.com/dmag-ufsm/7Wonders
 Upstream baseline: a0bc333a7a7f21f83156de8a2d522e7baa913f0a
 Baseline commit date: 2021-10-07 (Update LICENSE).
@@ -27,7 +30,7 @@ The simulator and downstream extension are distributed under GPL-3.0-only.
 The old upstream README's MIT statement is inconsistent with that LICENSE;
 this project does not use it to claim MIT licensing for the simulator.
 
-include/nlohmann/ is the bundled nlohmann/json library, copyright Niels Lohmann
+engine/include/nlohmann/ is the bundled nlohmann/json library, copyright Niels Lohmann
 and contributors, under its original MIT license. Its embedded notices remain
 unchanged. Those permissions are not replaced by the project's GPL notice.
 
@@ -40,3 +43,7 @@ artwork, and no publisher affiliation, are claimed.
 See docs/ORIGIN.md for the verified file-level distinction and
 docs/SIMULATOR_CHANGES.md for function-level changes, the exact upstream
 patch and the checked source checksum inventory.
+
+Since 2026-11-05 engine source paths above are relative to engine/. The engine
+owns its source, tests and provenance; python/ remains the RL extension here.
+The split does not change game rules or implement the BGA second edition.

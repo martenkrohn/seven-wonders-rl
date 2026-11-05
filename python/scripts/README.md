@@ -88,6 +88,9 @@ mode by default, with paired intervals and the existing console/dashboard.
 upstream commit; `--check` detects simulator files changed without updating the
 record. Every C++ correction also requires an entry in
 [the simulator change log](../../docs/SIMULATOR_CHANGES.md).
+The audit delegates to the separate `engine/` submodule. `check_engine.py`
+verifies its exact commit and contract against `engine.lock.json`; see the
+[engine workflow](../../docs/guides/ENGINE.md) before updating it.
 
 ## Runtime options (25 October 2026)
 

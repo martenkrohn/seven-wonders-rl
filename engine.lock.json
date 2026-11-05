@@ -1,0 +1,9 @@
+{
+  "format_version": 1,
+  "repository": "https://github.com/martenkrohn/seven-wonders-engine.git",
+  "commit": "3e4692cbf072ccab32b33b2e5dda10144d780ef0",
+  "release": "v0.1.0-legacy",
+  "ruleset": "legacy-dmag-with-downstream-fixes",
+  "protocol_version": 2,
+  "players": 3
+}

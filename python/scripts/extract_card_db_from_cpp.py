@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Any, Optional
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+ENGINE_ROOT = REPO_ROOT / "engine"
 
 
 def parse_enum(file_path: Path, namespace_name: str) -> Tuple[Dict[str, int], Dict[int, str]]:
@@ -789,8 +790,8 @@ def main():
     
     # Parse enums
     print("\n1. Parsing enums...")
-    card_h = REPO_ROOT / "include/card.h"
-    resources_h = REPO_ROOT / "include/resources.h"
+    card_h = ENGINE_ROOT / "include/card.h"
+    resources_h = ENGINE_ROOT / "include/resources.h"
     
     card_id_name_to_int, card_id_int_to_name = parse_enum(card_h, 'CARD_ID')
     print(f"   - Found {len(card_id_name_to_int)} CARD_ID entries")
@@ -804,7 +805,7 @@ def main():
     
     # Parse Card constructors
     print("\n2. Parsing Card constructors from main.cpp...")
-    main_cpp = REPO_ROOT / "main.cpp"
+    main_cpp = ENGINE_ROOT / "main.cpp"
     cards = parse_cards_from_main(main_cpp, card_id_name_to_int, type_name_to_int)
     print(f"   - Parsed {len(cards)} card instantiations")
     
@@ -815,7 +816,7 @@ def main():
     
     # Parse effects from player.cpp
     print("\n4. Parsing effects from player.cpp...")
-    player_cpp = REPO_ROOT / "src/player.cpp"
+    player_cpp = ENGINE_ROOT / "src/player.cpp"
     
     choice_data = parse_choice_resources(player_cpp, card_id_name_to_int, resource_int_to_name)
     print(f"   - Choice resources: {len(choice_data)} cards")

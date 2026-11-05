@@ -51,7 +51,7 @@ Prüffrage und passenden Erfolgskriterien beruhen.
 | `reference/` | Tatsächliche technische Verträge und gegenwärtige Grenzen | [Architektur](reference/ARCHITECTURE.md), [bekannte Grenzen](reference/KNOWN_ISSUES.md) |
 | `guides/` | Praktische Bedienung ohne historische Versuchsentscheidungen | [Entwicklung](guides/DEVELOPMENT.md), [Beobachtungsgedächtnis](guides/OBSERVATION_MEMORY.md), [Evaluation und Dashboard](guides/EVALUATION.md), [öffentliche Demo](guides/DASHBOARD_DEMO.md) |
 | `archive/` | Protokolle, Ergebnisse und Messzusammenfassungen der explorativen Phase | [Kommentiertes Archiv](archive/README.md) |
-| `simulator/` | Exakter Herkunftsvergleich: Patch und Prüfsummen | [Erläuterung](SIMULATOR_CHANGES.md) |
+| `engine/` (Submodule im Projektstamm) | Eigenständige Engine, Tests und Herkunftsnachweis | [Engine-Arbeitsweise](guides/ENGINE.md) |
 
 Der [Editionsaudit zu Karten und Wundern](reference/EDITION_AUDIT.md) prüft den
 aktuellen Simulator gegen das Grundspiel von 2020 und beschreibt die nötige

@@ -21,6 +21,7 @@ import re
 import extract_card_db_from_cpp as cpp
 
 ROOT = Path(__file__).resolve().parents[2]
+ENGINE_ROOT = ROOT / 'engine'
 DOC = ROOT / 'docs/reference/edition-comparison'
 RESOURCE_NAMES = dict(wood='Holz', ore='Erz', clay='Lehm', stone='Stein',
                       loom='Stoff', glass='Glas', papyrus='Papyrus', coins='Münzen')
@@ -284,9 +285,9 @@ def read_cards(catalog):
     new = [r for r in read_csv(ROOT/'00_marten/final_cards.csv') if int(r['id']) <= 77]
     db = json.loads((ROOT/'python/src/sevenwonders_rl/data/card_db.json').read_text())
     by_name = {canonical(c['name']):c for c in db.values()}
-    ids, _ = cpp.parse_enum(ROOT/'include/card.h','CARD_ID')
-    types, _ = cpp.parse_enum(ROOT/'include/card.h','CARD_TYPE')
-    declarations = cpp.parse_cards_from_main(ROOT/'main.cpp',ids,types)
+    ids, _ = cpp.parse_enum(ENGINE_ROOT/'include/card.h','CARD_ID')
+    types, _ = cpp.parse_enum(ENGINE_ROOT/'include/card.h','CARD_TYPE')
+    declarations = cpp.parse_cards_from_main(ENGINE_ROOT/'main.cpp',ids,types)
     by_id_age = {(d['id'],d['era']):d for d in declarations}
     old_by_name_age = {(canonical(r['name']),int(r['age'])):r for r in old}
     rows = []
@@ -514,7 +515,7 @@ def main():
     conflicts,bga_manifest=apply_bga_reference(cards,wonders,args.bga_reference)
     validate_comparison(cards,wonders)
     output=args.output.resolve();output.mkdir(parents=True,exist_ok=True)
-    inputs=['references/cards.csv','00_marten/final_cards.csv','main.cpp','src/player.cpp','src/wonder.cpp','python/src/sevenwonders_rl/data/card_db.json','python/src/sevenwonders_rl/data/wonder_db.json','docs/reference/edition-comparison/catalog_2020.json','python/scripts/build_edition_comparison.py','python/scripts/edition_comparison/report.html']
+    inputs=['references/cards.csv','00_marten/final_cards.csv','engine/main.cpp','engine/src/player.cpp','engine/src/wonder.cpp','python/src/sevenwonders_rl/data/card_db.json','python/src/sevenwonders_rl/data/wonder_db.json','docs/reference/edition-comparison/catalog_2020.json','python/scripts/build_edition_comparison.py','python/scripts/edition_comparison/report.html']
     summary=dict(card_rows=len(cards),old_card_types=len({r['old_name'] for r in cards if r['old_name']}),
                  new_card_types=len({r['name'] for r in cards}),wonder_sides=len(wonders),
                  changed_card_rows=sum(bool(r['edition_changes']) for r in cards),

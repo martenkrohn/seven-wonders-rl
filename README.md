@@ -2,7 +2,7 @@
 
 A work-in-progress reinforcement-learning project for three-player **7 Wonders**. It adds a Python Gymnasium environment and PyTorch PPO agents to an existing C++ game simulator.
 
-The simulator comes from [DMAG/UFSM's 7Wonders](https://github.com/dmag-ufsm/7Wonders). This project adds the RL environment, observation and action features, heuristic opponents, training/evaluation tools and snapshot self-play. It also includes a few targeted simulator fixes; it does not implement the original game engine from scratch.
+The simulator comes from [DMAG/UFSM's 7Wonders](https://github.com/dmag-ufsm/7Wonders). This project adds the RL environment, observation and action features, heuristic opponents, training/evaluation tools and snapshot self-play. The maintained [engine fork](https://github.com/martenkrohn/seven-wonders-engine) is a separate project, included at a fixed commit under `engine/`. Its initial `v0.1.0-legacy` release preserves existing rules and corrections; the BGA second-edition migration is pending.
 
 **Current stage:** exploratory training has demonstrated learning, including
 improved resource preparation in longer runs. The project is now moving toward
@@ -55,6 +55,7 @@ The [origin record](docs/ORIGIN.md) pins the upstream commit. The [simulator cha
 The supported development environment is **Linux/Ubuntu, including WSL**. Use Python 3.12, a C++17 compiler and CMake. From the repository root:
 
 ```sh
+git submodule update --init --recursive
 python3.12 -m venv python/.venv
 source python/.venv/bin/activate
 python -m pip install -e './python[dev]'
@@ -64,11 +65,15 @@ cmake --build build --parallel 2
 
 The package declares Python >=3.10; Python 3.12 is the tested baseline. Dependencies include Gymnasium, NumPy and PyTorch. Versions are not locked, so the package declaration is not a fully pinned reproduction environment.
 
+Clone with `git clone --recurse-submodules` or initialize the submodule as above.
+See the [engine workflow](docs/guides/ENGINE.md) for separate development and updates.
+
 ## Run the checks
 
 From the repository root, with the environment active:
 
 ```sh
+python python/scripts/check_engine.py
 ctest --test-dir build --output-on-failure
 cd python
 python -m pytest -m 'unit or component'
@@ -125,8 +130,9 @@ Open `runs/YOUR-EVALUATION/dashboard.html` in your browser. The [evaluation guid
 ## Repository layout
 
 ```text
-main.cpp, src/, include/          C++ simulator and vendored JSON headers
-tests/                           C++ regression checks
+engine/                          Pinned standalone C++ engine (Git submodule)
+engine.lock.json                 Engine commit, release, ruleset and protocol
+CMakeLists.txt                   Compatibility build: still produces build/7Wonders
 python/src/sevenwonders_rl/
   envs/                          Gymnasium wrapper and engine transport
   features/                      Observations, action features and trade estimates

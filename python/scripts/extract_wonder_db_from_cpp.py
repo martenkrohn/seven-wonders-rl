@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Any, Optional
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+ENGINE_ROOT = REPO_ROOT / "engine"
 
 
 def parse_enum(file_path: Path, namespace_name: str) -> Tuple[Dict[str, int], Dict[int, str]]:
@@ -312,8 +313,8 @@ def main():
     
     # Parse enums
     print("\n1. Parsing enums...")
-    wonder_h = REPO_ROOT / "include/wonder.h"
-    resources_h = REPO_ROOT / "include/resources.h"
+    wonder_h = ENGINE_ROOT / "include/wonder.h"
+    resources_h = ENGINE_ROOT / "include/resources.h"
     
     wonder_id_name_to_int, wonder_id_int_to_name = parse_enum(wonder_h, 'WONDER_ID')
     print(f"   - Found {len(wonder_id_name_to_int)} WONDER_ID entries")
@@ -326,7 +327,7 @@ def main():
     
     # Parse wonder classes
     print("\n2. Parsing wonder class definitions from wonder.cpp...")
-    wonder_cpp = REPO_ROOT / "src/wonder.cpp"
+    wonder_cpp = ENGINE_ROOT / "src/wonder.cpp"
     wonder_classes = parse_wonder_classes(wonder_cpp)
     print(f"   - Found {len(wonder_classes)} wonder classes")
     

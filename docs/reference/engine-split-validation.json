@@ -1,0 +1,136 @@
+{
+  "date": "2026-11-05",
+  "snapshot": {
+    "tag": "pre-engine-split-2026-11-05",
+    "commit": "faa81e727c4e662af610c6222e28c27a7b350292"
+  },
+  "engine": {
+    "format_version": 1,
+    "repository": "https://github.com/martenkrohn/seven-wonders-engine.git",
+    "commit": "3e4692cbf072ccab32b33b2e5dda10144d780ef0",
+    "release": "v0.1.0-legacy",
+    "ruleset": "legacy-dmag-with-downstream-fixes",
+    "protocol_version": 2,
+    "players": 3,
+    "github_ci": "https://github.com/martenkrohn/seven-wonders-engine/actions/runs/42087796832",
+    "github_ci_result": "success"
+  },
+  "source_verification": {
+    "unchanged_cpp_header_test_files": 48,
+    "only_existing_build_file_changed": "CMakeLists.txt",
+    "upstream_patch_reconstructs_all_49_files": true,
+    "original_license_and_vendored_headers_unchanged": true
+  },
+  "binary_sha256": {
+    "before": "8935f50d6d3231dca68cfcd75ff86fb12b27da874f70a1133a4aec3533426adf",
+    "standalone": "437833d903aacf7a69013f04c4f072abae5c3fa2857ade678b6901b6ce5762a4",
+    "rl_build": "437833d903aacf7a69013f04c4f072abae5c3fa2857ade678b6901b6ce5762a4"
+  },
+  "standalone_replays": {
+    "unchanged_source_and_test_files": 48,
+    "compared_states": 154,
+    "matches": [
+      {
+        "seed": 0,
+        "states": 22,
+        "history_sha256": "fa254f3286eaf8cce464b18b8ebdf454fea02e9db483f59e14feddd54c6d9821",
+        "scores": [
+          34,
+          42,
+          42
+        ]
+      },
+      {
+        "seed": 7,
+        "states": 22,
+        "history_sha256": "f5b4339777f432b2e7a2f502bbf3e5f602a453c9d9c0ba0433b5d88faa4f5e9c",
+        "scores": [
+          30,
+          40,
+          49
+        ]
+      },
+      {
+        "seed": 19,
+        "states": 22,
+        "history_sha256": "8dfb8d5a6e9fbdf6752a8bfaeb6ba7d6dd7d38e184c3686deb41ae6bf3aae8df",
+        "scores": [
+          25,
+          41,
+          53
+        ]
+      },
+      {
+        "seed": 31,
+        "states": 22,
+        "history_sha256": "a4c605922cbd3d0de973858668ea151892b148ea799bcff8d1a2a8344fb9637f",
+        "scores": [
+          34,
+          47,
+          42
+        ]
+      },
+      {
+        "seed": 42,
+        "states": 22,
+        "history_sha256": "a41117f7816c3fe0449a46fa47d09b2a771f31f75ffc9d282970bf71557aec35",
+        "scores": [
+          46,
+          21,
+          43
+        ]
+      },
+      {
+        "seed": 231,
+        "states": 22,
+        "history_sha256": "f391ded051552f6a38063a0cb258e5ce389d5ed3d8af6a4d57996e767de936bc",
+        "scores": [
+          47,
+          41,
+          42
+        ]
+      },
+      {
+        "seed": 17091312795664974005,
+        "states": 22,
+        "history_sha256": "558dda3499c02600577b556babeea9197b0b94a2c39a5955c35bc7d600bc9fdb",
+        "scores": [
+          43,
+          33,
+          40
+        ]
+      }
+    ]
+  },
+  "checks": {
+    "standalone_ctest": {
+      "passed": 5,
+      "failed": 0
+    },
+    "rl_ctest": {
+      "passed": 5,
+      "failed": 0
+    },
+    "fresh_published_tag_clone_audit_and_configure": "passed",
+    "engine_pin_and_provenance_checks": "passed",
+    "python_pytest": {
+      "tests": 204,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passed": 203,
+      "duration_seconds": 357.962
+    }
+  },
+  "preserved_databases_sha256": {
+    "python/src/sevenwonders_rl/data/card_db.json": "f2607b5400ae1e2c9e5890abd02207df31a44072938a4668ba76cf9e816fd8c8",
+    "python/src/sevenwonders_rl/data/wonder_db.json": "fa5e244feefa98120ebdfb84f31476a4aaef280e715be7dc1010e6791b16fa7f",
+    "python/src/sevenwonders_rl/data/mechanics.json": "a938fcae9f949225f9fa0264f06b422a60e526c1e8c5ffa29d56396fd2ce2038"
+  },
+  "edition_comparison": {
+    "card_rows": 80,
+    "wonder_sides": 14,
+    "all_comparison_rows_unchanged": true
+  },
+  "scope": "Repository separation only; no game rules, data or RL feature semantics changed. Known exporter defects remain documented."
+}

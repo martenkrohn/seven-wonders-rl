@@ -18,13 +18,14 @@ import extract_card_db_from_cpp as cards
 import extract_wonder_db_from_cpp as wonders
 
 ROOT = Path(__file__).resolve().parents[2]
+ENGINE_ROOT = ROOT / "engine"
 BASELINE = "a0bc333a7a7f21f83156de8a2d522e7baa913f0a"
 DATA = ROOT / "python/src/sevenwonders_rl/data"
 
 
 def upstream(path):
     return subprocess.check_output(
-        ["git", "-C", str(ROOT), "show", f"{BASELINE}:{path}"], text=True)
+        ["git", "-C", str(ENGINE_ROOT), "show", f"{BASELINE}:{path}"], text=True)
 
 
 def regeneration(module):
@@ -55,13 +56,13 @@ def regeneration(module):
 
 
 def main():
-    current_main = (ROOT / "main.cpp").read_text()
+    current_main = (ENGINE_ROOT / "main.cpp").read_text()
     pattern = r"(?:cards|guild_cards)\.push_back\(Card\(.*?\)\);"
     old = re.findall(pattern, upstream("main.cpp"))
     new = re.findall(pattern, current_main)
-    card_ids, _ = cards.parse_enum(ROOT / "include/card.h", "CARD_ID")
-    types, _ = cards.parse_enum(ROOT / "include/card.h", "CARD_TYPE")
-    parsed = cards.parse_cards_from_main(ROOT / "main.cpp", card_ids, types)
+    card_ids, _ = cards.parse_enum(ENGINE_ROOT / "include/card.h", "CARD_ID")
+    types, _ = cards.parse_enum(ENGINE_ROOT / "include/card.h", "CARD_TYPE")
+    parsed = cards.parse_cards_from_main(ENGINE_ROOT / "main.cpp", card_ids, types)
     card_db = json.loads((DATA / "card_db.json").read_text())
     resources = ["wood", "ore", "clay", "stone", "loom", "glass", "papyrus", "coins"]
     mismatches = []
@@ -80,10 +81,12 @@ def main():
     result = {
         "baseline": BASELINE,
         "working_tree_sha256": {
-            path: hashlib.sha256((ROOT / path).read_bytes()).hexdigest() for path in files},
+            ("engine/" + path if not path.startswith("python/") else path):
+                hashlib.sha256(((ROOT if path.startswith("python/") else ENGINE_ROOT) / path).read_bytes()).hexdigest()
+                for path in files},
         "card_declarations": {"upstream": len(old), "current": len(new), "identical": old == new},
-        "card_cpp_unchanged": upstream("src/card.cpp") == (ROOT / "src/card.cpp").read_text(),
-        "card_id_header_unchanged": upstream("include/card.h") == (ROOT / "include/card.h").read_text(),
+        "card_cpp_unchanged": upstream("src/card.cpp") == (ENGINE_ROOT / "src/card.cpp").read_text(),
+        "card_id_header_unchanged": upstream("include/card.h") == (ENGINE_ROOT / "include/card.h").read_text(),
         "unique_card_ids": len(card_db),
         "card_cost_or_single_chain_mismatches": mismatches,
         "regeneration": {**regeneration(cards), **regeneration(wonders)},
