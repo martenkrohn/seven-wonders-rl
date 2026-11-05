@@ -1,0 +1,134 @@
+{
+  "baseline": "a0bc333a7a7f21f83156de8a2d522e7baa913f0a",
+  "working_tree_sha256": {
+    "main.cpp": "1972f8db8909b39fa9086ebce0eebf62d4e1c9694b56cfcf8f425e34b845a4bb",
+    "src/card.cpp": "d479a2427f6a0f14e335cce68b895816fbc1662c7f87ffa35d6cd32a4de8a296",
+    "src/player.cpp": "461568f1e7630cca688c1af667a92b8ea500c5abff3745ac8cafa80a1f48b2b0",
+    "src/wonder.cpp": "e7565a10464a2a629220fefe05ea5e7f78c363149f9d7bda8e9ae9f5a2caafbb",
+    "include/card.h": "399a5036f828298b664bbec2414cfd057a6380e06268e66fb67d861029f2d3cd",
+    "include/wonder.h": "e8cec6631184b30a2ee1d621f7cc5732ce3b0875278c37b73ede804b44991854",
+    "python/scripts/extract_card_db_from_cpp.py": "d09c65a78c75dd00eb888687174ed20544fea7c83c6aa753ee4dacadd16087a3",
+    "python/scripts/extract_wonder_db_from_cpp.py": "f6961345bd431a59d413dcc708ee3f891e6609290ab76b62a0d74f558655a1ec",
+    "python/src/sevenwonders_rl/data/card_db.json": "f2607b5400ae1e2c9e5890abd02207df31a44072938a4668ba76cf9e816fd8c8",
+    "python/src/sevenwonders_rl/data/wonder_db.json": "fa5e244feefa98120ebdfb84f31476a4aaef280e715be7dc1010e6791b16fa7f"
+  },
+  "card_declarations": {
+    "upstream": 78,
+    "current": 78,
+    "identical": true
+  },
+  "card_cpp_unchanged": true,
+  "card_id_header_unchanged": true,
+  "unique_card_ids": 75,
+  "card_cost_or_single_chain_mismatches": [],
+  "regeneration": {
+    "card_db.json": {
+      "identical": false,
+      "missing_ids": [],
+      "new_ids": [],
+      "changed_fields": {
+        "35": [
+          "effects"
+        ],
+        "36": [
+          "effects"
+        ]
+      }
+    },
+    "mechanics.json": {
+      "identical": true,
+      "missing_ids": [],
+      "new_ids": [],
+      "changed_fields": {}
+    },
+    "wonder_db.json": {
+      "identical": false,
+      "missing_ids": [
+        "0"
+      ],
+      "new_ids": [
+        "14"
+      ],
+      "changed_fields": {
+        "1": [
+          "id_name",
+          "name",
+          "stages",
+          "starting_resource"
+        ],
+        "10": [
+          "id_name",
+          "name",
+          "stages",
+          "starting_resource"
+        ],
+        "11": [
+          "id_name",
+          "name",
+          "stages",
+          "starting_resource"
+        ],
+        "12": [
+          "id_name",
+          "name",
+          "stages",
+          "starting_resource"
+        ],
+        "13": [
+          "id_name",
+          "name",
+          "stages",
+          "starting_resource"
+        ],
+        "2": [
+          "id_name",
+          "name",
+          "stages",
+          "starting_resource"
+        ],
+        "3": [
+          "id_name",
+          "name",
+          "stages",
+          "starting_resource"
+        ],
+        "4": [
+          "id_name",
+          "name",
+          "stages",
+          "starting_resource"
+        ],
+        "5": [
+          "id_name",
+          "name",
+          "stages",
+          "starting_resource"
+        ],
+        "6": [
+          "id_name",
+          "name",
+          "stages",
+          "starting_resource"
+        ],
+        "7": [
+          "id_name",
+          "name",
+          "stages",
+          "starting_resource"
+        ],
+        "8": [
+          "id_name",
+          "name",
+          "stages",
+          "starting_resource"
+        ],
+        "9": [
+          "id_name",
+          "name",
+          "stages",
+          "starting_resource"
+        ]
+      }
+    }
+  }
+}

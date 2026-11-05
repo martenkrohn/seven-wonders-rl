@@ -2,7 +2,7 @@
   "format_version": 1,
   "upstream": "https://github.com/dmag-ufsm/7Wonders",
   "baseline_commit": "a0bc333a7a7f21f83156de8a2d522e7baa913f0a",
-  "patch_sha256": "962c9e03c142cce46eb0a1ef99b7e13ad73f28eb1e581a656d3ee2e8c79c2af8",
+  "patch_sha256": "f6223ee5bbecaada060d80c8567be75117f3a39f237c45147540844edf4dc162",
   "files": [
     {
       "path": "CMakeLists.txt",
@@ -456,7 +456,7 @@
         "sha256": "46e13fa5ef2493e95db98e9dd357e1182d914b2505360b8918ca697811a51a82"
       },
       "current": {
-        "sha256": "e31dc90a8d8f91205234b19071b4dc850609b9a04c7a2c0aba8eb278f8477fd2",
+        "sha256": "3092680bf66d8c3981c04558a720548755cdc36498054ed327b5a2bbf28a2a03",
         "mode": "100644"
       }
     },
@@ -492,7 +492,7 @@
         "sha256": "cde2e751d66dd10e4ff4793172441bdd9314a80f3f37349a9258db7ce2674a4c"
       },
       "current": {
-        "sha256": "a0700b465020c237f354f2c75283d5dd14dc2bc05d605a646bceec5f5d08fa56",
+        "sha256": "1972f8db8909b39fa9086ebce0eebf62d4e1c9694b56cfcf8f425e34b845a4bb",
         "mode": "100644"
       }
     },
@@ -528,7 +528,7 @@
         "sha256": "ea3bd2f5862ac2b952f3e9848b0333c6f56effa073618645ce9ef4d9074e2ce1"
       },
       "current": {
-        "sha256": "f948ad044d0cc832cfda4e2105e36667dad02edf2312f17f6cbbfaf2405518dc",
+        "sha256": "461568f1e7630cca688c1af667a92b8ea500c5abff3745ac8cafa80a1f48b2b0",
         "mode": "100644"
       }
     },

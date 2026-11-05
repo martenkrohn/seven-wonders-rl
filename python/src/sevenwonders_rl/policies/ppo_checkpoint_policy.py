@@ -10,7 +10,7 @@ import numpy as np
 import torch
 
 from sevenwonders_rl.utils.ppo_model import ActorCritic
-from sevenwonders_rl.utils.ppo_utils import flatten_global, masked_logits
+from sevenwonders_rl.utils.ppo_utils import flatten_global, action_features, masked_logits
 from sevenwonders_rl.utils.checkpoints import load_model
 
 
@@ -46,7 +46,7 @@ class PPOCheckpointPolicy:
         pass
 
     def select_action(
-        self, obs: Dict[str, Any], rng: Optional[np.random.Generator] = None
+        self, obs: Dict[str, Any], rng: Optional[np.random.Generator] = None, *, head_id=None
     ) -> int:
         """
         Select an action from observation.
@@ -61,20 +61,22 @@ class PPOCheckpointPolicy:
         """
         if rng is None:
             rng = self._rng
-        return self.select_actions([obs], [rng])[0]
+        kwargs = {'head_ids': [head_id]} if head_id is not None else {}
+        return self.select_actions([obs], [rng], **kwargs)[0]
 
-    def select_actions(self, observations, rngs):
+    def select_actions(self, observations, rngs, *, head_ids=None):
         """One forward pass for this frozen policy; one local RNG per seat/game."""
         if len(observations) != len(rngs):
             raise ValueError("Each opponent observation requires its own RNG")
         if not observations:
             return []
-        global_t = torch.from_numpy(np.stack([flatten_global(obs) for obs in observations])).to(self.device)
-        feats_t = torch.from_numpy(np.stack([obs["action_feats"] for obs in observations])).to(self.device, dtype=torch.float32)
+        global_t = torch.from_numpy(np.stack([flatten_global(obs, self.model) for obs in observations])).to(self.device)
+        feats_t = torch.from_numpy(np.stack([action_features(obs, self.model) for obs in observations])).to(self.device, dtype=torch.float32)
         mask_t = torch.from_numpy(np.stack([obs["action_mask"] for obs in observations])).to(self.device)
 
         with torch.no_grad():
-            logits, _ = self.model.forward_batch(global_t, feats_t)
+            logits, _ = (self.model.forward_batch(global_t, feats_t, head_ids)
+                         if self.model.num_heads > 1 else self.model.forward_batch(global_t, feats_t))
             logits = masked_logits(logits, mask_t)
 
             if self.deterministic:

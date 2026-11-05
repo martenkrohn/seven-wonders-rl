@@ -32,6 +32,7 @@ def _select_agent_action(
     model: ActorCritic | None,
     device: torch.device,
     deterministic: bool,
+    head_id=None,
 ) -> int:
     mask = obs["action_mask"]
     legal = np.flatnonzero(mask == 1)
@@ -39,7 +40,7 @@ def _select_agent_action(
         return 0
 
     if model is not None:
-        return int(select_action_from_obs(obs, model, device, deterministic=deterministic, rng=rng))
+        return int(select_action_from_obs(obs, model, device, deterministic=deterministic, rng=rng, head_id=head_id))
 
     if policy_obj is not None:
         return int(policy_obj.select_action(obs, rng))
@@ -114,10 +115,14 @@ def evaluate(
         rng = np.random.default_rng(game_seed)
 
         opponent_policies = _make_opponent_policies(opponents, agent_seat, rng)
+        count = getattr(model, 'num_heads', 1)
+        selected_head = int(np.random.default_rng(game_seed + 90000).integers(count)) if count > 1 else None
         env = SevenWondersEnv(
             repo_root=str(repo_root),
             agent_seat=agent_seat,
             opponent_policies=opponent_policies,
+            public_information=getattr(model, 'public_information', False),
+            observation_memory=getattr(model, 'memory_enabled', False),
         )
 
         try:
@@ -139,6 +144,7 @@ def evaluate(
                     model,
                     device,
                     deterministic,
+                    selected_head,
                 )
                 
                 # Count action type (for debug)

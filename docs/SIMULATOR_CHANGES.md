@@ -1,6 +1,6 @@
 # Änderungsprotokoll des C++-Simulators
 
-Stand: 23. Oktober 2026. Diese Datei dokumentiert den gesamten aktuellen Unterschied des Simulatorcodes zur festen Ursprungsfassung, einschließlich Änderungen, die bereits vor der heutigen Self-Play-Arbeit vorhanden waren. Frühere Änderungen werden nicht nachträglich mit einem erfundenen Implementierungsdatum versehen.
+Stand: 25. Oktober 2026. Diese Datei dokumentiert den gesamten aktuellen Unterschied des Simulatorcodes zur festen Ursprungsfassung, einschließlich Änderungen, die bereits vor der heutigen Self-Play-Arbeit vorhanden waren. Frühere Änderungen werden nicht nachträglich mit einem erfundenen Implementierungsdatum versehen.
 
 ## Vergleichsbasis und exakter Nachweis
 
@@ -47,7 +47,7 @@ Beide behandeln die vierte Baustufe jetzt unter `case 3` statt `case 4`: Nach dr
 
 `main()` akzeptiert `--seed`, `--poll-us` (0 bis 1.000.000 Mikrosekunden) und `--quiet`; Zahlen werden geprüft, Fehler führen zu einer Fehlermeldung auf stderr und Rückgabewert 1. Ohne vorgegebenen Seed wird ein Seed über `random_device` gebildet. `--quiet` deaktiviert stdout-Ausgaben. Die Warteschleife auf die Spielerdateien schläft standardmäßig 1 ms; mit 0 bleibt ein Vergleich mit aktivem Warten möglich.
 
-Auswirkung: Wiederholungen desselben Seeds sind innerhalb derselben Toolchain reproduzierbar; identische alte Zufallsfolgen werden nicht erhalten. Prüfungen: `python/tests/test_engine_protocol.py`, insbesondere Wiederholung mit verschiedenen Austauschpfaden und Warteintervallen. Messungen zum früheren Runtime-Stand: `docs/RUNTIME_BENCHMARK_2026-10-23.json`.
+Auswirkung: Wiederholungen desselben Seeds sind innerhalb derselben Toolchain reproduzierbar; identische alte Zufallsfolgen werden nicht erhalten. Prüfungen: `python/tests/test_engine_protocol.py`, insbesondere Wiederholung mit verschiedenen Austauschpfaden und Warteintervallen. Messungen zum früheren Runtime-Stand: `docs/archive/performance/RUNTIME_BENCHMARK_2026-10-23.json`.
 
 ## ENG-005 – Vollständiger Endzustand und atomarer Dateiaustausch
 
@@ -80,6 +80,16 @@ Grenze der Korrektur: Sie löst die nachgewiesene Verschleppung der Auswahlbeleg
 `CMakeLists.txt` behält den bereits in der Vergleichsbasis vorhandenen Sprachstandard C++17 bei, ergänzt die Auswahlproduktionstests, die Endzustandsregression und die Regression für gemeinsame Ressourcenentscheidungen und registriert diese bei CTest. Die beiden älteren assert-basierten Tests behalten bei GCC/Clang ihre Assertions auch im Release-Build durch `-UNDEBUG`. Neue Tests mit `require()` werfen auch im Release-Build bei verletzten Bedingungen.
 
 Die Tests für Endzustand und gemeinsame Ressourcenentscheidungen erhalten getrennte Arbeitsverzeichnisse und eine CTest-Zeitgrenze. Die zusätzlichen C++-Tests sind Downstream-Dateien; der Patch enthält sie vollständig. Herkunftskommentare am Anfang von `main.cpp`, `include/player.h`, `src/player.cpp`, `src/wonder.cpp` und `src/filer.cpp` verweisen auf Ursprung und Dokumentation und verändern kein Spielverhalten. Die gebündelten JSON-Header behalten ihre ursprünglichen Hinweise.
+
+## ENG-008 – Doppelte Arbeit bei Status und unterdrückten Debugausgaben
+
+25. Oktober 2026. Dateien: `main.cpp`, `include/player.h`, `src/player.cpp`.
+
+`Game` speichert den Quiet-Modus jetzt explizit. Die Debugblöcke in `Game::Loop()` werden bei `--quiet` vollständig übersprungen. Zuvor unterdrückte lediglich der Fehlerstatus von `std::cout` die Ausgabe; die Ausdrücke zur erneuten Berechnung von `GetPlayableCards()` und `CanBuildWonder()` wurden trotzdem ausgeführt.
+
+`Player::CalculateScores()` liefert die sechs bisherigen Punktekategorien und deren Summe in einem Durchlauf und aktualisiert weiterhin `victory_points`. `CalculateScore()` delegiert daran. `WriteGameStatus()` verwendet diesen gemeinsamen Datensatz, statt zunächst alle Kategorien und anschließend dieselben Kategorien für die Summe erneut zu berechnen. Regeln, Daten und Protokollschema bleiben gleich.
+
+Prüfung: alle vier CTests, Python-Integrationstests und ein Vergleich mit dem eingefrorenen vorherigen Engine-Binary anhand vollständiger Status-/Spielverlaufs-Fingerprints. Der Vorher-Nachher-Benchmark ist in `python/scripts/benchmark_optimizations.py` wiederholbar; Details und Messgrenzen stehen im Runtime-Ergebnisbericht. Das ersetzt keine vollständige Prüfung sämtlicher Spielregeln.
 
 ## Abgrenzung
 

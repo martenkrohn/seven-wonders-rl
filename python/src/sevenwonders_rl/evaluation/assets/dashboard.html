@@ -11,7 +11,7 @@
 </head>
 <body>
 <aside class="sidebar">
-  <a href="#overview" class="brand"><span class="brand-mark">VII</span><span>7 WONDERS<small data-i18n="SELF-PLAY LABOR">SELF-PLAY LAB</small></span></a>
+  <a href="#points" class="brand"><span class="brand-mark">VII</span><span>7 WONDERS<small data-i18n="SELF-PLAY LABOR">SELF-PLAY LAB</small></span></a>
   <div class="sidebar-label" data-i18n="AUSWERTUNG">EVALUATION</div>
   <nav aria-label="Evaluation sections" data-i18n-aria-label="Auswertungsbereiche" id="navigation"></nav>
   <div class="sidebar-footer"><span class="status-dot"></span> <span data-i18n="Lokale Auswertung">Local evaluation</span><br><small data-i18n="Alle Daten bleiben in deinem Browser.">All data stays in your browser.</small></div>
@@ -25,7 +25,7 @@
       <label class="import-button"><span data-i18n="+ Auswertung hinzufügen">+ Add evaluation</span><input id="import-file" type="file" accept=".json,application/json" multiple></label>
     </div>
   </header>
-  <div class="page-header"><div><p class="kicker" data-i18n="7 WONDERS / ANALYSE">7 WONDERS / ANALYSIS</p><h1 id="page-title">Overview</h1><p id="page-description" class="muted"></p></div><span class="pill">SELF-PLAY</span></div>
+  <div class="page-header"><div><p class="kicker" data-i18n="7 WONDERS / ANALYSE">7 WONDERS / ANALYSIS</p><h1 id="page-title">Score breakdown</h1><p id="page-description" class="muted"></p></div><span class="pill">SELF-PLAY</span></div>
   <div id="error" role="alert" hidden></div>
   <!-- DASHBOARD_INTRODUCTION -->
   <section class="selectors" aria-label="Data selection" data-i18n-aria-label="Datenauswahl">
@@ -37,6 +37,7 @@
   <footer><span data-i18n="7 Wonders · Lokale Trainingsanalyse">7 Wonders · Local training analysis</span><span data-i18n="Sortieren · Filtern · Vergleichen">Sort · Filter · Compare</span></footer>
 </main>
 <noscript>Enable JavaScript to sort tables and view the evaluation. / Bitte JavaScript aktivieren, um die Auswertung anzuzeigen.</noscript>
+<script id="dashboard-context" type="application/json">DASHBOARD_CONTEXT</script>
 <script id="evaluation-data" type="application/json">DASHBOARD_DATA</script>
 <script>/* DASHBOARD_JS */</script>
 </body>

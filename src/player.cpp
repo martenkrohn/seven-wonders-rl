@@ -910,6 +910,10 @@ int Player::CalculateWonderScore(){
 
 // Calculates the player's TOTAL score using the methods defined above.
 int Player::CalculateScore(){
+    return CalculateScores()[6];
+}
+
+std::array<int, 7> Player::CalculateScores(){
     int civil_score = this->CalculateCivilianScore();
     int commercial_score = this->CalculateCommercialScore();
     int guild_score = this->CalculateGuildScore();
@@ -922,7 +926,8 @@ int Player::CalculateScore(){
 
     this->victory_points = total_score;
 
-    return this->victory_points;
+    return {civil_score, commercial_score, guild_score, military_score,
+            science_score, wonder_score, total_score};
 }
 
 //////////////////////////////////

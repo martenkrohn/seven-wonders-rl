@@ -1,0 +1,47 @@
+{
+  "run": "/home/marten/dev/7Wonders/python/runs/long-mixed-wonders-validation-20261026",
+  "result": {
+    "status": "completed",
+    "timestep": 4096,
+    "updates": 8,
+    "elapsed_seconds": 83.09351291100029,
+    "steps_per_second": 49.2938600921487,
+    "resumed_from_step": 0,
+    "best_vp_diff": null,
+    "selection_metric": "latest_valid_evaluation",
+    "latest_evaluated_step": 4096,
+    "best_selection_score": null
+  },
+  "training_transitions": 4096,
+  "evaluation_games": 360,
+  "all_evaluations_complete": true,
+  "milestone_percentages": [
+    0,
+    25,
+    50,
+    75,
+    100
+  ],
+  "priors_byte_identical": true,
+  "prior_input_dimensions": [
+    102,
+    99
+  ],
+  "global_dim": 645,
+  "action_feat_dim": 121,
+  "new_global_weight_abs_sum": 162.90219116210938,
+  "new_action_weight_abs_sum": 6.822421550750732,
+  "opponent_group_draws": {
+    "recent": 197,
+    "anchors": 75,
+    "archive": 61,
+    "standard": 22,
+    "science": 25,
+    "military": 20
+  },
+  "collection_and_update_seconds": 28.511208841,
+  "collection_and_update_steps_per_second": 143.66279672119077,
+  "wall_excluding_evaluations_steps_per_second": 138.6831361818596,
+  "evaluation_seconds": 53.558559255,
+  "latest_checkpoint_sha256": "d80ebf54462951efe1ae8ed402cc9cb6f5d305325f355df31953b5af1e30fb75"
+}

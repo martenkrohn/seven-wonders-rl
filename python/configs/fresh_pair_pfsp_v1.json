@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "description": "Fresh random learner and own-snapshot league; historical models are evaluation-only. PFSP-inspired ordered-pair sampling, not PSRO/JPSRO.",
+  "trainer": {
+    "mode": "selfplay",
+    "seed": 331,
+    "eval_seed": 159001,
+    "total_timesteps": 2097152,
+    "n_envs": 8,
+    "rollout_horizon": 64,
+    "batch_size": 256,
+    "minibatch_epochs": 4,
+    "learning_rate": 0.0003,
+    "num_heads": 4,
+    "prior_strength": 32.0,
+    "observation_memory": true,
+    "reward_profile": "standard",
+    "pair_pfsp": true,
+    "pfsp_power": 2.0,
+    "pfsp_control_fraction": 0.1,
+    "pfsp_half_life": 131072.0,
+    "pfsp_prior_games": 3.0,
+    "snapshot_every": 65536,
+    "pool_lag_steps": 0,
+    "pool_max": 64,
+    "save_every": 8192,
+    "log_every": 8192,
+    "milestone_evaluations": true,
+    "evaluation_population": "configs/fresh_pair_pfsp_v1_evaluation.json",
+    "eval_panel": "configs/fresh_pair_pfsp_v1_eval_panel.json",
+    "eval_games_per_matchup": 8,
+    "eval_workers": 2,
+    "eval_action_mode": "stochastic",
+    "dashboard_reference": "configs/dashboard.json"
+  },
+  "evaluation_source_hashes": {
+    "runs/long-mixed-wonders-v1-seed131/evaluations/step_2097152/model.pt": "9427d6b3501fcd8913f94d5dd8b7747c5392b485fb38a45294601dc752c58314",
+    "runs/long-mixed-wonders-v2-seed231/latest.pt": "4de04f397d74bffbc05c5a2facf6ae164e2de4a69b2da2cd5cfd20b12d8d14e4"
+  }
+}

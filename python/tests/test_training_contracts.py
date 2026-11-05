@@ -109,6 +109,17 @@ def trainer_module():
     return module
 
 
+def test_observation_memory_default_and_explicit_opt_out():
+    trainer = trainer_module()
+    for flags in ([], ['--observation-memory']):
+        args = trainer.parse_args(flags)
+        assert args.observation_memory and args.public_information
+    args = trainer.parse_args(['--no-observation-memory'])
+    assert not args.observation_memory and not args.public_information
+    args = trainer.parse_args(['--no-observation-memory', '--public-information'])
+    assert not args.observation_memory and args.public_information
+
+
 def test_invalid_training_configuration_rejected_before_output():
     trainer = trainer_module()
     for args in (["--n-envs", "0"], ["--total-timesteps", "3", "--n-envs", "2"],

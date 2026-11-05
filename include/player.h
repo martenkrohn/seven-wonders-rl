@@ -2,6 +2,7 @@
 // Derived from DMAG/UFSM 7Wonders. See NOTICE and docs/ORIGIN.md (GPLv3).
 #ifndef PLAYER_H
 #define PLAYER_H
+#include <array>
 
 #include <card.h>
 #include <wonder.h>
@@ -104,6 +105,7 @@ public:
     int CalculateScientificScore();
     int CalculateWonderScore();
     int CalculateScore();
+    std::array<int, 7> CalculateScores();
 
     // Amount resources related
     int CalculateAmountCivilianCards();

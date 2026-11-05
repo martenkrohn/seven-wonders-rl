@@ -1,0 +1,26 @@
+{
+  "archive": [
+    "runs/long-mixed-wonders-v1-seed131/checkpoint_131072.pt",
+    "runs/long-mixed-wonders-v1-seed131/checkpoint_393216.pt",
+    "runs/long-mixed-wonders-v1-seed131/checkpoint_786432.pt",
+    "runs/long-mixed-wonders-v1-seed131/checkpoint_1048576.pt",
+    "runs/long-mixed-wonders-v1-seed131/checkpoint_1310720.pt",
+    "runs/long-mixed-wonders-v1-seed131/checkpoint_1835008.pt"
+  ],
+  "hashes": {
+    "runs/long-mixed-wonders-v1-seed131/evaluations/step_2097152/model.pt": "9427d6b3501fcd8913f94d5dd8b7747c5392b485fb38a45294601dc752c58314",
+    "runs/long-mixed-wonders-v1-seed131/evaluations/step_0524288/model.pt": "55ba0bc6cbfe39e9affd9c247f37a42726a807d53bf96a349033a1bf8676971c",
+    "runs/long-mixed-wonders-v1-seed131/checkpoint_131072.pt": "47fcbaa964dbd3c3c143a21c76c8f9bf8b9e7da7e1f81620bd797e9e5a2ee0f7",
+    "runs/long-mixed-wonders-v1-seed131/checkpoint_393216.pt": "74ffcb9ee4bd25e9b83ae84e7a3b0cc9a6d35e831f7831c51a72ee2e59713826",
+    "runs/long-mixed-wonders-v1-seed131/checkpoint_786432.pt": "a6a49f166c099cc2473d22fc7d80d5f81cc60db9e8608b40c99cee74d330ef94",
+    "runs/long-mixed-wonders-v1-seed131/checkpoint_1048576.pt": "2c074bcb822a470bf17a435460232109957237f7ff0db1e1023c499c94d0f2a2",
+    "runs/long-mixed-wonders-v1-seed131/checkpoint_1310720.pt": "ea679332c7cabaf923b837fcfe5fe6d03225baf4b9a2204a5cc729fdfdd31316",
+    "runs/long-mixed-wonders-v1-seed131/checkpoint_1835008.pt": "29fd1cd8c0f7900be6ab7538ee07ba5e95b1fe47381ae13285d23c817775547e",
+    "runs/multihead-v1-seed31/latest.pt": "5928b98dbc66df812d83a04e180a6ba592658d393aed6e1c4c8c71186094720b",
+    "runs/multihead-v2-priors-seed31/latest.pt": "c047b7236793506cdd0e0e0f454d2d2d37be2c50aeaea8abdd9b896ae8d20beb",
+    "runs/multihead-v1-seed31/frozen_opponents/opponent_000.pt": "c81d68ebdf9ec7f4f3cd21ca35014809b612872a0a65ac202818caa81a5fd302",
+    "runs/multihead-v1-seed31/frozen_opponents/opponent_001.pt": "ad49e5bc05adca5050e4beb6c24b219c5c94cd2e3cdfe41334a17e8c294f4f73",
+    "runs/multihead-v1-seed31/frozen_opponents/opponent_002.pt": "88c8ba2a94f6f88e3784a1d62264672270890ed1d400459792f5993a624d2cec",
+    "runs/multihead-v1-seed31/frozen_opponents/opponent_003.pt": "5e15a83fa7d9de3a27499671dde9734af886dbdbdaee06c2a8e3b0dbd6cfb76a"
+  }
+}

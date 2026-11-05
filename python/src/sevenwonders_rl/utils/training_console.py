@@ -91,14 +91,22 @@ class TrainingConsole:
         self.started = time.perf_counter()
         self.eval_seconds = 0.0
         self.eval_count = 0
+        self.start_step = 0
         self.previous_evaluation = None
+        evaluations = (f'alle {number(args.eval_every)} Schritte · fester Kontrollplan' if
+                       getattr(args, 'continuous', False) else
+                       '0%, 25%, 50%, 75%, 100% · fester Kontrollplan' if
+                       getattr(args, 'milestone_evaluations', False) else f'alle {number(args.eval_every)} Schritte')
+        target = 'fortlaufend bis zum Stoppen' if getattr(args, 'continuous', False) else number(args.total_timesteps) + ' Schritte'
         print(f"\n{'=' * 72}\n"
               f"  {'SELF-PLAY' if args.mode == 'selfplay' else 'FIXED'} TRAINING | Seed {args.seed}\n"
               f"{'=' * 72}\n"
-              f"  Ziel:          {number(args.total_timesteps)} Schritte | {args.n_envs} Umgebungen\n"
+              f"  Ziel:          {target} | {args.n_envs} Umgebungen\n"
               f"  Fortschritt:   alle {number(args.log_every)} Schritte\n"
-              f"  Evaluation:    alle {number(args.eval_every)} Schritte\n"
+              f"  Evaluation:    {evaluations}\n"
               f"  Gegner:        {args.opponent_inference}\n"
+              f"  Lernziel:      {getattr(args, 'reward_profile', 'standard')} | "
+              f"Zusatzgewicht {getattr(args, 'specialist_weight', 1.0) if getattr(args, 'reward_profile', 'standard') != 'standard' else 0.0}\n"
               f"  Ergebnisse:    {out_dir}\n"
               f"  Spielaustausch: {io_root}\n"
               f"  Restzeit:      Schätzung inkl. Evaluationen; passt sich im Lauf an.\n"
@@ -107,7 +115,8 @@ class TrainingConsole:
     def evaluation_start(self, step, games, *, references=None):
         self.eval_started = time.perf_counter()
         label = "Anfangsevaluation" if step == 0 else f"Evaluation bei Schritt {number(step)}"
-        opponents = ('trainierte Vorgänger, Schritte ' + ', '.join(number(r['step']) for r in references)
+        opponents = ('feste Referenzen' if getattr(self.args, 'milestone_evaluations', False) else
+                     'trainierte Vorgänger, Schritte ' + ', '.join(number(r['step']) for r in references)
                      if references else 'feste Botreferenzen')
         print(f"\n{'=' * 78}\n CHECKPOINT-EVALUATION | {label}\n"
               f" Gegner: {opponents} | {number(games)} Spiele laufen ...\n{'=' * 78}", flush=True)
@@ -142,12 +151,20 @@ class TrainingConsole:
     def progress(self, step, updates):
         elapsed = time.perf_counter() - self.started
         training_seconds = max(0.0, elapsed - self.eval_seconds)
-        speed = step / training_seconds if training_seconds else 0.0
+        speed = (step - self.start_step) / training_seconds if training_seconds else 0.0
+        if getattr(self.args, 'continuous', False):
+            next_eval = (step // self.args.eval_every + 1) * self.args.eval_every
+            print(f'{number(step)} Schritte | {updates} Updates | Laufzeit {duration(elapsed)}\n'
+                  f'  {speed:.1f} Schritte/s (ohne Evaluationen) | nächste Evaluation bei {number(next_eval)}', flush=True)
+            return
         remaining = max(0, self.args.total_timesteps - step)
         # Initial evaluation is already complete. Count scheduled future evaluations
         # and the mandatory final self-play evaluation, without double counting.
         future_evals = self.args.total_timesteps // self.args.eval_every - step // self.args.eval_every
-        if self.args.mode == 'selfplay' and self.args.total_timesteps % self.args.eval_every and remaining:
+        if getattr(self.args, 'milestone_evaluations', False):
+            future_evals = sum(self.args.total_timesteps * i // 4 > step for i in range(1, 5))
+        if (not getattr(self.args, 'milestone_evaluations', False) and self.args.mode == 'selfplay'
+                and self.args.total_timesteps % self.args.eval_every and remaining):
             future_evals += 1
         eta = remaining / speed if speed else 0.0
         if self.eval_count:
@@ -159,9 +176,10 @@ class TrainingConsole:
               f"  Laufzeit {duration(elapsed)} | Rest ~{duration(eta)} | "
               f"{speed:.1f} Schritte/s (ohne Evaluationen)", flush=True)
 
-    def finish(self, out_dir):
+    def finish(self, out_dir, *, status='completed'):
+        label = 'Training gespeichert und gestoppt' if status == 'stopped' else 'Training abgeschlossen'
         print(f"\n{'=' * 72}\n"
-              f"Training abgeschlossen | Dauer {duration(time.perf_counter() - self.started)}\n"
+              f"{label} | Dauer {duration(time.perf_counter() - self.started)}\n"
               f"  Letztes Modell: {out_dir / 'latest.pt'}\n"
               f"  Ergebnisse:    {out_dir}\n"
               f"{'=' * 72}", flush=True)
@@ -170,8 +188,13 @@ class TrainingConsole:
 class HoldoutConsole:
     """Present standalone evaluation using the same metrics as training."""
 
-    def __init__(self, seed, blocks, games, candidate, references, output):
+    def __init__(self, seed, blocks, games, candidate, references, output, *,
+                 comparison_label='Untrainiertes und trainiertes Modell auf gleichem Spielplan',
+                 baseline_key='initial', baseline_pretrained=False):
         self.started = time.perf_counter()
+        self.comparison_label = comparison_label
+        self.baseline_key = baseline_key
+        self.baseline_pretrained = baseline_pretrained
         print(f"\n{'=' * 72}\n"
               f"  SELF-PLAY AUSWERTUNG | Seed {seed}\n"
               f"{'=' * 72}\n"
@@ -180,12 +203,13 @@ class HoldoutConsole:
               f"  Ergebnisse:    {output}", flush=True)
         for i, ref in enumerate(references, 1):
             print(f"  Gegner {i}:      {ref['checkpoint']}", flush=True)
-        print("  Vergleich:     Untrainiertes und trainiertes Modell auf gleichem Spielplan\n"
+        print(f"  Vergleich:     {comparison_label}\n"
               f"{'=' * 72}", flush=True)
 
     def evaluation_start(self, name, games):
         self.phase_started = time.perf_counter()
-        label = {'initial': 'Untrainiertes Ausgangsmodell', 'candidate': 'Trainiertes Testmodell'}.get(name, name)
+        label = {'initial': 'Vortrainiertes Ausgangsmodell' if self.baseline_pretrained else 'Untrainiertes Ausgangsmodell',
+                 'candidate': 'Trainiertes Testmodell'}.get(name, name)
         print(f"\n{label} | {number(games)} Spiele laufen ...", flush=True)
 
     def progress(self, done, total):
@@ -196,12 +220,19 @@ class HoldoutConsole:
                   f"Dauer {duration(elapsed)} | Rest ~{duration(eta)}", flush=True)
 
     def evaluation_end(self, summary):
+        if summary.get('constraint_statistics'):
+            s = summary['constraint_statistics']
+            print(f"  Grün: {s['green_builds']}/{s['green_opportunities']} legale Angebote genutzt | "
+                  f"Beschränkte Entscheidungen: {s['restricted_decisions']} | Regelverletzungen: {s['violations']}", flush=True)
         print("\n".join(evaluation_lines(summary)) +
               f"\n  Dauer:           {duration(time.perf_counter() - self.phase_started)}", flush=True)
 
     def finish(self, summaries, output):
         progress = summaries['progress']
-        print(f"\n{'=' * 72}\n  VERGLEICH ZUM UNTRAINIERTEN AUSGANGSMODELL\n{'=' * 72}", flush=True)
+        title = (('VERGLEICH ZUM VORTRAINIERTEN AUSGANGSMODELL' if self.baseline_pretrained
+                  else 'VERGLEICH ZUM UNTRAINIERTEN AUSGANGSMODELL') if self.baseline_key == 'initial'
+                 else self.comparison_label)
+        print(f"\n{'=' * 72}\n  {title}\n{'=' * 72}", flush=True)
         if progress.get('paired_valid'):
             print(f"  Punktevorsprung: {progress['vp_diff_gain']:+.2f} Punkte Zuwachs\n"
                   f"  Sieganteil:      {progress['win_share_gain'] * 100:+.1f} Prozentpunkte Zuwachs",
@@ -216,7 +247,7 @@ class HoldoutConsole:
                           f"[{interval[0] * scale:+.2f}, {interval[1] * scale:+.2f}] {unit}", flush=True)
         else:
             print("  Vergleich ungültig: unvollständige Spiele.", flush=True)
-        complete = all(summaries[name]['valid_for_selection'] for name in ('initial', 'candidate'))
+        complete = all(summaries[name]['valid_for_selection'] for name in (self.baseline_key, 'candidate'))
         print(f"\n  Status:          {'Vollständig abgeschlossen' if complete else 'UNVOLLSTÄNDIG – Fehler prüfen'}\n"
               f"  Gesamtdauer:     {duration(time.perf_counter() - self.started)}\n"
               f"  Detailergebnisse: {output / 'summary.json'}\n"

@@ -18,12 +18,13 @@ try:
 except ImportError as e:
     raise ImportError("Install gymnasium: pip install gymnasium") from e
 
-from sevenwonders_rl.features.obs_builder import build_obs, compute_action_mask
+from sevenwonders_rl.features.obs_builder import build_obs, compute_action_mask, ObservationContext
 from sevenwonders_rl.features.action_feature_schema import K as K_ACTION_FEATS
 from sevenwonders_rl.policies.opponent_sampler import OpponentSampler
 from sevenwonders_rl.policies.registry import make_policy
 from sevenwonders_rl.utils.seeding import derive_seed
 from sevenwonders_rl.utils.runtime import run_io_root
+from sevenwonders_rl.rewards import RewardSpec
 
 
 # ----------------------------
@@ -63,6 +64,7 @@ class SeatPolicy:
     name: str
     policy: Optional[Any] = None
     rng: Optional[np.random.Generator] = None
+    sampling_metadata: Optional[Dict[str, Any]] = None
 
     def __call__(
         self,
@@ -70,6 +72,7 @@ class SeatPolicy:
         seat_id: int,
         mask: np.ndarray,
         rng: Optional[np.random.Generator] = None,
+        observation=None,
     ) -> int:
         if rng is None:
             rng = self.rng
@@ -82,7 +85,7 @@ class SeatPolicy:
 
         # If a concrete policy object was supplied, ALWAYS use it.
         if self.policy is not None:
-            obs = build_obs(status, seat_id)
+            obs = build_obs(status, seat_id) if observation is None else observation
             a = int(self.policy.select_action(obs, rng))
 
             # Hard safety: policy must return legal. If not, fallback.
@@ -140,6 +143,10 @@ class SevenWondersEnv(gym.Env):
         engine_poll_us: int = 1000,
         poll_seconds: float = 0.001,
         batch_opponents: bool = True,
+        reward_profile: str = 'standard',
+        specialist_weight: float = 1.0,
+        public_information: bool = False,
+        observation_memory: bool = False,
     ):
         super().__init__()
         assert agent_seat in (0, 1, 2)
@@ -163,9 +170,14 @@ class SevenWondersEnv(gym.Env):
 
         self.agent_seat = agent_seat
         self.batch_opponents = batch_opponents
+        self.observation_memory = observation_memory
+        self.public_information = public_information or observation_memory
+        self._observation_histories = None
+        self._pending_memory_actions = None
         self.max_wait_seconds = float(max_wait_seconds)
         self.invalid_action_fallback = invalid_action_fallback
         self.reward_scale = float(reward_scale)
+        self.reward_spec = RewardSpec(reward_profile, specialist_weight, self.reward_scale)
         self.timers = timers
         if not math.isfinite(self.reward_scale) or self.reward_scale <= 0:
             raise ValueError("reward_scale must be finite and positive")
@@ -245,6 +257,15 @@ class SevenWondersEnv(gym.Env):
         )
 
         self.io_dir.mkdir(parents=True, exist_ok=True)
+
+        if self.public_information:
+            from sevenwonders_rl.features.public_state import PUBLIC_GLOBAL_DIM, PUBLIC_ACTION_DIM
+            self.observation_space['public_state'] = spaces.Box(
+                low=-1e9, high=1e9, shape=(PUBLIC_GLOBAL_DIM,), dtype=np.float32)
+            self.observation_space['wonder_action_feats'] = spaces.Box(
+                low=-1e9, high=1e9, shape=(N_ACTIONS, PUBLIC_ACTION_DIM), dtype=np.float32)
+        if observation_memory:
+            self._configure_observation_memory()
 
     # ------------
     # IO utilities
@@ -392,8 +413,49 @@ class SevenWondersEnv(gym.Env):
         """Wrapper for obs_builder.build_obs."""
         if self.timers:
             with self.timers.time("features.agent_observation"):
-                return build_obs(status, self.agent_seat)
-        return build_obs(status, self.agent_seat)
+                return self.observation_for_seat(self.agent_seat, status)
+        return self.observation_for_seat(self.agent_seat, status)
+
+    def observation_for_seat(self, seat, status=None):
+        status = self._last_status if status is None else status
+        context = getattr(self, "_observation_context", None)
+        if context is None or context.status is not status:
+            context = self._observation_context = ObservationContext(status, self.public_information)
+        obs = context.observation(seat)
+        if self._observation_histories is not None:
+            from sevenwonders_rl.features.observation_history import (
+                MEMORY_KEY, hand_is_observable, hide_skipped_hand)
+            if MEMORY_KEY not in obs:
+                visible = hand_is_observable(status, seat)
+                terminal = status['game'].get('phase') == 'finished'
+                if not visible:
+                    obs = hide_skipped_hand(obs, terminal=terminal)
+                history = self._observation_histories[seat]
+                history.observe(int(status['game']['turn']), obs, hand_known=visible)
+                obs = {**obs, MEMORY_KEY: history.payload(obs, hand_known=visible)}
+                context.observations[seat] = obs
+        return obs
+
+    def _configure_observation_memory(self):
+        """Configure once per game, including memory-aware frozen opponents."""
+        from sevenwonders_rl.features.observation_history import MEMORY_KEY, MEMORY_DIM, ObservationHistory
+        self._pending_memory_actions = None
+        enabled = self.observation_memory or any(
+            getattr(getattr(wrapper.policy, 'model', None), 'memory_enabled', False)
+            for wrapper in self.opponent_policies)
+        self._observation_histories = [ObservationHistory() for _ in range(3)] if enabled else None
+        if enabled:
+            self.public_information = True
+            from sevenwonders_rl.features.public_state import PUBLIC_GLOBAL_DIM, PUBLIC_ACTION_DIM
+            self.observation_space['public_state'] = spaces.Box(
+                low=-1e9, high=1e9, shape=(PUBLIC_GLOBAL_DIM,), dtype=np.float32)
+            self.observation_space['wonder_action_feats'] = spaces.Box(
+                low=-1e9, high=1e9, shape=(N_ACTIONS, PUBLIC_ACTION_DIM), dtype=np.float32)
+            self.observation_space[MEMORY_KEY] = spaces.Box(
+                low=-1e9, high=1e9, shape=(MEMORY_DIM,), dtype=np.float32)
+        elif MEMORY_KEY in self.observation_space.spaces:
+            del self.observation_space.spaces[MEMORY_KEY]
+        self._observation_context = None
 
     # --------------
     # Gym API
@@ -412,6 +474,7 @@ class SevenWondersEnv(gym.Env):
 
         self.close()
         self._clear_io()
+        self._configure_observation_memory()
 
         if not self.engine_path.exists():
             raise FileNotFoundError(f"Engine executable not found: {self.engine_path}")
@@ -434,6 +497,14 @@ class SevenWondersEnv(gym.Env):
         self.engine_seed = int(seed) if seed is not None else int(self._engine_seed_rng.integers(0, 2**63))
         self._seat_rngs = [np.random.default_rng(derive_seed(self.engine_seed, "policy", sid))
                            for sid in (0, 1, 2)]
+        # Cached policies may serve several seats and games. Episode assignments
+        # belong to this environment, never to the shared checkpoint object.
+        self._opponent_head_ids = {}
+        for sid, wrapper in enumerate(self.opponent_policies):
+            count = getattr(getattr(wrapper.policy, 'model', None), 'num_heads', 1)
+            if sid != self.agent_seat and count > 1:
+                head_rng = np.random.default_rng(derive_seed(self.engine_seed, 'opponent_head', sid))
+                self._opponent_head_ids[sid] = int(head_rng.integers(count))
         self._stderr_file = (self.io_dir.parent / "engine_stderr.log").open("w")
         try:
             self.proc = subprocess.Popen(
@@ -598,14 +669,28 @@ class SevenWondersEnv(gym.Env):
                         opp_policy = self._opp_right
                     
                     # Use policy's select_action method
-                    obs_for_opp = build_obs(current_status, sid)
+                    obs_for_opp = self.observation_for_seat(sid, current_status)
                     action_opp = opp_policy.select_action(obs_for_opp, self._seat_rngs[sid])
                     actions[sid] = int(action_opp)
                 else:
-                    actions[sid] = int(self.opponent_policies[sid](current_status, sid, masks[sid], self._seat_rngs[sid]))
+                    wrapper = self.opponent_policies[sid]
+                    observation = self.observation_for_seat(sid, current_status) if wrapper.policy is not None else None
+                    if sid in self._opponent_head_ids:
+                        actions[sid] = int(wrapper.policy.select_action(observation, self._seat_rngs[sid],
+                            head_id=self._opponent_head_ids[sid]))
+                    else:
+                        actions[sid] = int(wrapper(current_status, sid, masks[sid], self._seat_rngs[sid],
+                                                   observation=observation))
         if timers: timers.add_ns("policies.opponents", perf_counter_ns() - t0)
         
         # Write player JSONs and ready (atomic, no waiting)
+        if self._observation_histories is not None:
+            pending = {}
+            for sid, selected in enumerate(actions):
+                own_obs = self.observation_for_seat(sid, current_status)
+                own_card = int(own_obs['hand_ids'][selected % 7])
+                pending[sid] = (prev_turn, own_card if own_card >= 0 else None, selected // 7)
+            self._pending_memory_actions = pending
         if timers: t0 = perf_counter_ns()
         for sid in (0, 1, 2):
             cmd = self._action_to_command(current_status, sid, actions[sid])
@@ -664,6 +749,16 @@ class SevenWondersEnv(gym.Env):
         result = status2.get("last_actions", {}).get(str(self.agent_seat), {})
         if result.get("status") == "fallback_discard":
             raise EngineError("action_rejected", "Engine replaced learner action with discard")
+
+        if self._observation_histories is not None:
+            if self._pending_memory_actions is None:
+                raise EngineError('protocol_error', 'Missing pending observed actions')
+            for sid, (turn, card, kind) in self._pending_memory_actions.items():
+                if turn != prev_turn:
+                    raise EngineError('protocol_error', 'History action belongs to another turn')
+                outcome = status2.get('last_actions', {}).get(str(sid), {}).get('status')
+                self._observation_histories[sid].acknowledge(turn, card, kind, outcome)
+            self._pending_memory_actions = None
         
         if timers: t0 = perf_counter_ns()
         obs = self._build_obs(status2)
@@ -676,12 +771,11 @@ class SevenWondersEnv(gym.Env):
             totals = []
             for sid in (0, 1, 2):
                 totals.append(int(status2["players"][str(sid)]["points"]["total"]))
-            agent_total = totals[self.agent_seat]
-            opp_best = max(t for i, t in enumerate(totals) if i != self.agent_seat)
-            raw_reward = float(agent_total - opp_best)
-            reward = raw_reward / self.reward_scale
+            components = self.reward_spec.terminal_components(status2, self.agent_seat)
+            reward = components['training_reward']
             info["final_totals"] = totals
-            info["raw_vp_diff"] = raw_reward
+            info["raw_vp_diff"] = components['raw_vp_diff']
+            info['reward_components'] = components
         
         return obs, reward, terminated, False, info
 

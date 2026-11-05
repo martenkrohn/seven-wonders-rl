@@ -5,7 +5,8 @@ import numpy as np
 
 SEED_VERSION = 1
 ROLES = {"model": 1, "learner": 2, "minibatch": 3, "engine": 4,
-         "opponents": 5, "evaluation": 6, "policy": 7}
+         "opponents": 5, "evaluation": 6, "policy": 7,
+         "multihead": 8, "head": 9, "opponent_head": 10, "evaluation_head": 11}
 
 
 def derive_seed(master: int, role: str, *indices: int) -> int:

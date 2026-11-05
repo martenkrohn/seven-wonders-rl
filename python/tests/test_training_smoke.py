@@ -15,21 +15,34 @@ pytestmark = pytest.mark.integration
 def test_short_training_saves_final_partial_rollout_and_repeats(require_engine, tmp_path):
     root = Path(__file__).parents[1]
     states = []
+    trajectories = []
     for name, envs, horizon in (("one", 1, 32), ("two", 2, 16), ("repeat", 2, 16)):
         output = tmp_path / name
         subprocess.run([sys.executable, "scripts/ppo_training/train_unified.py", "--mode", "fixed",
             "--seed", "123", "--total-timesteps", "72", "--n-envs", str(envs),
-            "--rollout-horizon", str(horizon), "--eval-every", "1000", "--out-dir", str(output)],
+            "--rollout-horizon", str(horizon), "--eval-every", "1000", "--out-dir", str(output),
+            *(["--science-diagnostics"] if name == "repeat" else [])],
             cwd=root, check=True, capture_output=True, text=True, timeout=60)
         result = json.loads((output / "result.json").read_text())
         updates = [json.loads(line) for line in (output / "updates.jsonl").read_text().splitlines()]
         assert result["status"] == "completed" and result["timestep"] == 72
         assert len(updates) == 3 and updates[-1]["transitions"] == 8
+        trajectories.append([row['trajectory_sha256'] for row in updates])
         assert not (output / "best.pt").exists()  # no evaluation happened
         assert not Path(json.loads((output / "config.json").read_text())["io_root"]).exists()
         states.append(load_model(output / "latest.pt").state_dict())
+        if name == 'repeat':
+            science = [json.loads(line) for line in (output / 'science_episodes.jsonl').read_text().splitlines()]
+            episodes = [json.loads(line) for line in (output / 'episodes.jsonl').read_text().splitlines()]
+            assert len(science) == len(episodes) > 0
+            for game, episode in zip(science, episodes):
+                assert game['totals'] == episode['totals']
+                assert [age['age'] for age in game['ages']] == [1, 2, 3]
+                assert len(game['decisions']) >= 18
+                assert all(d['policy_step'] < 72 for d in game['decisions'])
     for key in states[1]:
         torch.testing.assert_close(states[1][key], states[2][key], rtol=0, atol=0)
+    assert trajectories[1] == trajectories[2]
 
 
 def test_failed_rollout_preserves_saved_update_and_persists_diagnostics(require_engine, tmp_path):
@@ -63,6 +76,19 @@ trainer.main(["--mode", "fixed", "--total-timesteps", "8", "--n-envs", "1",
     assert checkpoint["timestep"] == 2
     assert json.loads((output / "result.json").read_text())["status"] == "failed"
     assert not Path(json.loads((output / "config.json").read_text())["io_root"]).exists()
+    # The same short run can now restart without losing its failed checkpoint.
+    restart = [sys.executable, 'scripts/ppo_training/train_unified.py', '--mode', 'fixed',
+               '--total-timesteps', '8', '--n-envs', '1', '--rollout-horizon', '2',
+               '--eval-every', '1000', '--out-dir', str(output),
+               '--restart-incomplete', '--skip-completed']
+    restarted = subprocess.run(restart, cwd=root, capture_output=True, text=True, check=True, timeout=60)
+    assert 'archiviert' in restarted.stdout
+    archived, = (tmp_path / 'archive').iterdir()
+    assert torch.load(archived / 'latest.pt', weights_only=True)['timestep'] == 2
+    assert json.loads((output / 'result.json').read_text())['status'] == 'completed'
+    digest = file_hash(output / 'latest.pt')
+    skipped = subprocess.run(restart, cwd=root, capture_output=True, text=True, check=True, timeout=60)
+    assert 'übersprungen' in skipped.stdout and file_hash(output / 'latest.pt') == digest
 
 
 def test_pure_selfplay_starts_neural_logs_opponents_and_evaluates_neural_only(require_engine, tmp_path):
@@ -110,7 +136,11 @@ trainer.main(["--mode", "selfplay", "--seed", "7", "--total-timesteps", "512",
     assert 'paired_valid' not in final
     assert 'kein direkter Fortschrittsvergleich' in process.stdout
     assert json.loads((output / 'result.json').read_text())['latest_evaluated_step'] == 512
-    assert load_model(output / "latest.pt").architecture_version == 2
+    assert load_model(output / "latest.pt").memory_enabled
+    assert load_model(output / "latest.pt").architecture_version == 4
+    assert torch.load(output / 'latest.pt', weights_only=True)['optimizer_state'] is not None
+    for snapshot in output.glob('checkpoint_*.pt'):
+        assert torch.load(snapshot, weights_only=True)['optimizer_state'] is None
     assert (output / "evaluated.pt").exists()
     assert not (output / 'best.pt').exists()
     timing = json.loads((output / "timing.json").read_text())["buckets"]

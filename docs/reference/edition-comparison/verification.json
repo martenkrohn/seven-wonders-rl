@@ -1,0 +1,17 @@
+{
+  "checked_on": "2026-11-05",
+  "checks": {
+    "inventory": "80 matched BGA card-era rows; 75 old / 77 new card types; 14 wonder sides",
+    "printed_decks": "7 cards per player per age, both printed editions, player counts 3–7",
+    "bga_assets": "all 11 hashes checked against supplied manifest; actual MIME signatures used",
+    "bga_definitions": "costs, effects, copies and chains normalized and matched by name/age; all 14 wonder stages and starting resources match photographed transcriptions",
+    "source_discrepancies": "4 card costs corrected after definition and v2 sprite inspection; original values preserved",
+    "quantities": "2x Wood, +2 Wood and 2 Wood all parse as 2; four double producers match on both sides",
+    "browser": "94 entries; tabs; name search; edition/engine filters; 92 old images; 94 clipped new sprites; no new placeholders; SVG zoom; local image overrides; mobile width; no JS errors",
+    "input_hashes": "all source and generator/template hashes match comparison.json"
+  },
+  "limitations": [
+    "The comparison checks static definitions; BGA server behavior and simulator runtime rules are not fully audited here."
+  ],
+  "generated_report": "python/runs/edition-comparison/index.html"
+}

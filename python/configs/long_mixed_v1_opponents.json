@@ -1,0 +1,13 @@
+{
+  "groups": [
+    {"name": "anchors", "weight": 0.20, "checkpoints": [
+      "runs/multihead-v1-seed31/latest.pt", "runs/multihead-v2-priors-seed31/latest.pt"]},
+    {"name": "standard", "weight": 0.05, "checkpoints": [
+      "runs/multihead-v1-seed31/frozen_opponents/opponent_000.pt",
+      "runs/multihead-v1-seed31/frozen_opponents/opponent_001.pt"]},
+    {"name": "science", "weight": 0.05, "checkpoints": [
+      "runs/multihead-v1-seed31/frozen_opponents/opponent_002.pt"]},
+    {"name": "military", "weight": 0.05, "checkpoints": [
+      "runs/multihead-v1-seed31/frozen_opponents/opponent_003.pt"]}
+  ]
+}

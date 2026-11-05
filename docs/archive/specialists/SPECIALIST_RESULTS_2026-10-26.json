@@ -1,0 +1,741 @@
+{
+  "date": "2026-10-26",
+  "bootstrap": {
+    "samples": 5000,
+    "unit": "engine_seed block",
+    "note": "Exploratory intervals describe holdout seed variation, not uncertainty across training seeds."
+  },
+  "same_initial_records_across_runs": true,
+  "initial_record_comparison_excludes": [
+    "duration_seconds",
+    "checkpoint_id"
+  ],
+  "science_minus_military_on_common_plan": {
+    "margin": {
+      "gain": 10.89166666666667,
+      "ci95": [
+        8.481197916666668,
+        13.316718750000001
+      ]
+    },
+    "win_share": {
+      "gain": 0.4270833333333333,
+      "ci95": [
+        0.33749999999999997,
+        0.5114583333333333
+      ]
+    },
+    "vp": {
+      "gain": 20.03333333333334,
+      "ci95": [
+        17.779166666666665,
+        22.29380208333333
+      ]
+    },
+    "science": {
+      "gain": 45.00625,
+      "ci95": [
+        42.104114583333335,
+        47.79177083333334
+      ]
+    },
+    "military": {
+      "gain": -15.341666666666663,
+      "ci95": [
+        -16.058333333333334,
+        -14.597864583333333
+      ]
+    }
+  },
+  "audited_holdout_records": 1920,
+  "runs": {
+    "science": {
+      "result": {
+        "status": "completed",
+        "timestep": 524288,
+        "updates": 1024,
+        "elapsed_seconds": 2130.31096542,
+        "steps_per_second": 246.10867075766774,
+        "best_vp_diff": null,
+        "selection_metric": "latest_valid_evaluation",
+        "latest_evaluated_step": 524288,
+        "best_selection_score": null
+      },
+      "holdout_seed": 79001,
+      "training_games": 24960,
+      "started_games": 24968,
+      "seats": {
+        "0": 8323,
+        "1": 8323,
+        "2": 8322
+      },
+      "training_windows": [
+        {
+          "name": "first_quarter",
+          "games": 6240,
+          "margin": -1.995352564102564,
+          "specialist_points": 29.7713141025641,
+          "reward": 2.777596153846154
+        },
+        {
+          "name": "last_quarter",
+          "games": 6240,
+          "margin": 3.0044871794871795,
+          "specialist_points": 48.28589743589744,
+          "reward": 5.129038461538461
+        }
+      ],
+      "training_evaluations": [
+        {
+          "step": 65536,
+          "games": 36,
+          "win_share": 0.27314814814814814,
+          "margin": -4.472222222222222,
+          "vp": 43.80555555555556,
+          "science": 33.02777777777778,
+          "military": -2.5555555555555554,
+          "plan_id": "a8a0fc3e63d754cc06460c3a19b25a9d626da678aafad4e16451e5e1ed3ac856"
+        },
+        {
+          "step": 131072,
+          "games": 36,
+          "win_share": 0.3333333333333333,
+          "margin": -1.6944444444444444,
+          "vp": 48.888888888888886,
+          "science": 40.80555555555556,
+          "military": -5.722222222222222,
+          "plan_id": "a8a0fc3e63d754cc06460c3a19b25a9d626da678aafad4e16451e5e1ed3ac856"
+        },
+        {
+          "step": 196608,
+          "games": 36,
+          "win_share": 0.4583333333333333,
+          "margin": -0.08333333333333333,
+          "vp": 50.69444444444444,
+          "science": 42.083333333333336,
+          "military": -5.888888888888889,
+          "plan_id": "a8a0fc3e63d754cc06460c3a19b25a9d626da678aafad4e16451e5e1ed3ac856"
+        },
+        {
+          "step": 262144,
+          "games": 36,
+          "win_share": 0.5,
+          "margin": 0.9444444444444444,
+          "vp": 52.22222222222222,
+          "science": 43.111111111111114,
+          "military": -5.888888888888889,
+          "plan_id": "a8a0fc3e63d754cc06460c3a19b25a9d626da678aafad4e16451e5e1ed3ac856"
+        },
+        {
+          "step": 327680,
+          "games": 36,
+          "win_share": 0.5277777777777778,
+          "margin": 1.9166666666666667,
+          "vp": 53.25,
+          "science": 44.833333333333336,
+          "military": -5.833333333333333,
+          "plan_id": "a8a0fc3e63d754cc06460c3a19b25a9d626da678aafad4e16451e5e1ed3ac856"
+        },
+        {
+          "step": 393216,
+          "games": 36,
+          "win_share": 0.4583333333333333,
+          "margin": 0.2222222222222222,
+          "vp": 52.52777777777778,
+          "science": 45.666666666666664,
+          "military": -5.888888888888889,
+          "plan_id": "a8a0fc3e63d754cc06460c3a19b25a9d626da678aafad4e16451e5e1ed3ac856"
+        },
+        {
+          "step": 458752,
+          "games": 36,
+          "win_share": 0.5694444444444444,
+          "margin": 1.0277777777777777,
+          "vp": 52.611111111111114,
+          "science": 43.77777777777778,
+          "military": -5.944444444444445,
+          "plan_id": "a8a0fc3e63d754cc06460c3a19b25a9d626da678aafad4e16451e5e1ed3ac856"
+        },
+        {
+          "step": 524288,
+          "games": 36,
+          "win_share": 0.5694444444444444,
+          "margin": 1.6111111111111112,
+          "vp": 52.416666666666664,
+          "science": 44.27777777777778,
+          "military": -5.888888888888889,
+          "plan_id": "a8a0fc3e63d754cc06460c3a19b25a9d626da678aafad4e16451e5e1ed3ac856"
+        }
+      ],
+      "paired_gain": {
+        "margin": {
+          "gain": 8.46875,
+          "ci95": [
+            5.966666666666669,
+            10.802343749999995
+          ]
+        },
+        "win_share": {
+          "gain": 0.321875,
+          "ci95": [
+            0.2208333333333333,
+            0.41145833333333337
+          ]
+        },
+        "vp": {
+          "gain": 17.53125,
+          "ci95": [
+            15.28114583333333,
+            19.65223958333333
+          ]
+        },
+        "science": {
+          "gain": 46.547916666666666,
+          "ci95": [
+            43.899687500000006,
+            49.05630208333334
+          ]
+        },
+        "military": {
+          "gain": -11.520833333333334,
+          "ci95": [
+            -12.248020833333333,
+            -10.814583333333333
+          ]
+        }
+      },
+      "hashes": {
+        "/home/marten/dev/7Wonders/python/runs/specialists-v2-frozen-science-seed31/result.json": "9abbc3383794bbb62b97f369272c36c7acc54b9bf1f0c7c9f58f9697683755b3",
+        "/home/marten/dev/7Wonders/python/runs/specialists-v2-frozen-science-seed31/config.json": "8983ff7c79a21243d8d7020db7bd6d8c52b5e8b889ee2610191a9a550d7d7ad6",
+        "/home/marten/dev/7Wonders/python/runs/specialists-v2-frozen-science-seed31-holdout/candidate.jsonl": "21acd84134535722342d3eaad5c4b620ce9da5c46d3daff454e12a1f4aae522f",
+        "/home/marten/dev/7Wonders/python/runs/specialists-v2-frozen-science-seed31-holdout/initial.jsonl": "85ceda880eb0386568eab1548eca0609aef2254e269c7034fe158fafeb860991"
+      },
+      "holdout_training_seed_overlap": 0,
+      "configuration": {
+        "reward_spec": {
+          "version": 1,
+          "profile": "science",
+          "timing": "finished_only",
+          "category": "scientific",
+          "specialist_weight": 1.0,
+          "scale": 10.0,
+          "formula": "(own_vp - best_opponent_vp + specialist_weight * category_points) / scale"
+        },
+        "initialization": {
+          "kind": "checkpoint",
+          "checkpoint": "/home/marten/dev/7Wonders/python/runs/science-diagnostic-v1-baseline-seed31/latest.pt",
+          "sha256": "c81d68ebdf9ec7f4f3cd21ca35014809b612872a0a65ac202818caa81a5fd302",
+          "source_timestep": 524288,
+          "source_reward_profile": "standard",
+          "optimizer_restored": false
+        },
+        "frozen_opponent_references": [
+          {
+            "checkpoint": "/home/marten/dev/7Wonders/python/runs/specialists-v2-frozen-science-seed31/frozen_opponents/opponent_000.pt",
+            "sha256": "c81d68ebdf9ec7f4f3cd21ca35014809b612872a0a65ac202818caa81a5fd302",
+            "source_checkpoint": "/home/marten/dev/7Wonders/python/runs/science-diagnostic-v1-baseline-seed31/latest.pt",
+            "step": 524288
+          }
+        ],
+        "seed": 31,
+        "n_envs": 8,
+        "rollout_horizon": 64,
+        "batch_size": 256,
+        "minibatch_epochs": 4,
+        "eval_seed": 42,
+        "eval_every": 65536,
+        "gamma": 0.999,
+        "gae_lambda": 0.95,
+        "ent_coef": 0.01
+      },
+      "models": {
+        "initial": {
+          "games": 480,
+          "win_share": 0.415625,
+          "strict_win_rate": 0.40208333333333335,
+          "vp_mean": 39.516666666666666,
+          "margin_mean": -2.61875,
+          "categories": {
+            "blue": 14.65,
+            "military": 5.583333333333333,
+            "science": 3.839583333333333,
+            "guild": 2.675,
+            "wonder": 5.875,
+            "treasury": 4.814583333333333,
+            "yellow": 2.0791666666666666,
+            "total": 39.516666666666666
+          },
+          "discards": 2.472916666666667,
+          "zero_shields": 0,
+          "full_military_losses": 18,
+          "full_military_wins": 19,
+          "science_thresholds": {
+            "10": 71,
+            "20": 6,
+            "30": 0,
+            "40": 0,
+            "50": 0,
+            "60": 0
+          },
+          "science_range": [
+            0,
+            25
+          ],
+          "military_recomputations": 480,
+          "science_recomputations": 480,
+          "suboptimal_engine_joker_games": 6,
+          "engine_joker_omitted_points_mean": 0.029166666666666667,
+          "engine_joker_omitted_points_max": 3,
+          "age_action_means": {
+            "1": {
+              "blue": 1.0083333333333333,
+              "red": 0.9916666666666667,
+              "yellow": 0.7645833333333333,
+              "brown": 1.99375,
+              "wonder": 0.49583333333333335,
+              "discard": 0.41041666666666665,
+              "green": 0.26666666666666666,
+              "grey": 0.06875
+            },
+            "2": {
+              "blue": 1.2020833333333334,
+              "brown": 0.5395833333333333,
+              "yellow": 0.8583333333333333,
+              "discard": 0.5791666666666667,
+              "red": 1.0125,
+              "wonder": 1.08125,
+              "green": 0.68125,
+              "grey": 0.05
+            },
+            "3": {
+              "blue": 1.2604166666666667,
+              "yellow": 0.7770833333333333,
+              "red": 0.90625,
+              "discard": 1.4833333333333334,
+              "wonder": 0.41458333333333336,
+              "purple": 0.6916666666666667,
+              "green": 0.4875
+            }
+          }
+        },
+        "candidate": {
+          "games": 480,
+          "win_share": 0.7375,
+          "strict_win_rate": 0.7229166666666667,
+          "vp_mean": 57.047916666666666,
+          "margin_mean": 5.85,
+          "categories": {
+            "blue": 4.26875,
+            "military": -5.9375,
+            "science": 50.3875,
+            "guild": 3.652083333333333,
+            "wonder": 0.725,
+            "treasury": 3.810416666666667,
+            "yellow": 0.14166666666666666,
+            "total": 57.047916666666666
+          },
+          "discards": 1.2666666666666666,
+          "zero_shields": 473,
+          "full_military_losses": 454,
+          "full_military_wins": 0,
+          "science_thresholds": {
+            "10": 480,
+            "20": 480,
+            "30": 467,
+            "40": 400,
+            "50": 282,
+            "60": 98
+          },
+          "science_range": [
+            21,
+            85
+          ],
+          "military_recomputations": 480,
+          "science_recomputations": 480,
+          "suboptimal_engine_joker_games": 52,
+          "engine_joker_omitted_points_mean": 0.2791666666666667,
+          "engine_joker_omitted_points_max": 3,
+          "age_action_means": {
+            "1": {
+              "grey": 2.49375,
+              "green": 1.9645833333333333,
+              "brown": 0.9916666666666667,
+              "discard": 0.47708333333333336,
+              "yellow": 0.04791666666666667,
+              "blue": 0.0125,
+              "wonder": 0.008333333333333333,
+              "red": 0.004166666666666667
+            },
+            "2": {
+              "green": 3.2875,
+              "discard": 0.5166666666666667,
+              "brown": 1.24375,
+              "yellow": 0.07291666666666667,
+              "blue": 0.3375,
+              "wonder": 0.13958333333333334,
+              "grey": 0.40208333333333335
+            },
+            "3": {
+              "green": 4.179166666666666,
+              "purple": 0.88125,
+              "discard": 0.27291666666666664,
+              "blue": 0.44583333333333336,
+              "wonder": 0.15,
+              "yellow": 0.06875,
+              "red": 0.008333333333333333
+            }
+          }
+        }
+      },
+      "source_holdout": "python/runs/specialists-v2-frozen-science-seed31-holdout",
+      "initial_weights_match_source": true
+    },
+    "military": {
+      "result": {
+        "status": "completed",
+        "timestep": 524288,
+        "updates": 1024,
+        "elapsed_seconds": 2041.220612186,
+        "steps_per_second": 256.8502379752698,
+        "best_vp_diff": null,
+        "selection_metric": "latest_valid_evaluation",
+        "latest_evaluated_step": 524288,
+        "best_selection_score": null
+      },
+      "holdout_seed": 79001,
+      "training_games": 24960,
+      "started_games": 24968,
+      "seats": {
+        "0": 8323,
+        "1": 8323,
+        "2": 8322
+      },
+      "training_windows": [
+        {
+          "name": "first_quarter",
+          "games": 6240,
+          "margin": -5.543589743589743,
+          "specialist_points": 6.294711538461539,
+          "reward": 0.07511217948717948
+        },
+        {
+          "name": "last_quarter",
+          "games": 6240,
+          "margin": -4.943910256410256,
+          "specialist_points": 7.358653846153846,
+          "reward": 0.24147435897435895
+        }
+      ],
+      "training_evaluations": [
+        {
+          "step": 65536,
+          "games": 36,
+          "win_share": 0.3055555555555556,
+          "margin": -6.805555555555555,
+          "vp": 35.52777777777778,
+          "science": 5.055555555555555,
+          "military": 6.972222222222222,
+          "plan_id": "550db5c6682edc1cfb85763fbcbb35f9a86fcf1a42d18501189c1f7e824b0df9"
+        },
+        {
+          "step": 131072,
+          "games": 36,
+          "win_share": 0.2777777777777778,
+          "margin": -5.166666666666667,
+          "vp": 36.25,
+          "science": 2.4166666666666665,
+          "military": 7.361111111111111,
+          "plan_id": "550db5c6682edc1cfb85763fbcbb35f9a86fcf1a42d18501189c1f7e824b0df9"
+        },
+        {
+          "step": 196608,
+          "games": 36,
+          "win_share": 0.27314814814814814,
+          "margin": -3.138888888888889,
+          "vp": 37.94444444444444,
+          "science": 6.611111111111111,
+          "military": 6.444444444444445,
+          "plan_id": "550db5c6682edc1cfb85763fbcbb35f9a86fcf1a42d18501189c1f7e824b0df9"
+        },
+        {
+          "step": 262144,
+          "games": 36,
+          "win_share": 0.25,
+          "margin": -4.694444444444445,
+          "vp": 36.52777777777778,
+          "science": 6.75,
+          "military": 7.166666666666667,
+          "plan_id": "550db5c6682edc1cfb85763fbcbb35f9a86fcf1a42d18501189c1f7e824b0df9"
+        },
+        {
+          "step": 327680,
+          "games": 36,
+          "win_share": 0.3194444444444444,
+          "margin": -4.861111111111111,
+          "vp": 36.30555555555556,
+          "science": 7.583333333333333,
+          "military": 5.888888888888889,
+          "plan_id": "550db5c6682edc1cfb85763fbcbb35f9a86fcf1a42d18501189c1f7e824b0df9"
+        },
+        {
+          "step": 393216,
+          "games": 36,
+          "win_share": 0.2314814814814815,
+          "margin": -4.111111111111111,
+          "vp": 36.44444444444444,
+          "science": 5.666666666666667,
+          "military": 7.027777777777778,
+          "plan_id": "550db5c6682edc1cfb85763fbcbb35f9a86fcf1a42d18501189c1f7e824b0df9"
+        },
+        {
+          "step": 458752,
+          "games": 36,
+          "win_share": 0.25,
+          "margin": -4.611111111111111,
+          "vp": 36.19444444444444,
+          "science": 5.694444444444445,
+          "military": 6.805555555555555,
+          "plan_id": "550db5c6682edc1cfb85763fbcbb35f9a86fcf1a42d18501189c1f7e824b0df9"
+        },
+        {
+          "step": 524288,
+          "games": 36,
+          "win_share": 0.2222222222222222,
+          "margin": -7.222222222222222,
+          "vp": 34.94444444444444,
+          "science": 7.111111111111111,
+          "military": 7.055555555555555,
+          "plan_id": "550db5c6682edc1cfb85763fbcbb35f9a86fcf1a42d18501189c1f7e824b0df9"
+        }
+      ],
+      "paired_gain": {
+        "margin": {
+          "gain": -2.4229166666666666,
+          "ci95": [
+            -3.697968749999999,
+            -1.1415625000000018
+          ]
+        },
+        "win_share": {
+          "gain": -0.10520833333333335,
+          "ci95": [
+            -0.17500000000000002,
+            -0.03333333333333333
+          ]
+        },
+        "vp": {
+          "gain": -2.502083333333334,
+          "ci95": [
+            -3.4708333333333337,
+            -1.541666666666667
+          ]
+        },
+        "science": {
+          "gain": 1.5416666666666667,
+          "ci95": [
+            0.6499999999999999,
+            2.4625
+          ]
+        },
+        "military": {
+          "gain": 3.8208333333333337,
+          "ci95": [
+            2.85,
+            4.779166666666666
+          ]
+        }
+      },
+      "hashes": {
+        "/home/marten/dev/7Wonders/python/runs/specialists-v2-frozen-military-seed31/result.json": "d6bb5804c6f55e5988de445aeb5ff184530639cf5d72e8cdece1b143bba5f6fc",
+        "/home/marten/dev/7Wonders/python/runs/specialists-v2-frozen-military-seed31/config.json": "ad10c85f3e2b8202c80bd716406fd591cba2f091c24f6e76156dbede970a8ff4",
+        "/home/marten/dev/7Wonders/python/runs/specialists-v2-frozen-military-seed31-holdout/candidate.jsonl": "b37e0a96cfafbfc9f23e903e44fdb1a5a4f2a8460febebe7d2b1ffe7261a1121",
+        "/home/marten/dev/7Wonders/python/runs/specialists-v2-frozen-military-seed31-holdout/initial.jsonl": "c426cff691f0b12c3b4f63fce1760468de19033b2b0b5b7d1ba5d2a3478ab252"
+      },
+      "holdout_training_seed_overlap": 0,
+      "configuration": {
+        "reward_spec": {
+          "version": 1,
+          "profile": "military",
+          "timing": "finished_only",
+          "category": "military",
+          "specialist_weight": 1.0,
+          "scale": 10.0,
+          "formula": "(own_vp - best_opponent_vp + specialist_weight * category_points) / scale"
+        },
+        "initialization": {
+          "kind": "checkpoint",
+          "checkpoint": "/home/marten/dev/7Wonders/python/runs/science-diagnostic-v1-baseline-seed31/latest.pt",
+          "sha256": "c81d68ebdf9ec7f4f3cd21ca35014809b612872a0a65ac202818caa81a5fd302",
+          "source_timestep": 524288,
+          "source_reward_profile": "standard",
+          "optimizer_restored": false
+        },
+        "frozen_opponent_references": [
+          {
+            "checkpoint": "/home/marten/dev/7Wonders/python/runs/specialists-v2-frozen-military-seed31/frozen_opponents/opponent_000.pt",
+            "sha256": "c81d68ebdf9ec7f4f3cd21ca35014809b612872a0a65ac202818caa81a5fd302",
+            "source_checkpoint": "/home/marten/dev/7Wonders/python/runs/science-diagnostic-v1-baseline-seed31/latest.pt",
+            "step": 524288
+          }
+        ],
+        "seed": 31,
+        "n_envs": 8,
+        "rollout_horizon": 64,
+        "batch_size": 256,
+        "minibatch_epochs": 4,
+        "eval_seed": 42,
+        "eval_every": 65536,
+        "gamma": 0.999,
+        "gae_lambda": 0.95,
+        "ent_coef": 0.01
+      },
+      "models": {
+        "initial": {
+          "games": 480,
+          "win_share": 0.415625,
+          "strict_win_rate": 0.40208333333333335,
+          "vp_mean": 39.516666666666666,
+          "margin_mean": -2.61875,
+          "categories": {
+            "blue": 14.65,
+            "military": 5.583333333333333,
+            "science": 3.839583333333333,
+            "guild": 2.675,
+            "wonder": 5.875,
+            "treasury": 4.814583333333333,
+            "yellow": 2.0791666666666666,
+            "total": 39.516666666666666
+          },
+          "discards": 2.472916666666667,
+          "zero_shields": 0,
+          "full_military_losses": 18,
+          "full_military_wins": 19,
+          "science_thresholds": {
+            "10": 71,
+            "20": 6,
+            "30": 0,
+            "40": 0,
+            "50": 0,
+            "60": 0
+          },
+          "science_range": [
+            0,
+            25
+          ],
+          "military_recomputations": 480,
+          "science_recomputations": 480,
+          "suboptimal_engine_joker_games": 6,
+          "engine_joker_omitted_points_mean": 0.029166666666666667,
+          "engine_joker_omitted_points_max": 3,
+          "age_action_means": {
+            "1": {
+              "blue": 1.0083333333333333,
+              "red": 0.9916666666666667,
+              "yellow": 0.7645833333333333,
+              "brown": 1.99375,
+              "wonder": 0.49583333333333335,
+              "discard": 0.41041666666666665,
+              "green": 0.26666666666666666,
+              "grey": 0.06875
+            },
+            "2": {
+              "blue": 1.2020833333333334,
+              "brown": 0.5395833333333333,
+              "yellow": 0.8583333333333333,
+              "discard": 0.5791666666666667,
+              "red": 1.0125,
+              "wonder": 1.08125,
+              "green": 0.68125,
+              "grey": 0.05
+            },
+            "3": {
+              "blue": 1.2604166666666667,
+              "yellow": 0.7770833333333333,
+              "red": 0.90625,
+              "discard": 1.4833333333333334,
+              "wonder": 0.41458333333333336,
+              "purple": 0.6916666666666667,
+              "green": 0.4875
+            }
+          }
+        },
+        "candidate": {
+          "games": 480,
+          "win_share": 0.3104166666666667,
+          "strict_win_rate": 0.29583333333333334,
+          "vp_mean": 37.014583333333334,
+          "margin_mean": -5.041666666666667,
+          "categories": {
+            "blue": 7.975,
+            "military": 9.404166666666667,
+            "science": 5.38125,
+            "guild": 2.029166666666667,
+            "wonder": 5.045833333333333,
+            "treasury": 5.60625,
+            "yellow": 1.5729166666666667,
+            "total": 37.014583333333334
+          },
+          "discards": 4.13125,
+          "zero_shields": 0,
+          "full_military_losses": 3,
+          "full_military_wins": 49,
+          "science_thresholds": {
+            "10": 127,
+            "20": 29,
+            "30": 3,
+            "40": 0,
+            "50": 0,
+            "60": 0
+          },
+          "science_range": [
+            0,
+            33
+          ],
+          "military_recomputations": 480,
+          "science_recomputations": 480,
+          "suboptimal_engine_joker_games": 11,
+          "engine_joker_omitted_points_mean": 0.06458333333333334,
+          "engine_joker_omitted_points_max": 3,
+          "age_action_means": {
+            "1": {
+              "discard": 1.4520833333333334,
+              "red": 1.1520833333333333,
+              "yellow": 0.6645833333333333,
+              "blue": 0.46458333333333335,
+              "green": 0.3020833333333333,
+              "brown": 1.8083333333333333,
+              "wonder": 0.15625
+            },
+            "2": {
+              "green": 0.8854166666666666,
+              "yellow": 0.78125,
+              "discard": 0.8354166666666667,
+              "red": 1.2041666666666666,
+              "wonder": 1.1,
+              "brown": 0.65,
+              "blue": 0.5479166666666667,
+              "grey": 0.0020833333333333333
+            },
+            "3": {
+              "green": 0.6979166666666666,
+              "red": 1.09375,
+              "purple": 0.48333333333333334,
+              "yellow": 0.6354166666666666,
+              "blue": 0.8104166666666667,
+              "discard": 1.84375,
+              "wonder": 0.45208333333333334
+            }
+          }
+        }
+      },
+      "source_holdout": "python/runs/specialists-v2-frozen-military-seed31-holdout",
+      "initial_weights_match_source": true
+    }
+  },
+  "limitations": [
+    "One training seed per objective; no matched standard-reward continuation control.",
+    "All tested references are from the same baseline training lineage.",
+    "Bootstrap intervals reflect held-out engine-seed blocks, not training-seed variation.",
+    "Engine science joker allocation can be suboptimal; reported wins use unchanged original engine scores."
+  ]
+}

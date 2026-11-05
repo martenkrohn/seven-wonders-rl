@@ -1,0 +1,12 @@
+{
+  "groups": [
+    {
+      "name": "anchors",
+      "weight": 0.2,
+      "checkpoints": [
+        "runs/long-mixed-wonders-v1-seed131/evaluations/step_2097152/model.pt",
+        "runs/long-mixed-wonders-v1-seed131/evaluations/step_0524288/model.pt"
+      ]
+    }
+  ]
+}

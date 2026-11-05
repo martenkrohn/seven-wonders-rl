@@ -13,6 +13,7 @@ from sevenwonders_rl.envs.sevenwonders_env import EngineError
 from sevenwonders_rl.features.action_feature_schema import IDX
 from sevenwonders_rl.policies.registry import make_policy
 from sevenwonders_rl.policies.ppo_checkpoint_policy import PPOCheckpointPolicy
+from sevenwonders_rl.policies.action_constraints import ACTION_CONSTRAINTS, constrained_mask, green_build_mask
 from sevenwonders_rl.utils.checkpoints import file_hash
 from sevenwonders_rl.utils.ppo_utils import select_action_from_obs
 from sevenwonders_rl.utils.runtime import seat_order
@@ -110,11 +111,17 @@ def aggregate(records):
     }
 
 
-def evaluate_model(model, device, specs, repo_root, io_root, jsonl_path,
+def _evaluate_serial(model, device, specs, repo_root, io_root, jsonl_path,
                    action_mode="greedy", engine_poll_us=1000, poll_seconds=.001,
-                   checkpoint_id=None, *, batch_opponents=True, detailed=False, progress_callback=None):
+                   checkpoint_id=None, *, batch_opponents=True, detailed=False, progress_callback=None,
+                   action_constraint='none', head_id=None, _game_ids=None):
     """Evaluate an explicit, fixed game plan without consuming training RNGs."""
     records = []
+    count_heads = getattr(model, 'num_heads', 1)
+    if head_id is not None and not 0 <= head_id < count_heads:
+        raise ValueError('Evaluation head ID out of range')
+    if action_constraint not in ACTION_CONSTRAINTS:
+        raise ValueError(f'Unknown action constraint: {action_constraint}')
     snapshot_cache = {}
     snapshot_hashes = {}
     previous_training = model.training
@@ -122,7 +129,8 @@ def evaluate_model(model, device, specs, repo_root, io_root, jsonl_path,
     Path(jsonl_path).parent.mkdir(parents=True, exist_ok=True)
     try:
         with Path(jsonl_path).open("x", encoding="utf-8") as output:
-            for game_id, spec in enumerate(specs):
+            game_ids = range(len(specs)) if _game_ids is None else _game_ids
+            for game_id, spec in zip(game_ids, specs):
                 seed = int(spec["engine_seed"])
                 agent = spec.get("agent_seat", 0)
                 _, left, right = seat_order(agent)
@@ -143,27 +151,49 @@ def evaluate_model(model, device, specs, repo_root, io_root, jsonl_path,
                     io_dir=str(Path(io_root) / f"game_{game_id:04d}" / "io"),
                     opponent_policies=opponents, invalid_action_fallback="raise",
                     engine_poll_us=engine_poll_us, poll_seconds=poll_seconds,
-                    batch_opponents=batch_opponents)
+                    batch_opponents=batch_opponents,
+                    observation_memory=getattr(model, 'memory_enabled', False), public_information=(
+                        getattr(model, 'public_information', False) or any(
+                            getattr(getattr(p.policy, 'model', None), 'public_information', False)
+                            for p in opponents)))
                 rng = np.random.default_rng(policy_seeds[str(agent)])
+                head_rng = np.random.default_rng(derive_seed(seed, 'evaluation_head', agent))
+                selected_head = (head_id if head_id is not None else int(head_rng.integers(count_heads)))
                 counts = Counter()
+                constraint_counts = Counter(applied_decisions=0, green_opportunities=0,
+                    restricted_decisions=0, green_builds=0, violations=0)
                 def on_step(obs, action, info):
                     ack = info.get("status", {}).get("last_actions", {}).get(str(agent), {})
                     if ack.get("status") != "applied":
                         return
+                    green = green_build_mask(obs)
+                    available = bool(green.any())
+                    constraint_counts['applied_decisions'] += 1
+                    constraint_counts['green_opportunities'] += int(available)
+                    constraint_counts['green_builds'] += int(bool(green[action]))
+                    constraint_counts['restricted_decisions'] += int(action_constraint == 'green_priority'
+                        and available and np.any((obs['action_mask'] > 0) & (green == 0)))
+                    constraint_counts['violations'] += int(action_constraint == 'green_priority'
+                        and available and not green[action])
                     kind = action // 7
                     feats = obs["action_feats"][action]
                     prod = sum(feats[IDX[f"delta_prod_{r}"]] for r in ("wood", "ore", "clay", "stone", "loom", "glass", "papyrus"))
                     prod += feats[IDX["delta_prod_choice_raw"]] + feats[IDX["delta_prod_choice_manuf"]]
                     counts["discard" if kind == 3 else "build_wonder" if kind == 1 else "prod_build" if prod > 0 else "other"] += 1
                 record, _ = run_game(env, lambda obs: select_action_from_obs(
-                    obs, model, device, deterministic=action_mode == "greedy", rng=rng),
+                    {**obs, 'action_mask': constrained_mask(obs, action_constraint)},
+                    model, device, deterministic=action_mode == "greedy", rng=rng, head_id=selected_head),
                     {"game_id": game_id, "engine_seed": seed, "seed": seed,
                      "agent_seat": agent, "policy_seeds": policy_seeds,
                      "checkpoint_id": checkpoint_id, "action_selection_mode": action_mode,
+                     "action_constraint": action_constraint,
+                     "head_id": selected_head, "head_selection": 'fixed' if head_id is not None else 'per_game',
                      "opponents": {"left": spec["left"], "right": spec["right"]},
                      "opponents_by_seat": {str(s): opponents[s].name for s in (left, right)}}, on_step,
                     detailed=detailed)
+                record['opponent_head_ids'] = {str(k): v for k, v in getattr(env, '_opponent_head_ids', {}).items()}
                 record["action_counts"] = dict(counts)
+                record['constraint_statistics'] = dict(constraint_counts)
                 output.write(json.dumps(record, allow_nan=False) + "\n")
                 output.flush()
                 records.append(record)
@@ -172,4 +202,89 @@ def evaluate_model(model, device, specs, repo_root, io_root, jsonl_path,
                     progress_callback(game_id + 1, len(specs))
     finally:
         model.train(previous_training)
-    return {**aggregate(records), "jsonl_path": str(jsonl_path)}
+    statistics = Counter()
+    for record in records:
+        statistics.update(record['constraint_statistics'])
+    return {**aggregate(records), "jsonl_path": str(jsonl_path),
+            'action_constraint': action_constraint, 'constraint_statistics': dict(statistics)}
+
+
+_WORKER_MODEL = None
+
+
+def _init_evaluation_worker(model):
+    import torch
+    global _WORKER_MODEL
+    torch.set_num_threads(1)
+    torch.set_num_interop_threads(1)
+    _WORKER_MODEL = model.eval()
+
+
+def _evaluation_chunk(task):
+    specs, game_ids, kwargs = task
+    _evaluate_serial(_WORKER_MODEL, 'cpu', specs, _game_ids=game_ids, **kwargs)
+    return str(kwargs['jsonl_path'])
+
+
+def evaluate_model(model, device, specs, repo_root, io_root, jsonl_path,
+                   action_mode="greedy", engine_poll_us=1000, poll_seconds=.001,
+                   checkpoint_id=None, *, batch_opponents=True, detailed=False,
+                   progress_callback=None, action_constraint='none', workers=1, head_id=None):
+    """Evaluate a fixed plan, optionally using independent CPU worker processes.
+
+    Game IDs, seed streams and output order are independent of worker scheduling.
+    Models are loaded once per chunk and reference caches survive all its games.
+    The calling process's training mode, weights and RNG are left untouched.
+    """
+    if workers < 1:
+        raise ValueError('workers must be positive')
+    if action_constraint not in ACTION_CONSTRAINTS:
+        raise ValueError(f'Unknown action constraint: {action_constraint}')
+    kwargs = dict(repo_root=repo_root, io_root=io_root, jsonl_path=jsonl_path,
+                  action_mode=action_mode, engine_poll_us=engine_poll_us,
+                  poll_seconds=poll_seconds, checkpoint_id=checkpoint_id,
+                  batch_opponents=batch_opponents, detailed=detailed,
+                  action_constraint=action_constraint, head_id=head_id)
+    if workers == 1 or len(specs) < 2:
+        return _evaluate_serial(model, device, specs, progress_callback=progress_callback, **kwargs)
+    if str(device) != 'cpu':
+        raise ValueError('Parallel evaluation currently supports CPU models only')
+    from concurrent.futures import ProcessPoolExecutor, as_completed
+    from multiprocessing import get_context
+    from tempfile import TemporaryDirectory
+
+    output_path = Path(jsonl_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    records = []
+    # Reserve the final output before launching workers; never overwrite a run.
+    with output_path.open('x', encoding='utf-8') as output:
+        with TemporaryDirectory(prefix='evaluation-parts-', dir=output_path.parent) as parts:
+            count = min(workers, len(specs))
+            tasks = []
+            for worker in range(count):
+                ids = list(range(worker, len(specs), count))
+                tasks.append(([specs[i] for i in ids], ids,
+                              {**kwargs, 'jsonl_path': Path(parts) / f'{worker}.jsonl'}))
+            try:
+                with ProcessPoolExecutor(max_workers=count, mp_context=get_context('spawn'),
+                                         initializer=_init_evaluation_worker, initargs=(model,)) as executor:
+                    futures = {executor.submit(_evaluation_chunk, task): len(task[0]) for task in tasks}
+                    completed = 0
+                    for future in as_completed(futures):
+                        future.result()
+                        completed += futures[future]
+                        if progress_callback is not None:
+                            progress_callback(completed, len(specs))
+            finally:
+                # Preserve finished attempts even if another chunk raises. The
+                # executor has joined the writers before temporary parts vanish.
+                for part in sorted(Path(parts).glob('*.jsonl')):
+                    records.extend(json.loads(line) for line in part.read_text().splitlines())
+                records.sort(key=lambda record: record['game_id'])
+                for record in records:
+                    output.write(json.dumps(record, allow_nan=False) + '\n')
+    statistics = Counter()
+    for record in records:
+        statistics.update(record['constraint_statistics'])
+    return {**aggregate(records), 'jsonl_path': str(jsonl_path),
+            'action_constraint': action_constraint, 'constraint_statistics': dict(statistics)}

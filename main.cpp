@@ -43,6 +43,7 @@ class Game{
         std::mt19937_64 rng;
         uint64_t engine_seed;
         unsigned int poll_us;
+        bool quiet;
         json last_actions = json::object();
 
     public:
@@ -82,8 +83,8 @@ class Game{
         /*
          * Initializes the game variables.
          */
-        Game(uint64_t seed, unsigned int wait_us = 1000)
-            : rng(seed), engine_seed(seed), poll_us(wait_us) {
+        Game(uint64_t seed, unsigned int wait_us = 1000, bool silent = false)
+            : rng(seed), engine_seed(seed), poll_us(wait_us), quiet(silent) {
             this->number_of_players = NUM_PLAYERS;
             this->era = 1;
             this->turn = 0;
@@ -460,13 +461,11 @@ class Game{
                 status["players"][to_string(i)]["resources"]["shields"] = resources[RESOURCE::shields];
 
                 // victory points
-                status["players"][to_string(i)]["points"]["civilian"] = player_list[i]->CalculateCivilianScore();
-                status["players"][to_string(i)]["points"]["commercial"] = player_list[i]->CalculateCommercialScore();
-                status["players"][to_string(i)]["points"]["guild"] = player_list[i]->CalculateGuildScore();
-                status["players"][to_string(i)]["points"]["military"] = player_list[i]->CalculateMilitaryScore();
-                status["players"][to_string(i)]["points"]["scientific"] = player_list[i]->CalculateScientificScore();
-                status["players"][to_string(i)]["points"]["wonder"] = player_list[i]->CalculateWonderScore();
-                status["players"][to_string(i)]["points"]["total"] = player_list[i]->CalculateScore();
+                const auto scores = player_list[i]->CalculateScores();
+                const char* categories[] = {"civilian", "commercial", "guild", "military",
+                                            "scientific", "wonder", "total"};
+                for (int category = 0; category < 7; ++category)
+                    status["players"][to_string(i)]["points"][categories[category]] = scores[category];
 
                 // Amount resources by type
                 status["players"][to_string(i)]["amount"]["civilian"] = player_list[i]->CalculateAmountCivilianCards();
@@ -491,6 +490,7 @@ class Game{
 
                 WriteGameStatus();
 
+                if (!quiet) {
                 cout << "\n:::TURN " << (short)this->turn << ":::" << endl;
 
                 // Print Playable Cards for each player.
@@ -505,6 +505,7 @@ class Game{
                 }
 
                 cout << "<Waiting players...>" << endl;
+                }
                 while (!fp.ArePlayersReady()) {
                     if (poll_us) std::this_thread::sleep_for(std::chrono::microseconds(poll_us));
                 }
@@ -658,7 +659,7 @@ int main(int argc, char **argv)
         }
     }
     if (quiet) std::cout.setstate(std::ios_base::failbit);
-    Game g(seed, poll_us);
+    Game g(seed, poll_us, quiet);
 
     g.Init();
     g.NewGame(NUM_PLAYERS);

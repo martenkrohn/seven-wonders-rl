@@ -6,12 +6,31 @@ All observations are built with player rotation: (self, left, right) relative to
 from __future__ import annotations
 from typing import Any, Dict, List, Literal
 import numpy as np
-from sevenwonders_rl.features.action_features import build_action_feats
+from sevenwonders_rl.features.action_features import build_action_feats, prepare_players
 from sevenwonders_rl.features.player_state import science_state, discount_flags, DISCOUNTS
 
 N_SLOTS = 7
 N_ACTIONS = 28
 GLOBAL_DIM = 102
+
+
+class ObservationContext:
+    """One immutable engine status, shared public features and lazy seat views."""
+
+    def __init__(self, status, public_information=False):
+        self.status = status
+        self.public_information = public_information
+        self.players = prepare_players(status)
+        self.table = build_table_features(status, 0, self.players)
+        if public_information:
+            from sevenwonders_rl.features.public_state import player_public
+            self.public = [player_public(status['players'][str(i)], self.players[i]['ids']) for i in range(3)]
+        self.observations = {}
+
+    def observation(self, seat):
+        if seat not in self.observations:
+            self.observations[seat] = build_obs(self.status, seat, context=self)
+        return self.observations[seat]
 
 
 def _seat_order(agent_seat: int) -> List[int]:
@@ -72,7 +91,7 @@ def compute_action_mask(status: Dict[str, Any], seat_id: int) -> np.ndarray:
     return mask
 
 
-def build_table_features(status: Dict[str, Any], agent_seat: int) -> Dict[str, np.ndarray]:
+def build_table_features(status: Dict[str, Any], agent_seat: int, public_players=None) -> Dict[str, np.ndarray]:
     """Build table-wide features with player rotation (self, left, right).
     
     Returns dict with:
@@ -107,8 +126,13 @@ def build_table_features(status: Dict[str, Any], agent_seat: int) -> Dict[str, n
         r = p["resources"]
         pt = p["points"]
         am = p["amount"]
-        science, jokers[i] = science_state(p)
-        held = discount_flags(p)
+        if public_players is None:
+            science, jokers[i] = science_state(p)
+            held = discount_flags(p)
+        else:
+            science = public_players[sid]['science']
+            jokers[i] = public_players[sid]['jokers']
+            held = public_players[sid]['discounts']
         discounts[i] = [int(flag in held) for flag in DISCOUNTS]
 
         basic[i, :] = np.array(
@@ -158,7 +182,8 @@ def build_hand_ids(status: Dict[str, Any], agent_seat: int) -> np.ndarray:
 def build_obs(
     status: Dict[str, Any], 
     agent_seat: int,
-    feature_version: Literal["v2"] = "v2"
+    feature_version: Literal["v2"] = "v2",
+    *, context=None, public_information=False,
 ) -> Dict[str, Any]:
     """Build full observation dict for the agent.
     
@@ -180,12 +205,18 @@ def build_obs(
         - table_amount: (3, 7) int32 - card counts per player
         - game_meta: (3,) int32 - [era, turn, clockwise]
     """
-    feat = build_table_features(status, agent_seat)
+    if context is None:
+        context = ObservationContext(status, public_information)
+    if context.status is not status:
+        raise ValueError("Observation context belongs to another status")
+    # The base table uses absolute seat order [0, 2, 1].
+    indices = [0 if seat == 0 else 3 - seat for seat in _seat_order(agent_seat)]
+    feat = {key: value[indices] for key, value in context.table.items()}
     mask = compute_action_mask(status, agent_seat)
     hand_ids = build_hand_ids(status, agent_seat)
     
     # Use v2 action features (99 dimensions per action)
-    action_feats = build_action_feats(status, agent_seat, mask)
+    action_feats = build_action_feats(status, agent_seat, mask, context.players)
 
     # Backward compatible global_table: [coins, shields, gear, compass, tablet, raw_total, manu_total]
     basic = feat["table_basic"]  # (3,5)
@@ -224,4 +255,8 @@ def build_obs(
             dtype=np.int32
         ),
     }
+    if context.public_information:
+        from sevenwonders_rl.features.public_state import wonder_actions
+        obs['public_state'] = np.concatenate([context.public[i] for i in _seat_order(agent_seat)])
+        obs['wonder_action_feats'] = wonder_actions(status, agent_seat, mask, context.players)
     return obs

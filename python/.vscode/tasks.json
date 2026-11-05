@@ -1,0 +1,42 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Training starten / fortsetzen (fortlaufend)",
+      "type": "process",
+      "command": "${workspaceFolder:python}/.venv/bin/python",
+      "args": ["-u", "${workspaceFolder:python}/scripts/ppo_training/run_fresh_pair_pfsp.py", "--continuous", "--auto-resume"],
+      "options": {"cwd": "${workspaceFolder:python}"},
+      "problemMatcher": [],
+      "runOptions": {"instanceLimit": 1},
+      "presentation": {"reveal": "always", "panel": "dedicated", "clear": false}
+    },
+    {
+      "label": "Training sauber stoppen (nach aktuellem Update)",
+      "type": "process",
+      "command": "${workspaceFolder:python}/.venv/bin/python",
+      "args": ["${workspaceFolder:python}/scripts/ppo_training/run_fresh_pair_pfsp.py", "--continuous", "--stop"],
+      "options": {"cwd": "${workspaceFolder:python}"},
+      "problemMatcher": [],
+      "presentation": {"reveal": "always", "panel": "dedicated"}
+    },
+    {
+      "label": "Trainings-Dashboard öffnen (fortlaufender Lauf)",
+      "type": "process",
+      "command": "${workspaceFolder:python}/.venv/bin/python",
+      "args": ["${workspaceFolder:python}/scripts/open_dashboard.py", "--run-dir", "runs/continuous-pair-pfsp-v1-seed331"],
+      "options": {"cwd": "${workspaceFolder:python}"},
+      "problemMatcher": [],
+      "presentation": {"reveal": "silent", "panel": "dedicated"}
+    },
+    {
+      "label": "Analyse-Dashboard im Browser öffnen",
+      "type": "process",
+      "command": "${workspaceFolder:python}/.venv/bin/python",
+      "args": ["${workspaceFolder:python}/scripts/open_dashboard.py"],
+      "options": {"cwd": "${workspaceFolder:python}"},
+      "problemMatcher": [],
+      "presentation": {"reveal": "silent", "panel": "dedicated"}
+    }
+  ]
+}

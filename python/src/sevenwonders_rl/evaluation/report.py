@@ -32,7 +32,10 @@ def block_intervals(records):
 
 
 def group_label(value):
-    return Path(value['checkpoint']).stem if isinstance(value, dict) else str(value)
+    if isinstance(value, dict):
+        prefix = value.get('group')
+        return f"{prefix}: {Path(value['checkpoint']).stem}" if prefix else Path(value['checkpoint']).stem
+    return str(value)
 
 
 def summarize_model(records):
@@ -137,6 +140,13 @@ def summarize_model(records):
                                            if 'action_counts' in r])
                            for k in ('discard', 'build_wonder', 'prod_build', 'other')},
         color_legal_opportunities=dict(opportunities))
+    if any('constraint_statistics' in r for r in completed):
+        statistics = Counter()
+        for r in completed:
+            statistics.update(r.get('constraint_statistics', {}))
+        summary['constraint_statistics'] = dict(statistics)
+        summary['science_threshold_counts'] = {str(t): sum(
+            r['points_breakdown']['scientific'] >= t for r in completed) for t in (10, 20, 30)}
     return summary
 
 
@@ -210,6 +220,18 @@ def render_report(report):
             continue
         category_label = LABELS.get(k, 'Handel + Münzen' if k == 'commercial_combined' else 'Gesamt')
         lines.append(f" {category_label:25}" + ''.join(f" {decimal(m['categories'].get(k, {}).get('mean') if m['categories'].get(k) else None):>18}" for m in models.values()))
+    if candidate.get('constraint_statistics'):
+        lines.extend(section('GRÜN-PRIORITÄT: REGELPRÜFUNG'))
+        for name, m in models.items():
+            stats = m.get('constraint_statistics', {})
+            lines.append(f" {model_title(name)}: {stats.get('green_builds', 0)} grüne Bauten / "
+                         f"{stats.get('green_opportunities', 0)} legale Angebote | "
+                         f"{stats.get('restricted_decisions', 0)} beschränkte Entscheidungen | "
+                         f"{stats.get('violations', 0)} Regelverletzungen")
+            lines.append(' Wissenschaftspartien ab 10/20/30 Punkten: ' +
+                         ' / '.join(str(m['science_threshold_counts'][str(t)]) for t in (10, 20, 30)))
+        lines.append(' Beschränkt bedeutet: mindestens eine sonst legale Aktion wurde ausgeschlossen. '
+                     'Das ist kein Nachweis, dass die freie Policy eine andere Aktion gewählt hätte.')
     lines.extend(category_lines(candidate['categories'], detailed=True))
     lines.append(' Durchschnittlicher Kategorieabstand zum selben besten Gegner jeder Partie:')
     for k, stat in candidate['category_margin_to_best'].items():

@@ -1,0 +1,1412 @@
+[
+  {
+    "key": "lumber_yard_age1",
+    "name": "Lumber Yard",
+    "kind": "card",
+    "old_image": "images/cards/Lumber Yard.png",
+    "new_image": "cards/lumber_yard_age1.png",
+    "bga_id": 1,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1020,
+      "y": 2751,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "ore_vein_age1",
+    "name": "Ore Vein",
+    "kind": "card",
+    "old_image": "images/cards/Ore Vein.png",
+    "new_image": "cards/ore_vein_age1.png",
+    "bga_id": 4,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 510,
+      "y": 0,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "stone_pit_age1",
+    "name": "Stone Pit",
+    "kind": "card",
+    "old_image": "images/cards/Stone Pit.png",
+    "new_image": "cards/stone_pit_age1.png",
+    "bga_id": 2,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 0,
+      "y": 0,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "clay_pool_age1",
+    "name": "Clay Pool",
+    "kind": "card",
+    "old_image": "images/cards/Clay Pool.png",
+    "new_image": "cards/clay_pool_age1.png",
+    "bga_id": 3,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 255,
+      "y": 0,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "timber_yard_age1",
+    "name": "Timber Yard",
+    "kind": "card",
+    "old_image": "images/cards/Timber Yard.png",
+    "new_image": "cards/timber_yard_age1.png",
+    "bga_id": 8,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1530,
+      "y": 0,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "clay_pit_age1",
+    "name": "Clay Pit",
+    "kind": "card",
+    "old_image": "images/cards/Clay Pit.png",
+    "new_image": "cards/clay_pit_age1.png",
+    "bga_id": 7,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1275,
+      "y": 0,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "excavation_age1",
+    "name": "Excavation",
+    "kind": "card",
+    "old_image": "images/cards/Excavation.png",
+    "new_image": "cards/excavation_age1.png",
+    "bga_id": 6,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1020,
+      "y": 0,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "forest_cave_age1",
+    "name": "Forest Cave",
+    "kind": "card",
+    "old_image": "images/cards/Forest Cave.png",
+    "new_image": "cards/forest_cave_age1.png",
+    "bga_id": 9,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1785,
+      "y": 0,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "tree_farm_age1",
+    "name": "Tree Farm",
+    "kind": "card",
+    "old_image": "images/cards/Tree Farm.png",
+    "new_image": "cards/tree_farm_age1.png",
+    "bga_id": 5,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 765,
+      "y": 0,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "mine_age1",
+    "name": "Mine",
+    "kind": "card",
+    "old_image": "images/cards/Mine.png",
+    "new_image": "cards/mine_age1.png",
+    "bga_id": 10,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 2040,
+      "y": 0,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "sawmill_age2",
+    "name": "Sawmill",
+    "kind": "card",
+    "old_image": "images/cards/Sawmill.png",
+    "new_image": "cards/sawmill_age2.png",
+    "bga_id": 28,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1530,
+      "y": 786,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "foundry_age2",
+    "name": "Foundry",
+    "kind": "card",
+    "old_image": "images/cards/Foundry.png",
+    "new_image": "cards/foundry_age2.png",
+    "bga_id": 31,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 2295,
+      "y": 786,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "quarry_age2",
+    "name": "Quarry",
+    "kind": "card",
+    "old_image": "images/cards/Quarry.png",
+    "new_image": "cards/quarry_age2.png",
+    "bga_id": 29,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1785,
+      "y": 786,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "brickyard_age2",
+    "name": "Brickyard",
+    "kind": "card",
+    "old_image": "images/cards/Brickyard.png",
+    "new_image": "cards/brickyard_age2.png",
+    "bga_id": 30,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 2040,
+      "y": 786,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "glassworks_age1",
+    "name": "Glassworks",
+    "kind": "card",
+    "old_image": "images/cards/Glassworks2.png",
+    "new_image": "cards/glassworks_age1.png",
+    "bga_id": 12,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 0,
+      "y": 393,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "glassworks_age2",
+    "name": "Glassworks",
+    "kind": "card",
+    "old_image": "images/cards/Glassworks.png",
+    "new_image": "cards/glassworks_age2.png",
+    "bga_id": 33,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 0,
+      "y": 393,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "press_age1",
+    "name": "Press",
+    "kind": "card",
+    "old_image": "images/cards/Press.png",
+    "new_image": "cards/press_age1.png",
+    "bga_id": 13,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 255,
+      "y": 393,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "press_age2",
+    "name": "Press",
+    "kind": "card",
+    "old_image": "images/cards/Press2.png",
+    "new_image": "cards/press_age2.png",
+    "bga_id": 34,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 255,
+      "y": 393,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "loom_age1",
+    "name": "Loom",
+    "kind": "card",
+    "old_image": "images/cards/Loom.png",
+    "new_image": "cards/loom_age1.png",
+    "bga_id": 11,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 2295,
+      "y": 0,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "loom_age2",
+    "name": "Loom",
+    "kind": "card",
+    "old_image": "images/cards/Loom2.png",
+    "new_image": "cards/loom_age2.png",
+    "bga_id": 32,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 2295,
+      "y": 0,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "altar_age1",
+    "name": "Altar",
+    "kind": "card",
+    "old_image": "images/cards/Altar.png",
+    "new_image": "cards/altar_age1.png",
+    "bga_id": 16,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1020,
+      "y": 786,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "theater_age1",
+    "name": "Theater",
+    "kind": "card",
+    "old_image": "images/cards/Theater.png",
+    "new_image": "cards/theater_age1.png",
+    "bga_id": 17,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 510,
+      "y": 786,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "well_age1",
+    "name": "Well",
+    "kind": "card",
+    "old_image": "images/cards/Pawnshop.png",
+    "new_image": "cards/well_age1.png",
+    "bga_id": 14,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 765,
+      "y": 786,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "baths_age1",
+    "name": "Baths",
+    "kind": "card",
+    "old_image": "images/cards/Baths.png",
+    "new_image": "cards/baths_age1.png",
+    "bga_id": 15,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1275,
+      "y": 786,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "courthouse_age2",
+    "name": "Courthouse",
+    "kind": "card",
+    "old_image": "images/cards/Courthouse.png",
+    "new_image": "cards/courthouse_age2.png",
+    "bga_id": 38,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 510,
+      "y": 1572,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "temple_age2",
+    "name": "Temple",
+    "kind": "card",
+    "old_image": "images/cards/Temple.png",
+    "new_image": "cards/temple_age2.png",
+    "bga_id": 36,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1020,
+      "y": 1572,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "statue_age2",
+    "name": "Statue",
+    "kind": "card",
+    "old_image": "images/cards/Statue.png",
+    "new_image": "cards/statue_age2.png",
+    "bga_id": 37,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 765,
+      "y": 1572,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "aqueduct_age2",
+    "name": "Aqueduct",
+    "kind": "card",
+    "old_image": "images/cards/Aqueduct.png",
+    "new_image": "cards/aqueduct_age2.png",
+    "bga_id": 35,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1275,
+      "y": 1572,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "gardens_age3",
+    "name": "Gardens",
+    "kind": "card",
+    "old_image": "images/cards/Gardens.png",
+    "new_image": "cards/gardens_age3.png",
+    "bga_id": 62,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 0,
+      "y": 2358,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "senate_age3",
+    "name": "Senate",
+    "kind": "card",
+    "old_image": "images/cards/Senate.png",
+    "new_image": "cards/senate_age3.png",
+    "bga_id": 65,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 765,
+      "y": 2358,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "town_hall_age3",
+    "name": "Town Hall",
+    "kind": "card",
+    "old_image": "images/cards/Town Hall.png",
+    "new_image": "cards/town_hall_age3.png",
+    "bga_id": 63,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 510,
+      "y": 2358,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "pantheon_age3",
+    "name": "Pantheon",
+    "kind": "card",
+    "old_image": "images/cards/Pantheon.png",
+    "new_image": "cards/pantheon_age3.png",
+    "bga_id": 61,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 255,
+      "y": 2358,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "palace_age3",
+    "name": "Palace",
+    "kind": "card",
+    "old_image": "images/cards/Palace.png",
+    "new_image": "cards/palace_age3.png",
+    "bga_id": 64,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 2295,
+      "y": 1965,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "tavern_age1",
+    "name": "Tavern",
+    "kind": "card",
+    "old_image": "images/cards/Tavern.png",
+    "new_image": "cards/tavern_age1.png",
+    "bga_id": 18,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 255,
+      "y": 786,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "west_trading_post_age1",
+    "name": "West Trading Post",
+    "kind": "card",
+    "old_image": "images/cards/West Trading Post.png",
+    "new_image": "cards/west_trading_post_age1.png",
+    "bga_id": 20,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 2295,
+      "y": 393,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "east_trading_post_age1",
+    "name": "East Trading Post",
+    "kind": "card",
+    "old_image": "images/cards/East Trading Post.png",
+    "new_image": "cards/east_trading_post_age1.png",
+    "bga_id": 19,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 2040,
+      "y": 393,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "marketplace_age1",
+    "name": "Marketplace",
+    "kind": "card",
+    "old_image": "images/cards/Marketplace.png",
+    "new_image": "cards/marketplace_age1.png",
+    "bga_id": 21,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 0,
+      "y": 786,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "caravansery_age2",
+    "name": "Caravansery",
+    "kind": "card",
+    "old_image": "images/cards/Caravansery.png",
+    "new_image": "cards/caravansery_age2.png",
+    "bga_id": 40,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 255,
+      "y": 1572,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "forum_age2",
+    "name": "Forum",
+    "kind": "card",
+    "old_image": "images/cards/Forum.png",
+    "new_image": "cards/forum_age2.png",
+    "bga_id": 39,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 0,
+      "y": 1572,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "vineyard_age2",
+    "name": "Vineyard",
+    "kind": "card",
+    "old_image": "images/cards/Vineyard.png",
+    "new_image": "cards/vineyard_age2.png",
+    "bga_id": 41,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 2040,
+      "y": 1179,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "bazar_age2",
+    "name": "Bazar",
+    "kind": "card",
+    "old_image": "images/cards/Bazar.png",
+    "new_image": "cards/bazar_age2.png",
+    "bga_id": 42,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 2295,
+      "y": 1179,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "lighthouse_age3",
+    "name": "Lighthouse",
+    "kind": "card",
+    "old_image": "images/cards/Lighthouse.png",
+    "new_image": "cards/lighthouse_age3.png",
+    "bga_id": 67,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 2040,
+      "y": 1965,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "haven_age3",
+    "name": "Haven",
+    "kind": "card",
+    "old_image": "images/cards/Haven.png",
+    "new_image": "cards/haven_age3.png",
+    "bga_id": 66,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1785,
+      "y": 1965,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "chamber_of_commerce_age3",
+    "name": "Chamber of Commerce",
+    "kind": "card",
+    "old_image": "images/cards/Chamber of Commerce.png",
+    "new_image": "cards/chamber_of_commerce_age3.png",
+    "bga_id": 68,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1530,
+      "y": 1965,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "ludus_age3",
+    "name": "Ludus",
+    "kind": "card",
+    "old_image": null,
+    "new_image": "cards/ludus_age3.png",
+    "bga_id": 79,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1275,
+      "y": 2751,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "arena_age3",
+    "name": "Arena",
+    "kind": "card",
+    "old_image": "images/cards/Arena.png",
+    "new_image": "cards/arena_age3.png",
+    "bga_id": 69,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1275,
+      "y": 1965,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "guard_tower_age1",
+    "name": "Guard Tower",
+    "kind": "card",
+    "old_image": "images/cards/Guard Tower.png",
+    "new_image": "cards/guard_tower_age1.png",
+    "bga_id": 24,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1020,
+      "y": 393,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "barracks_age1",
+    "name": "Barracks",
+    "kind": "card",
+    "old_image": "images/cards/Barracks.png",
+    "new_image": "cards/barracks_age1.png",
+    "bga_id": 23,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 510,
+      "y": 393,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "stockade_age1",
+    "name": "Stockade",
+    "kind": "card",
+    "old_image": "images/cards/Stockade.png",
+    "new_image": "cards/stockade_age1.png",
+    "bga_id": 22,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 765,
+      "y": 393,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "stables_age2",
+    "name": "Stables",
+    "kind": "card",
+    "old_image": "images/cards/Stables.png",
+    "new_image": "cards/stables_age2.png",
+    "bga_id": 45,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 0,
+      "y": 1179,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "archery_range_age2",
+    "name": "Archery Range",
+    "kind": "card",
+    "old_image": "images/cards/Archery Range.png",
+    "new_image": "cards/archery_range_age2.png",
+    "bga_id": 46,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 510,
+      "y": 1179,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "walls_age2",
+    "name": "Walls",
+    "kind": "card",
+    "old_image": "images/cards/Walls.png",
+    "new_image": "cards/walls_age2.png",
+    "bga_id": 43,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 255,
+      "y": 1179,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "training_ground_age2",
+    "name": "Training Ground",
+    "kind": "card",
+    "old_image": "images/cards/Training Ground.png",
+    "new_image": "cards/training_ground_age2.png",
+    "bga_id": 44,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 765,
+      "y": 1179,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "arsenal_age3",
+    "name": "Arsenal",
+    "kind": "card",
+    "old_image": "images/cards/Arsenal.png",
+    "new_image": "cards/arsenal_age3.png",
+    "bga_id": 72,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1785,
+      "y": 1572,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "siege_workshop_age3",
+    "name": "Siege Workshop",
+    "kind": "card",
+    "old_image": "images/cards/Siege Workshop.png",
+    "new_image": "cards/siege_workshop_age3.png",
+    "bga_id": 73,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 2295,
+      "y": 1572,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "fortifications_age3",
+    "name": "Fortifications",
+    "kind": "card",
+    "old_image": "images/cards/Fortifications.png",
+    "new_image": "cards/fortifications_age3.png",
+    "bga_id": 70,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 2040,
+      "y": 1572,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "circus_age3",
+    "name": "Circus",
+    "kind": "card",
+    "old_image": "images/cards/Circus.png",
+    "new_image": "cards/circus_age3.png",
+    "bga_id": 71,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1530,
+      "y": 1572,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "castrum_age3",
+    "name": "Castrum",
+    "kind": "card",
+    "old_image": null,
+    "new_image": "cards/castrum_age3.png",
+    "bga_id": 80,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1530,
+      "y": 2751,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "scriptorium_age1",
+    "name": "Scriptorium",
+    "kind": "card",
+    "old_image": "images/cards/Scriptorium.png",
+    "new_image": "cards/scriptorium_age1.png",
+    "bga_id": 27,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1530,
+      "y": 393,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "apothecary_age1",
+    "name": "Apothecary",
+    "kind": "card",
+    "old_image": "images/cards/Apothecary.png",
+    "new_image": "cards/apothecary_age1.png",
+    "bga_id": 25,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1275,
+      "y": 393,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "workshop_age1",
+    "name": "Workshop",
+    "kind": "card",
+    "old_image": "images/cards/Workshop.png",
+    "new_image": "cards/workshop_age1.png",
+    "bga_id": 26,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1785,
+      "y": 393,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "dispensary_age2",
+    "name": "Dispensary",
+    "kind": "card",
+    "old_image": "images/cards/Dispensary.png",
+    "new_image": "cards/dispensary_age2.png",
+    "bga_id": 47,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1530,
+      "y": 1179,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "laboratory_age2",
+    "name": "Laboratory",
+    "kind": "card",
+    "old_image": "images/cards/Laboratory.png",
+    "new_image": "cards/laboratory_age2.png",
+    "bga_id": 48,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1020,
+      "y": 1179,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "library_age2",
+    "name": "Library",
+    "kind": "card",
+    "old_image": "images/cards/Library.png",
+    "new_image": "cards/library_age2.png",
+    "bga_id": 49,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1785,
+      "y": 1179,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "school_age2",
+    "name": "School",
+    "kind": "card",
+    "old_image": "images/cards/School.png",
+    "new_image": "cards/school_age2.png",
+    "bga_id": 50,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1275,
+      "y": 1179,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "university_age3",
+    "name": "University",
+    "kind": "card",
+    "old_image": "images/cards/University.png",
+    "new_image": "cards/university_age3.png",
+    "bga_id": 76,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 510,
+      "y": 1965,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "study_age3",
+    "name": "Study",
+    "kind": "card",
+    "old_image": "images/cards/Study.png",
+    "new_image": "cards/study_age3.png",
+    "bga_id": 78,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1020,
+      "y": 1965,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "lodge_age3",
+    "name": "Lodge",
+    "kind": "card",
+    "old_image": "images/cards/Lodge.png",
+    "new_image": "cards/lodge_age3.png",
+    "bga_id": 74,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 765,
+      "y": 1965,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "academy_age3",
+    "name": "Academy",
+    "kind": "card",
+    "old_image": "images/cards/Academy.png",
+    "new_image": "cards/academy_age3.png",
+    "bga_id": 77,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 255,
+      "y": 1965,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "observatory_age3",
+    "name": "Observatory",
+    "kind": "card",
+    "old_image": "images/cards/Observatory.png",
+    "new_image": "cards/observatory_age3.png",
+    "bga_id": 75,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 0,
+      "y": 1965,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "workers_guild_age3",
+    "name": "Workers Guild",
+    "kind": "card",
+    "old_image": "images/cards/Workers Guild.png",
+    "new_image": "cards/workers_guild_age3.png",
+    "bga_id": 51,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1020,
+      "y": 2358,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "craftsmens_guild_age3",
+    "name": "Craftsmens Guild",
+    "kind": "card",
+    "old_image": "images/cards/Craftmens Guild.png",
+    "new_image": "cards/craftsmens_guild_age3.png",
+    "bga_id": 52,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1275,
+      "y": 2358,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "magistrates_guild_age3",
+    "name": "Magistrates Guild",
+    "kind": "card",
+    "old_image": "images/cards/Magistrates Guild.png",
+    "new_image": "cards/magistrates_guild_age3.png",
+    "bga_id": 59,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 510,
+      "y": 2751,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "traders_guild_age3",
+    "name": "Traders Guild",
+    "kind": "card",
+    "old_image": "images/cards/Traders Guild.png",
+    "new_image": "cards/traders_guild_age3.png",
+    "bga_id": 53,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1530,
+      "y": 2358,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "spies_guild_age3",
+    "name": "Spies Guild",
+    "kind": "card",
+    "old_image": "images/cards/Spies Guild.png",
+    "new_image": "cards/spies_guild_age3.png",
+    "bga_id": 55,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 2040,
+      "y": 2358,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "philosophers_guild_age3",
+    "name": "Philosophers Guild",
+    "kind": "card",
+    "old_image": "images/cards/Philosophers Guild.png",
+    "new_image": "cards/philosophers_guild_age3.png",
+    "bga_id": 54,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 1785,
+      "y": 2358,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "shipowners_guild_age3",
+    "name": "Shipowners Guild",
+    "kind": "card",
+    "old_image": "images/cards/Shipowners Guild.png",
+    "new_image": "cards/shipowners_guild_age3.png",
+    "bga_id": 57,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 0,
+      "y": 2751,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "scientists_guild_age3",
+    "name": "Scientists Guild",
+    "kind": "card",
+    "old_image": "images/cards/Scientists Guild.png",
+    "new_image": "cards/scientists_guild_age3.png",
+    "bga_id": 58,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 255,
+      "y": 2751,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "decorators_guild_age3",
+    "name": "Decorators Guild",
+    "kind": "card",
+    "old_image": "images/cards/Strategists Guild.png",
+    "new_image": "cards/decorators_guild_age3.png",
+    "bga_id": 56,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 2295,
+      "y": 2358,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "builders_guild_age3",
+    "name": "Builders Guild",
+    "kind": "card",
+    "old_image": "images/cards/Builders Guild.png",
+    "new_image": "cards/builders_guild_age3.png",
+    "bga_id": 60,
+    "bga_sprite": {
+      "file": "img/cards_v2.jpg",
+      "x": 765,
+      "y": 2751,
+      "width": 255,
+      "height": 393
+    }
+  },
+  {
+    "key": "gizah_a",
+    "name": "Gizah Tag",
+    "kind": "wonder",
+    "old_image": "images/wonders/board_0.png",
+    "new_image": "wonders/gizah_a.png",
+    "bga_id": 1,
+    "bga_sprite": {
+      "file": "img/boards_v2.jpg",
+      "x": 0,
+      "y": 0,
+      "width": 450,
+      "height": 223
+    }
+  },
+  {
+    "key": "babylon_a",
+    "name": "Babylon Tag",
+    "kind": "wonder",
+    "old_image": "images/wonders/board_1.png",
+    "new_image": "wonders/babylon_a.png",
+    "bga_id": 2,
+    "bga_sprite": {
+      "file": "img/boards_v2.jpg",
+      "x": 0,
+      "y": 223,
+      "width": 450,
+      "height": 223
+    }
+  },
+  {
+    "key": "olympia_a",
+    "name": "Olympia Tag",
+    "kind": "wonder",
+    "old_image": "images/wonders/board_2.png",
+    "new_image": "wonders/olympia_a.png",
+    "bga_id": 3,
+    "bga_sprite": {
+      "file": "img/boards_v2.jpg",
+      "x": 0,
+      "y": 446,
+      "width": 450,
+      "height": 223
+    }
+  },
+  {
+    "key": "rhodos_a",
+    "name": "Rhodos Tag",
+    "kind": "wonder",
+    "old_image": "images/wonders/board_3.png",
+    "new_image": "wonders/rhodos_a.png",
+    "bga_id": 4,
+    "bga_sprite": {
+      "file": "img/boards_v2.jpg",
+      "x": 0,
+      "y": 669,
+      "width": 450,
+      "height": 223
+    }
+  },
+  {
+    "key": "ephesos_a",
+    "name": "Ephesos Tag",
+    "kind": "wonder",
+    "old_image": "images/wonders/board_4.png",
+    "new_image": "wonders/ephesos_a.png",
+    "bga_id": 5,
+    "bga_sprite": {
+      "file": "img/boards_v2.jpg",
+      "x": 0,
+      "y": 892,
+      "width": 450,
+      "height": 223
+    }
+  },
+  {
+    "key": "alexandria_a",
+    "name": "Alexandria Tag",
+    "kind": "wonder",
+    "old_image": "images/wonders/board_5.png",
+    "new_image": "wonders/alexandria_a.png",
+    "bga_id": 6,
+    "bga_sprite": {
+      "file": "img/boards_v2.jpg",
+      "x": 0,
+      "y": 1115,
+      "width": 450,
+      "height": 223
+    }
+  },
+  {
+    "key": "halikarnassos_a",
+    "name": "Halikarnassos Tag",
+    "kind": "wonder",
+    "old_image": "images/wonders/board_6.png",
+    "new_image": "wonders/halikarnassos_a.png",
+    "bga_id": 7,
+    "bga_sprite": {
+      "file": "img/boards_v2.jpg",
+      "x": 0,
+      "y": 1338,
+      "width": 450,
+      "height": 223
+    }
+  },
+  {
+    "key": "gizah_b",
+    "name": "Gizah Nacht",
+    "kind": "wonder",
+    "old_image": "images/wonders/board_7.png",
+    "new_image": "wonders/gizah_b.png",
+    "bga_id": 8,
+    "bga_sprite": {
+      "file": "img/boards_v2.jpg",
+      "x": 0,
+      "y": 1561,
+      "width": 450,
+      "height": 223
+    }
+  },
+  {
+    "key": "babylon_b",
+    "name": "Babylon Nacht",
+    "kind": "wonder",
+    "old_image": "images/wonders/board_8.png",
+    "new_image": "wonders/babylon_b.png",
+    "bga_id": 9,
+    "bga_sprite": {
+      "file": "img/boards_v2.jpg",
+      "x": 0,
+      "y": 1784,
+      "width": 450,
+      "height": 223
+    }
+  },
+  {
+    "key": "olympia_b",
+    "name": "Olympia Nacht",
+    "kind": "wonder",
+    "old_image": "images/wonders/board_9.png",
+    "new_image": "wonders/olympia_b.png",
+    "bga_id": 10,
+    "bga_sprite": {
+      "file": "img/boards_v2.jpg",
+      "x": 0,
+      "y": 2007,
+      "width": 450,
+      "height": 223
+    }
+  },
+  {
+    "key": "rhodos_b",
+    "name": "Rhodos Nacht",
+    "kind": "wonder",
+    "old_image": "images/wonders/board_10.png",
+    "new_image": "wonders/rhodos_b.png",
+    "bga_id": 11,
+    "bga_sprite": {
+      "file": "img/boards_v2.jpg",
+      "x": 0,
+      "y": 2230,
+      "width": 450,
+      "height": 223
+    }
+  },
+  {
+    "key": "ephesos_b",
+    "name": "Ephesos Nacht",
+    "kind": "wonder",
+    "old_image": "images/wonders/board_11.png",
+    "new_image": "wonders/ephesos_b.png",
+    "bga_id": 12,
+    "bga_sprite": {
+      "file": "img/boards_v2.jpg",
+      "x": 0,
+      "y": 2453,
+      "width": 450,
+      "height": 223
+    }
+  },
+  {
+    "key": "alexandria_b",
+    "name": "Alexandria Nacht",
+    "kind": "wonder",
+    "old_image": "images/wonders/board_12.png",
+    "new_image": "wonders/alexandria_b.png",
+    "bga_id": 13,
+    "bga_sprite": {
+      "file": "img/boards_v2.jpg",
+      "x": 0,
+      "y": 2676,
+      "width": 450,
+      "height": 223
+    }
+  },
+  {
+    "key": "halikarnassos_b",
+    "name": "Halikarnassos Nacht",
+    "kind": "wonder",
+    "old_image": "images/wonders/board_13.png",
+    "new_image": "wonders/halikarnassos_b.png",
+    "bga_id": 14,
+    "bga_sprite": {
+      "file": "img/boards_v2.jpg",
+      "x": 0,
+      "y": 2899,
+      "width": 450,
+      "height": 223
+    }
+  }
+]

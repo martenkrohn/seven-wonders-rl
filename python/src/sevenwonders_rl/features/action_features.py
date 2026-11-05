@@ -10,6 +10,7 @@ Philosophy: No lossy aggregation. Preserve all information.
 """
 
 from typing import Dict, Any, List, Set, Tuple, Optional
+from functools import lru_cache
 import numpy as np
 from sevenwonders_rl.data.cards import by_id, by_name_strict, get_chain_to_count
 from sevenwonders_rl.data.wonders import wonder_by_id
@@ -87,6 +88,7 @@ def _resolve_built_card_ids(status_player: Dict[str, Any]) -> List[int]:
     return built_ids(status_player)
 
 
+@lru_cache(maxsize=256)
 def _get_card_production(card_id: int) -> Dict[str, int]:
     """Get FIXED production from a card.
     
@@ -280,6 +282,7 @@ def _compute_tradable_supply(
     return supply
 
 
+@lru_cache(maxsize=256)
 def _extract_card_effects(card_id: int) -> Dict[str, int]:
     """Extract immediate effect deltas from a card."""
     card = by_id(card_id)
@@ -302,8 +305,8 @@ def _extract_card_effects(card_id: int) -> Dict[str, int]:
     deltas['delta_science_jokers'] = int('sci_extra' in science)
     
     # Production deltas
+    prod = _get_card_production(card_id)
     for res in RESOURCE_ORDER:
-        prod = _get_card_production(card_id)
         deltas[f'delta_prod_{res}'] = prod.get(res, 0)
     
     # Choice production
@@ -328,126 +331,62 @@ def _extract_card_effects(card_id: int) -> Dict[str, int]:
     return deltas
 
 
-def _build_player_context(
-    status: Dict[str, Any],
-    agent_seat: int,
-    player_idx: int,
-) -> PlayerContext:
-    """Build player context for the agent (player_idx=0) or neighbors.
-    
-    Args:
-        status: game_status.json
-        agent_seat: Which seat is the agent
-        player_idx: 0=agent, 1=left neighbor, 2=right neighbor
+def prepare_players(status):
+    """Public state shared by all three seat observations of one status.
+
+    These objects are owned by the observation context, never attached to the
+    engine JSON and never reused for a later status.
     """
+    result = []
+    for seat in range(3):
+        player = status['players'][str(seat)]
+        ids = built_ids(player)
+        science, jokers = science_state(player, ids)
+        wonder_id = player.get('wonder_id', 0)
+        stage = player.get('wonder_stage', 0)
+        wonder = wonder_by_id(wonder_id)
+        own_choice = _extract_own_choice_resources(ids)
+        own_choice.extend(_extract_wonder_choice_resources(wonder_id, stage))
+        result.append(dict(
+            ids=ids, science=science, jokers=jokers,
+            discounts=discount_flags(player, ids),
+            production={r: player.get('resources', {}).get(r, 0) for r in RESOURCE_ORDER},
+            choice=own_choice, supply=_compute_tradable_supply(player, ids, []),
+            tradable_choice=_compute_neighbor_choice_supply(ids),
+            coins=player.get('resources', {}).get('coins', 0),
+            shields=player.get('resources', {}).get('shields', 0),
+            wonder_id=wonder_id, stage=stage,
+            max_stages=len(wonder['stages']) if wonder else 1))
+    return result
+
+
+def _build_player_context(status, agent_seat, player_idx, public_players=None):
+    players = prepare_players(status) if public_players is None else public_players
     order = _seat_order(agent_seat)
-    seat_id = order[player_idx]
-    p = status['players'][str(seat_id)]
-    
-    # Get built cards
-    built_card_ids = _resolve_built_card_ids(p)
-    
-    # Basic info
-    current_coins = p.get('resources', {}).get('coins', 0)
-    
-    # Discount flags
-    held_discounts = discount_flags(p)
-    
-    # Own production (all production, including non-tradable)
-    own_production = {}
-    for res in RESOURCE_ORDER:
-        own_production[res] = p.get('resources', {}).get(res, 0)
-    
-    # Wonder info (get early for choice resource extraction)
-    wonder_id = p.get('wonder_id', 0)
-    wonder_stage = p.get('wonder_stage', 0)
-    
-    # Choice resources from player's built cards AND wonder stages (for trade planning)
-    own_choice_resources = _extract_own_choice_resources(built_card_ids)
-    own_choice_resources.extend(_extract_wonder_choice_resources(wonder_id, wonder_stage))
-    
-    # Shields
-    own_shields = p.get('resources', {}).get('shields', 0)
-    
-    # Science
-    own_science, own_jokers = science_state(p)
-    
-    # Neighbor supply (tradable only)
+    own = players[order[player_idx]]
     if player_idx == 0:
-        # For agent, get left and right neighbor supply
-        left_seat = order[1]
-        right_seat = order[2]
-        
-        left_p = status['players'][str(left_seat)]
-        right_p = status['players'][str(right_seat)]
-        
-        left_built = _resolve_built_card_ids(left_p)
-        right_built = _resolve_built_card_ids(right_p)
-        
-        left_choice_supply = _compute_neighbor_choice_supply(left_built)
-        right_choice_supply = _compute_neighbor_choice_supply(right_built)
-        
-        left_supply = _compute_tradable_supply(left_p, left_built, [])
-        right_supply = _compute_tradable_supply(right_p, right_built, [])
-        
-        left_shields = left_p.get('resources', {}).get('shields', 0)
-        right_shields = right_p.get('resources', {}).get('shields', 0)
-        
-        left_science, left_jokers = science_state(left_p)
-        right_science, right_jokers = science_state(right_p)
-        
-        # Wonder progress
-        left_wonder = wonder_by_id(left_p.get('wonder_id', 0))
-        right_wonder = wonder_by_id(right_p.get('wonder_id', 0))
-        
-        left_wonder_stages = left_p.get('wonder_stage', 0)
-        left_wonder_max_stages = len(left_wonder['stages']) if left_wonder else 1
-        
-        right_wonder_stages = right_p.get('wonder_stage', 0)
-        right_wonder_max_stages = len(right_wonder['stages']) if right_wonder else 1
-        
+        left, right = players[order[1]], players[order[2]]
     else:
-        # For neighbors, we don't need their neighbor info
-        left_supply = {res: 0 for res in RESOURCE_ORDER}
-        right_supply = {res: 0 for res in RESOURCE_ORDER}
-        left_shields = 0
-        right_shields = 0
-        left_science = {sym: 0 for sym in SCIENCE_SYMBOLS}
-        right_science = {sym: 0 for sym in SCIENCE_SYMBOLS}
-        left_wonder_stages = 0
-        left_wonder_max_stages = 1
-        right_wonder_stages = 0
-        right_wonder_max_stages = 1
-        left_choice_supply = []
-        right_choice_supply = []
-        left_jokers = right_jokers = 0
-    
+        # Preserve the historical standalone context contract for neighbours.
+        empty = dict(supply={r: 0 for r in RESOURCE_ORDER}, tradable_choice=[],
+                     shields=0, science={s: 0 for s in SCIENCE_SYMBOLS},
+                     jokers=0, stage=0, max_stages=1)
+        left = right = empty
     context = PlayerContext(
-        current_coins=current_coins,
-        discount_flags=held_discounts,
-        built_card_ids=built_card_ids,
-        own_production=own_production,
-        own_choice_resources=own_choice_resources,
-        left_supply=left_supply,
-        left_choice_supply=left_choice_supply,
-        right_supply=right_supply,
-        right_choice_supply=right_choice_supply,
-        wonder_id=wonder_id,
-        wonder_stage=wonder_stage,
-        own_shields=own_shields,
-        own_science=own_science,
-        left_shields=left_shields,
-        left_science=left_science,
-        left_wonder_stages=left_wonder_stages,
-        left_wonder_max_stages=left_wonder_max_stages,
-        right_shields=right_shields,
-        right_science=right_science,
-        right_wonder_stages=right_wonder_stages,
-        right_wonder_max_stages=right_wonder_max_stages,
-    )
-    context.own_science_jokers = own_jokers
-    context.left_science_jokers = left_jokers
-    context.right_science_jokers = right_jokers
+        current_coins=own['coins'], discount_flags=own['discounts'],
+        built_card_ids=own['ids'], own_production=own['production'],
+        own_choice_resources=own['choice'],
+        left_supply=left['supply'], left_choice_supply=left['tradable_choice'],
+        right_supply=right['supply'], right_choice_supply=right['tradable_choice'],
+        wonder_id=own['wonder_id'], wonder_stage=own['stage'],
+        own_shields=own['shields'], own_science=own['science'],
+        left_shields=left['shields'], left_science=left['science'],
+        left_wonder_stages=left['stage'], left_wonder_max_stages=left['max_stages'],
+        right_shields=right['shields'], right_science=right['science'],
+        right_wonder_stages=right['stage'], right_wonder_max_stages=right['max_stages'])
+    context.own_science_jokers = own['jokers']
+    context.left_science_jokers = left['jokers']
+    context.right_science_jokers = right['jokers']
     return context
 
 
@@ -625,6 +564,7 @@ def build_action_feats(
     status: Dict[str, Any],
     agent_seat: int,
     action_mask: np.ndarray,
+    public_players=None,
 ) -> np.ndarray:
     """Build per-action feature matrix V2.
     
@@ -639,7 +579,7 @@ def build_action_feats(
     feats = np.zeros((N_ACTIONS, K), dtype=np.float32)
     
     # Build player context
-    ctx = _build_player_context(status, agent_seat, player_idx=0)
+    ctx = _build_player_context(status, agent_seat, player_idx=0, public_players=public_players)
     
     # Get hand
     p = status['players'][str(agent_seat)]
@@ -653,6 +593,13 @@ def build_action_feats(
     # Get playable cards set
     playable_set = set(p['cards_playable'])
     
+    # State columns are identical for every legal nonempty action. Fill once;
+    # retain the original header-only rows for illegal and empty slots.
+    state_row = np.zeros((1, K), dtype=np.float32)
+    _fill_game_state_feats(state_row, 0, status, ctx, agent_seat)
+    _fill_science_state_feats(state_row, 0, ctx)
+    _fill_opponent_state_feats(state_row, 0, ctx)
+
     # For each action
     for action_idx in range(N_ACTIONS):
         is_legal = (action_mask[action_idx] == 1)
@@ -676,9 +623,7 @@ def build_action_feats(
             continue
         
         # Fill game state features (same for all legal actions)
-        _fill_game_state_feats(feats, action_idx, status, ctx, agent_seat)
-        _fill_science_state_feats(feats, action_idx, ctx)
-        _fill_opponent_state_feats(feats, action_idx, ctx)
+        feats[action_idx] += state_row[0]
         
         # Get card info
         card_id = hand_ids_padded[slot]
@@ -694,7 +639,8 @@ def build_action_feats(
             _fill_build_structure_feats(feats, action_idx, card, card_name, ctx, playable_set)
         
         elif action_type == 1:  # build_wonder
-            # TODO: Wonder features deferred for now
+            # Preserve the historical 99-column contract. Opt-in wonder costs and
+            # effects are appended separately by features.public_state.
             pass
         
         elif action_type == 2:  # build_hand_free

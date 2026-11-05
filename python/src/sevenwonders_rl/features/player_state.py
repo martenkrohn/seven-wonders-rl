@@ -20,10 +20,10 @@ def wonder_effects(player):
             yield from stage.get('effects', [])
 
 
-def science_state(player):
+def science_state(player, card_ids=None):
     counts = dict.fromkeys(SCIENCE_SYMBOLS, 0)
     jokers = 0
-    for card_id in built_ids(player):
+    for card_id in built_ids(player) if card_ids is None else card_ids:
         symbols = by_id(card_id).get('effects', {}).get('science') or []
         for symbol in symbols:
             if symbol in counts:
@@ -34,9 +34,9 @@ def science_state(player):
     return counts, jokers
 
 
-def discount_flags(player):
+def discount_flags(player, card_ids=None):
     flags = set()
-    for card_id in built_ids(player):
+    for card_id in built_ids(player) if card_ids is None else card_ids:
         flags.update(by_id(card_id).get('effects', {}).get('discount_flags') or [])
     if any(effect.get('type') == 'buy_raw_cheap' for effect in wonder_effects(player)):
         flags.update(('raw_cheap_east', 'raw_cheap_west'))

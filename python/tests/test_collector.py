@@ -24,6 +24,9 @@ def observation(value):
 
 
 class ValueModel:
+    def forward_values(self, global_obs):
+        return global_obs[:, 0]
+
     def forward_batch(self, global_obs, features):
         return torch.zeros(len(global_obs), 28), global_obs[:, 0]
 
@@ -61,3 +64,13 @@ def test_collector_rejects_transport_failure_instead_of_learning_from_it():
     with pytest.raises(EngineError, match="Invalid transition"):
         trainer.collect_rollout(ValueModel(), [FakeEnvironment(invalid=True)], [observation(0)],
             1, torch.Generator().manual_seed(0), lambda *args: pytest.fail("Must not reset invalid transition"), TimingBuckets())
+
+
+def test_all_terminal_batch_does_not_bootstrap():
+    class TerminalModel(ValueModel):
+        def forward_values(self, global_obs):
+            pytest.fail("Terminal batches must not invoke the critic")
+    rollout, _ = trainer_module().collect_rollout(TerminalModel(),
+        [FakeEnvironment(terminated=True)], [observation(2)], 1,
+        torch.Generator().manual_seed(0), lambda *args: observation(1000), TimingBuckets())
+    torch.testing.assert_close(rollout['next_values'], torch.zeros(1, 1))

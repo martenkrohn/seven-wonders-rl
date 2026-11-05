@@ -41,7 +41,7 @@ from sevenwonders_rl.policies.feature_policy_base import get_action_type
 from sevenwonders_rl.policies.specialist_policies import _is_science_action, _is_military_action
 from sevenwonders_rl.features.action_feature_schema import IDX
 from sevenwonders_rl.utils.ppo_model import ActorCritic
-from sevenwonders_rl.utils.ppo_utils import flatten_global
+from sevenwonders_rl.utils.ppo_utils import select_action_from_obs
 from sevenwonders_rl.utils.checkpoints import load_model as load_checkpoint_model, manifest, file_hash
 from sevenwonders_rl.utils.runtime import atomic_json, run_io_root
 from sevenwonders_rl.utils.seeding import derive_seed
@@ -113,26 +113,11 @@ class PPOPolicyLogger:
     events: List[ActionEvent] = field(default_factory=list)
     deterministic: bool = True
 
-    def select_action(self, obs: Dict[str, Any], rng: Optional[np.random.Generator] = None) -> int:
-        # Convert obs to tensors
-        global_feat = torch.from_numpy(flatten_global(obs)).unsqueeze(0).to(self.device)
-        action_feats = torch.from_numpy(np.asarray(obs["action_feats"], dtype=np.float32)).unsqueeze(0).to(self.device)
-        action_mask = torch.from_numpy(np.asarray(obs["action_mask"], dtype=np.int8)).unsqueeze(0).to(self.device)
-
-        with torch.no_grad():
-            action_logits, _ = self.model.forward_batch(global_feat, action_feats)
-            
-            # Apply mask (set invalid actions to -inf)
-            action_logits = action_logits.masked_fill(action_mask == 0, float('-inf'))
-            
-            action_probs = torch.softmax(action_logits, dim=-1)
-            if self.deterministic:
-                a = int(action_logits.argmax(-1).item())
-            else:
-                if rng is None:
-                    raise ValueError("Stochastic evaluation requires a local RNG")
-                probs = action_probs.squeeze(0).cpu().numpy().astype(np.float64)
-                a = int(rng.choice(len(probs), p=probs / probs.sum()))
+    def select_action(self, obs: Dict[str, Any], rng: Optional[np.random.Generator] = None,
+                      *, head_id=None) -> int:
+        selected_head = head_id if head_id is not None else getattr(self, '_head_id', None)
+        a = select_action_from_obs(obs, self.model, self.device,
+            deterministic=self.deterministic, rng=rng, head_id=selected_head)
 
         mask = np.asarray(obs["action_mask"], dtype=np.int8)
         invalid_returned = not (0 <= a < len(mask) and mask[a] == 1)
@@ -379,15 +364,20 @@ def run_evaluation(model, device, n_games, opp_mix, base_seed, out_dir=None,
             policy, label = create_policy(name, derive_seed(game_seed, "policy", seat), device, allow_legacy)
             labels[seat] = label + ("_left" if seat == 2 else "_right")
             policies[seat] = (PPOPolicyLogger(labels[seat], policy, device,
-                             deterministic=action_mode == "greedy") if isinstance(policy, ActorCritic)
+                             deterministic=action_mode == "greedy") if isinstance(policy, torch.nn.Module)
                              else BotPolicyLogger(labels[seat], policy))
         loggers = [ppo_logger, policies[1], policies[2]]
         for seat, logger in enumerate(loggers):
             logger.events.clear()
             logger._game_idx, logger._seat = game_idx, seat
+            count = getattr(getattr(logger, 'model', None), 'num_heads', 1)
+            logger._head_id = int(np.random.default_rng(
+                derive_seed(game_seed, 'evaluation_head', seat)).integers(count)) if count > 1 else None
         env = SevenWondersEnv(repo_root=str(rr), io_dir=str(exchange / f"game_{game_idx}" / "io"),
             agent_seat=0, opponent_policies=[SeatPolicy(l.name, policy=l) for l in loggers],
-            invalid_action_fallback="raise", engine_poll_us=engine_poll_us, poll_seconds=poll_seconds)
+            invalid_action_fallback="raise", engine_poll_us=engine_poll_us, poll_seconds=poll_seconds,
+            public_information=any(getattr(getattr(l, 'model', None), 'public_information', False) for l in loggers),
+            observation_memory=any(getattr(getattr(l, 'model', None), 'memory_enabled', False) for l in loggers))
         def on_step(obs, action, info):
             acknowledgements = info.get("status", {}).get("last_actions", {})
             for seat, logger in enumerate(loggers):

@@ -217,6 +217,8 @@ def evaluate_with_traces(
             agent_seat=agent_seat,
             opponent_policies=opponent_policies,
             reward_scale=1.0,
+            public_information=getattr(model, 'public_information', False),
+            observation_memory=getattr(model, 'memory_enabled', False),
         )
         
         obs, info = env.reset(seed=seed)
@@ -224,6 +226,8 @@ def evaluate_with_traces(
         
         traces = []
         turn = 0
+        count = getattr(model, 'num_heads', 1)
+        selected_head = int(np.random.default_rng(seed + 90000).integers(count)) if count > 1 else None
         
         while not done:
             status = info.get("status", {})
@@ -232,7 +236,7 @@ def evaluate_with_traces(
             
             # Select action
             if model is not None:
-                action = select_action_from_obs(obs, model, device, deterministic=True)
+                action = select_action_from_obs(obs, model, device, deterministic=True, head_id=selected_head)
             else:
                 rng = np.random.default_rng(seed + turn)
                 action = agent_policy.select_action(obs, rng)

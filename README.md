@@ -4,9 +4,22 @@ A work-in-progress reinforcement-learning project for three-player **7 Wonders**
 
 The simulator comes from [DMAG/UFSM's 7Wonders](https://github.com/dmag-ufsm/7Wonders). This project adds the RL environment, observation and action features, heuristic opponents, training/evaluation tools and snapshot self-play. It also includes a few targeted simulator fixes; it does not implement the original game engine from scratch.
 
-**Current stage:** self-play training has demonstrated learning in the tested setting, with gains over untrained policies and trained predecessors on separate evaluation seeds. Detailed evaluation also revealed limited strategic diversity. The next development focus is long-term strategy discovery and the classic **deep exploration** challenge: trying sequences of decisions whose benefits only emerge later.
+**Current stage:** exploratory training has demonstrated learning, including
+improved resource preparation in longer runs. The project is now moving toward
+targeted, scientifically grounded experiments on exploration, opponent
+populations and robust evaluation. Further gains in the latest continuation
+remain uncertain. An explicit observation-history extension is implemented;
+its playing-strength benefit and the next opponent-selection rule remain open.
 
-Neural-only self-play, corrected PPO/GAE, rolling trained evaluation opponents and a local analysis dashboard are implemented. RAM exchange and grouped opponent inference support longer runs. See the [experiment guide](docs/SELFPLAY_POC.md), [moderate-run results](docs/SELFPLAY_MODERATE_RESULTS_2026-10-23.md), [feature corrections](docs/FEATURE_CORRECTIONS_2026-10-23.md), [validation record](docs/VALIDATION.md) and [remaining limitations](docs/KNOWN_ISSUES.md). These results establish a proof of concept, not a general playing-strength benchmark.
+Start with the [documentation index](docs/README.md) and the
+[research overview](docs/research/OVERVIEW.md). Current guides and technical
+references are separated from the [exploratory experiment archive](docs/archive/README.md).
+The implementation includes PPO/GAE, optional multiple heads and frozen priors,
+public card/wonder information, mixed frozen-opponent pools and milestone
+dashboards. The optional [memory mode](docs/guides/OBSERVATION_MEMORY.md) shares
+complete own-hand, legal-action and observed-history inputs with actor and critic.
+See the [known limitations](docs/reference/KNOWN_ISSUES.md) before
+interpreting results as general playing strength.
 
 ## How it works
 
@@ -62,7 +75,7 @@ python -m pytest -m 'unit or component'
 python -m pytest -m integration
 ```
 
-Unit/component tests use recorded game-state fixtures. Integration tests require `build/7Wonders`. These checks cover the implemented interfaces and selected rule regressions; they do not establish complete board-game rule correctness or successful learning. See the [validation record](docs/VALIDATION.md) for the checks performed during this cleanup and the [architecture notes](docs/ARCHITECTURE.md) for the environment and training interfaces.
+Unit/component tests use recorded game-state fixtures. Integration tests require `build/7Wonders`. These checks cover the implemented interfaces and selected rule regressions; they do not establish complete board-game rule correctness or successful learning. See the [validation record](docs/archive/validation/VALIDATION.md) for the checks performed during this cleanup and the [architecture notes](docs/reference/ARCHITECTURE.md) for the environment and training interfaces.
 
 ## Training and evaluation
 
@@ -75,17 +88,29 @@ python scripts/build_dashboard.py --help
 ```
 
 - **Fixed opponents:** `--mode fixed` trains against a mixture of heuristic policies.
-- **Neural-only self-play:** `--mode selfplay` starts against its random initial neural checkpoint, trains against frozen same-run snapshots and evaluates against rolling trained predecessors. See the [proof-of-concept guide](docs/SELFPLAY_POC.md) for pilots, separate holdout evaluation and a moderate training budget.
+- **Neural opponents:** `--mode selfplay` supports fresh initialization or compatible pretrained weights, frozen snapshots and optional configured opponent groups. Ordinary evaluation uses rolling predecessors; milestone mode uses an unchanged panel. The [architecture reference](docs/reference/ARCHITECTURE.md) distinguishes these modes.
 - **Training evaluation:** readable console summaries show victory-point sources, score distributions and science participation. Opponent identities are recorded; changing reference opponents are not presented as directly comparable progress measurements.
-- **Detailed evaluation:** the separate evaluator compares final and intermediate models on the same opponent, seed and seat plan. Reports include score categories, age-by-age development, card choices relative to legal opportunities, and bootstrap uncertainty intervals over engine-seed blocks. See the [evaluation guide](docs/EVALUATION.md).
+- **Detailed evaluation:** the separate evaluator compares final and intermediate models on the same opponent, seed and seat plan. Reports include score categories, age-by-age development, card choices relative to legal opportunities, and bootstrap uncertainty intervals over engine-seed blocks. See the [evaluation guide](docs/guides/EVALUATION.md).
 
-Current feature semantics are **version 3**: science symbols and jokers, building chains, trade discounts and production features have been corrected. New training runs require fresh output directories and compatible checkpoints. The [latest assessment](docs/SELFPLAY_FEATURE_V3_RESULTS_2026-10-24.md) evaluates a completed run with these corrections; the earlier moderate-run results predate them. This is not a controlled comparison isolating the effect of the corrections. Earlier exploratory results affected by incorrect GAE or premature scoring are separate from the corrected proof-of-concept runs. No checkpoints are bundled. The [script index](python/scripts/README.md) separates the main tools from diagnostics and older trainers.
+Base feature semantics are **version 3**. The optional public-state extension
+adds public played-card identities and wonder identities/stage plans. Checkpoints
+enforce compatible schemas. The [latest completed long-run assessment](docs/archive/long-training/LONG_TRAINING_V2_RESULTS_2026-10-29.md)
+and [earlier fresh-seed comparison](docs/archive/long-training/LONG_FRESH_RESULTS_2026-10-26.md)
+describe the current evidence and its limits. Historical runs affected by
+incorrect GAE or premature scoring are not evidence for the corrected trainer.
+No checkpoints are bundled. The [script index](python/scripts/README.md) lists
+main tools, diagnostics and historical experiment wrappers.
 
 ## Analysis dashboard
 
 [**Explore the evaluation dashboard →**](https://martenkrohn.github.io/seven-wonders-rl/)
 
-The public example contains the completed **Seed 31, feature semantics v3** experiment: 262,144 training transitions, followed by a detailed evaluation of the initial, intermediate and final models against trained predecessors on a shared test plan. See the [latest assessment](docs/SELFPLAY_FEATURE_V3_RESULTS_2026-10-24.md) for findings and the [snapshot and update guide](docs/DASHBOARD_DEMO.md) for how the example is replaced as new results become available.
+The public example is a historical snapshot of the completed **Seed 31, feature
+semantics v3** experiment: 262,144 training transitions, followed by a detailed
+evaluation of initial, intermediate and final models against trained predecessors.
+It does not represent the latest local model. See its
+[assessment](docs/archive/selfplay/SELFPLAY_FEATURE_V3_RESULTS_2026-10-24.md) and the
+[snapshot/update guide](docs/guides/DASHBOARD_DEMO.md).
 
 Each detailed evaluation produces a standalone `dashboard.html` that opens directly in a browser, without a server or external dependencies. It provides sortable tables, card search and filters, score distributions, age-by-age summaries, model comparisons and CSV exports. Additional evaluation reports can be loaded locally. English is the default; an English/German selector updates labels, number formatting and CSV exports and remembers a manual choice. Both languages are available locally and in the public demo. Light and dark themes follow the system preference until a manual choice is saved.
 
@@ -95,7 +120,7 @@ Existing evaluation data can be turned into a dashboard without replaying games 
 python scripts/build_dashboard.py --evaluation-dir runs/YOUR-EVALUATION
 ```
 
-Open `runs/YOUR-EVALUATION/dashboard.html` in your browser. The [evaluation guide](docs/EVALUATION.md#interaktives-dashboard) explains report comparison, available metrics and how missing data are handled. Training logs, checkpoints and routine generated dashboards remain local; only the explicitly selected public demo snapshot is bundled in `demo/`.
+Open `runs/YOUR-EVALUATION/dashboard.html` in your browser. The [evaluation guide](docs/guides/EVALUATION.md#interaktives-dashboard) explains report comparison, available metrics and how missing data are handled. Training logs, checkpoints and routine generated dashboards remain local; only the explicitly selected public demo snapshot is bundled in `demo/`.
 
 ## Repository layout
 
@@ -114,7 +139,11 @@ python/scripts/ppo_training/     Main training and evaluation tools
 python/scripts/eval_selfplay.py  Detailed self-play evaluation and report rendering
 python/scripts/build_dashboard.py  Dashboard generation from saved analysis
 python/tests/                   Python tests and a selected fixture pool
-docs/                            Origin, architecture and known issues
+docs/README.md                   Documentation entry point and current status
+docs/research/                   Research agenda, overview and detailed sources
+docs/experiments/                Protocols and results for upcoming focused experiments
+docs/reference/, docs/guides/    Technical contracts and operational instructions
+docs/archive/                    Exploratory protocols, results and measurement summaries
 ```
 
 Generated builds, runtime exchange files, logs, training runs and checkpoints are ignored. The original GUI, its artwork and unrelated reference archives are not distributed in this source tree.

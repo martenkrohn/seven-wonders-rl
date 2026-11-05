@@ -30,15 +30,19 @@ def opponent_actions_batch(envs, statuses=None, timers=None):
                         continue
                     policy = wrapper.policy
                     group = groups.setdefault(id(policy), (policy, []))[1]
-                    group.append((index, seat, build_obs(status, seat), env._seat_rngs[seat]))
+                    obs = (env.observation_for_seat(seat, status) if hasattr(env, "observation_for_seat")
+                           else build_obs(status, seat))
+                    head = env._opponent_head_ids[seat] if policy.model.num_heads > 1 else None
+                    group.append((index, seat, obs, env._seat_rngs[seat], head))
         for policy, requests in groups.values():
             with timing("policies.opponents.inference"):
-                selected = policy.select_actions([r[2] for r in requests], [r[3] for r in requests])
+                kwargs = {'head_ids': [r[4] for r in requests]} if policy.model.num_heads > 1 else {}
+                selected = policy.select_actions([r[2] for r in requests], [r[3] for r in requests], **kwargs)
             if len(selected) != len(requests):
                 raise ValueError("Batched opponent returned an incomplete action list")
             if timers is not None:
                 timers.add_ns("policies.opponents.requests", 0, calls=len(requests))
-            for (index, seat, obs, _), action in zip(requests, selected):
+            for (index, seat, obs, _, _head), action in zip(requests, selected):
                 if not 0 <= action < len(obs["action_mask"]) or not obs["action_mask"][action]:
                     raise ValueError(f"Batched neural opponent returned illegal action {action} for seat {seat}")
                 actions[index][seat] = action

@@ -1,0 +1,59 @@
+[
+  {
+    "key": "town_hall_age3",
+    "name": "Town Hall",
+    "field": "cost",
+    "previous": {
+      "stone": 3,
+      "glass": 1
+    },
+    "bga": {
+      "stone": 2,
+      "ore": 1,
+      "glass": 1
+    },
+    "resolution": "BGA definitions; differing card costs also checked on corresponding v2 sprite artwork"
+  },
+  {
+    "key": "arena_age3",
+    "name": "Arena",
+    "field": "cost",
+    "previous": {
+      "clay": 2,
+      "ore": 1
+    },
+    "bga": {
+      "stone": 2,
+      "ore": 1
+    },
+    "resolution": "BGA definitions; differing card costs also checked on corresponding v2 sprite artwork"
+  },
+  {
+    "key": "circus_age3",
+    "name": "Circus",
+    "field": "cost",
+    "previous": {
+      "clay": 3,
+      "ore": 1
+    },
+    "bga": {
+      "stone": 3,
+      "ore": 1
+    },
+    "resolution": "BGA definitions; differing card costs also checked on corresponding v2 sprite artwork"
+  },
+  {
+    "key": "craftsmens_guild_age3",
+    "name": "Craftsmens Guild",
+    "field": "cost",
+    "previous": {
+      "stone": 2,
+      "ore": 1
+    },
+    "bga": {
+      "ore": 2,
+      "stone": 2
+    },
+    "resolution": "BGA definitions; differing card costs also checked on corresponding v2 sprite artwork"
+  }
+]

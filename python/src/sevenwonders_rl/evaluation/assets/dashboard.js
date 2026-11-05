@@ -37,16 +37,16 @@
   const COLORS = {brown:'Braun',grey:'Grau',blue:'Blau',red:'Rot',green:'Grün',yellow:'Gelb',purple:'Violett',unknown:'Unbekannt'};
   const PALETTE = {blue:'#638cbe',military:'#bf6159',science:'#639768',yellow:'#d1ab45',guild:'#9274af',wonder:'#aa8c67',treasury:'#acaa9d'};
   const VIEWS = {
-    overview:['Überblick','01','Die wichtigsten Ergebnisse und die Spielweise deines Modells.'],
-    points:['Punkteherkunft','02','Durchschnitt, Streuung und Unterschiede zu den Gegnern.'],
-    ages:['Zeitalter','03','Wie Wirtschaft, Militär und Punkte im Laufe einer Partie entstehen.'],
-    cards:['Karten & Aktionen','04','Welche Karten gewählt werden – und welche legalen Möglichkeiten ungenutzt bleiben.'],
-    comparisons:['Vergleiche','05','Modellstände, Spielsituationen und geladene Trainingsläufe vergleichen.'],
-    quality:['Datenqualität','06','Vollständigkeit, Testbedingungen und Grenzen der Auswertung.']
+    points:['Punkteherkunft','01','Woher kommen die Punkte – und wo liegen Stärken und Schwächen?'],
+    ages:['Zeitalter','02','Produktion, Wirtschaft und Punkte am Ende jedes Zeitalters.'],
+    cards:['Karten & Aktionen','03','Welche Karten und Aktionen prägen die Spielweise?'],
+    training:['Trainingsverlauf','04','Fortschritt über Checkpoints und gezielte Vergleiche.']
   };
   let entries = JSON.parse(document.getElementById('evaluation-data').textContent);
-  const state = {entry:0, model:'candidate', view:'overview', tables:new Map(),
-    filters:{query:'',color:'',age:''}, groups:{kind:'opponents',category:'total'}, error:null};
+  const context = JSON.parse(document.getElementById('dashboard-context')?.textContent || '{}');
+  const state = {entry:0, model:'candidate', view:'points', tables:new Map(),
+    filters:{query:'',color:'',age:''}, groups:{kind:'opponents',category:'total'},
+    compare:'best', progress:'previous', metric:'vp_diff_mean', from:'', to:'', error:null};
   const $ = id => document.getElementById(id);
   globalThis.SevenWondersTheme?.attach($('theme-toggle'));
   const num = (value, digits=2) => numeric(value) ? new Intl.NumberFormat(locale(),{minimumFractionDigits:digits,maximumFractionDigits:digits}).format(value) : t('nicht erfasst');
@@ -58,6 +58,7 @@
   const entryTitle = entry => i18n?.language()==='de'&&entry.title_de?entry.title_de:entry.title;
   const report = () => current().report;
   const model = () => report().models[state.model];
+  const isScience = entry => entry?.kind==='science_diagnostics';
   function el(tag, text, className) {
     const element = document.createElement(tag);
     if (text !== null && text !== undefined) element.textContent = typeof text==='string'?t(text):text;
@@ -66,10 +67,21 @@
   }
   function modelLabel(entry, key) {
     const desc = entry.report.model_descriptors?.[key] || {};
+    if(desc.label){
+      const steps=desc.label.match(/^(\d[\d,.]*) Schritte$/);
+      if(steps)return t('{step} Schritte',{step:num(Number(steps[1].replaceAll(',','').replaceAll('.','')),0)});
+      return t(desc.label);
+    }
+    if(numeric(desc.head_id))return 'Head '+desc.head_id;
+    if(desc.action_constraint==='none')return t('Freie Policy');
+    if(desc.action_constraint==='green_priority')return t('Grün-Priorität');
+    if(key==='initial' && desc.prior_strength>0)return t('Startmodell mit Priors (Schritt 0)');
     const match = String(desc.checkpoint || '').match(/checkpoint_(\d+)\.pt$/);
     const labelStep=String(entry.labels?.[key]||'').match(/Schritt ([\d.]+)/);
     const step = desc.timestep ?? (match ? Number(match[1]) : labelStep?Number(labelStep[1].replaceAll('.','')):null);
-    if (key === 'initial') return t('Untrainiertes Ausgangsmodell (Schritt 0)');
+    if (key === 'initial' && desc.num_heads>1 && desc.initialization?.kind === 'checkpoint') return t('Startmodell');
+    if (key === 'initial') return t(desc.initialization?.kind === 'checkpoint'
+      ? 'Vortrainiertes Ausgangsmodell (Spezialisierungsschritt 0)' : 'Untrainiertes Ausgangsmodell (Schritt 0)');
     if(key!=='candidate'&&!numeric(step))return t('Zusätzlicher Zwischenstand {number}',{number:key.replace('comparison_','')});
     const name = key === 'candidate' ? (match ? 'Testmodell' : 'Trainingsende') : 'Zwischenstand';
     return t(name)+(numeric(step)?t(' – Schritt ')+num(step,0):'');
@@ -95,7 +107,7 @@
     for(const [value,text] of options) {const option=el('option',text);option.value=value;select.append(option);}
     select.addEventListener('change',onchange);wrapper.append(select);parent.append(wrapper);return select;
   }
-  const col=(key,label,type='number',format=null)=>({key,label:t(label),type,format});
+  const col=(key,label,type='number',format=null,render=null)=>({key,label:t(label),type,format,render});
   function table(parent,columns,getRows,{sort=null,direction=-1,filename='tabelle.csv'}={}) {
     const tableKey=[state.entry,state.model,state.view,filename].join(':');
     let {sortKey=sort||columns[0].key,sortDirection=direction,page=0,pageSize=25}=state.tables.get(tableKey)||{};
@@ -108,7 +120,8 @@
     previous.setAttribute('aria-label',t('Vorherige Seite'));next.setAttribute('aria-label',t('Nächste Seite'));
     controls.append(previous,next,button('CSV exportieren',()=>download(csvText(columns,sortedRows()),filename)));
     toolbar.append(count,controls);
-    const wrap=el('div',null,'table-wrap');parent.append(toolbar,wrap);
+    const wrap=el('div',null,'table-wrap'),surface=el('div',null,'table-surface');
+    surface.append(toolbar,wrap);parent.append(surface);
     size.addEventListener('change',()=>{pageSize=Number(size.value);page=0;draw();});
     function sortedRows(){return [...getRows()].sort((a,b)=>compareRows(a,b,sortKey,sortDirection));}
     function draw(reset=false) {
@@ -132,7 +145,8 @@
       for(const row of shown){const tr=el('tr');
         for(const column of columns){const value=row[column.key];
           const text=value==null?t('nicht erfasst'):column.format?column.format(value):column.type==='number'?num(value):t(String(value));
-          tr.append(el('td',text,column.type==='number'?'numeric':''));
+          const cell=el('td',column.render?null:text,column.type==='number'?'numeric':'');
+          if(column.render)cell.append(column.render(value,row));tr.append(cell);
         }body.append(tr);
       }
       if(!shown.length){const tr=el('tr'),td=el('td','Keine passenden Daten vorhanden.','empty');td.colSpan=columns.length;tr.append(td);body.append(tr);}
@@ -145,159 +159,248 @@
       .filter(([key])=>key!=='commercial_combined'||m.categories?.[key])
       .map(([key,label])=>({category:label,key,...(m.categories?.[key]||{})}));
   }
-  const strengthRows=entry=>Object.entries(entry.report.models).map(([key,m])=>({
-    model:modelLabel(entry,key),win_share:m.win_share,points:m.agent_vp_mean,margin:m.vp_diff_mean,games:m.completed}));
-  function strengthTable(parent,entry=current()) {
-    table(parent,[col('model','Modellstand','string'),col('win_share','Sieganteil','number',pct),col('points','Eigene Punkte Ø'),
-      col('margin','Vorsprung Ø','number',signed),col('games','Spiele','number',v=>num(v,0))],()=>strengthRows(entry),{sort:'win_share',filename:'modellvergleich.csv'});
+  const COLOR_HEX={brown:'#a5855e',grey:'#9ea8a0',blue:PALETTE.blue,red:PALETTE.military,green:PALETTE.science,yellow:PALETTE.yellow,purple:PALETTE.guild};
+  const SCORE_ICONS={blue:'vp_civilian',military:'vp_military',science:'vp_scientific',yellow:'vp_commercial',guild:'vp_guild',wonder:'vp_wonder',treasury:'coins'};
+  const RESOURCE_LABELS={wood:'Holz',ore:'Erz',clay:'Lehm',stone:'Stein',loom:'Stoff',glass:'Glas',papyrus:'Papyrus',coins:'Münzbestand',shields:'Militärstärke / Schilde',wonder_stage:'Vollendete Wunderabschnitte'};
+  function artwork(kind,key,label,className='resource-icon') {
+    const src=context.artwork?.[kind]?.[key];
+    if(!src)return el('span',label,'artwork-fallback');
+    const img=el('img');img.src=src;img.alt=t(label);img.className=className;img.loading='lazy';return img;
   }
-  function pointBars(parent,m) {
-    const rows=scoreRows(m).filter(r=>r.key!=='total'&&numeric(r.mean));
-    if(!rows.length){parent.append(el('p','Punkteprofile wurden nicht erfasst.','empty'));return;}
-    const max=Math.max(1,...rows.map(r=>Math.abs(r.mean)));
-    for(const row of rows){const line=el('div',null,'bar-row'),label=el('span',row.category),swatch=el('span',null,'swatch');
-      swatch.style.background=PALETTE[row.key]||'#999';label.prepend(swatch);
-      const track=el('div',null,'bar-track'),fill=el('div',null,'bar-fill'),width=Math.abs(row.mean)/max*48;
-      fill.style.width=width+'%';fill.style.left=(row.mean>=0?50:50-width)+'%';fill.style.background=PALETTE[row.key]||'#999';
-      track.append(fill);line.append(label,track,el('span',num(row.mean),'bar-value'));parent.append(line);
-    }
-    parent.append(el('p','Durchschnittliche Punkte je Spiel. Die Mittellinie markiert 0; negative Werte liegen links.','definition'));
+  function details(parent,title,description) {
+    const box=el('details',null,'panel disclosure');box.append(el('summary',title));
+    if(description)box.append(el('p',description,'definition'));parent.append(box);return box;
   }
-  function overview(parent) {
-    const m=model(), stats=el('div',null,'stats');
+  function stars(p) {return !numeric(p)?'':p<.001?'***':p<.01?'**':p<.05?'*':'';}
+  globalThis.SevenWondersDashboard.stars=stars;
+  function testLabel(p) {return numeric(p)?(stars(p)||t('Nicht signifikant')):t('Nicht getestet');}
+  function pText(p){return numeric(p)?(p<.0001?'< '+num(.0001,4):num(p,4)):t('Nicht getestet');}
+  function strengthStats(parent) {
+    const m=model(),stats=el('div',null,'stats compact-stats');
     for(const [label,value,detail] of [
-      ['Sieganteil',pct(m.win_share),'95 %: '+interval(m.win_share_ci95,true)],
       ['Eigene Punkte',num(m.agent_vp_mean),'Durchschnitt je abgeschlossenem Spiel'],
-      ['Punktevorsprung',signed(m.vp_diff_mean),'Gegen den stärksten Gegner je Partie'],
-      ['Abgeschlossene Spiele',num(m.completed,0),t('Von {attempts} Versuchen',{attempts:num(m.attempted,0)})]
+      ['Sieganteil',pct(m.win_share),'Geteilte Siege zählen anteilig.'],
+      ['Punktevorsprung',signed(m.vp_diff_mean),'Gegen den stärksten Gegner je Partie']
     ]){const tile=el('section',null,'stat');tile.append(el('div',label,'stat-label'),el('div',value,'stat-value'),el('small',detail));stats.append(tile);}
     parent.append(stats);
-    if(!m.valid_for_selection) notice(parent,'Diese Auswertung enthält unvollständige Spiele. Kennzahlen beziehen sich auf abgeschlossene Partien.');
-    if((m.coverage?.complete_age_sequences||0)<m.completed) notice(parent,'Für diesen Modellstand fehlen teilweise Zeitalter- oder Aktionsdaten. Fehlende Werte werden als „nicht erfasst“ angezeigt.');
-    const grid=el('div',null,'grid-two');parent.append(grid);
-    const points=panel(grid,'Woher kommen die Punkte?','Das Punkteprofil des ausgewählten Modellstands.');pointBars(points,m);
-    const science=m.categories?.science;
-    if(science){const box=el('div',null,'science-box');box.append(el('strong',t('Wissenschaft: {fraction} der Spiele ohne Punkte',{fraction:pct(science.zero_fraction)})),
-      el('span',numeric(science.positive_mean)?t('Bei vorhandenen Punkten: Ø {mean} · Maximum: {max}',{mean:num(science.positive_mean),max:num(science.max,0)}):'Keine Spiele mit Wissenschaftspunkten.'));points.append(box);}
-    const context=panel(grid,'Der Test im Kontext','Alle Modellstände spielen gegen denselben festgelegten Gegnerplan.');
-    const refs=el('ul',null,'reference-list');for(const ref of report().references||[]) refs.append(el('li',String(ref.checkpoint).split(/[\\/]/).pop()));context.append(refs);
-    const detail=el('div',null,'detail-list');for(const [label,value] of [['Spiel-Seeds',num(m.seed_blocks,0)],['Test-Seed',num(report().seed,0)],
-      ['Vorsprung, 95%-Intervall',interval(m.vp_diff_ci95)],['Ausgewähltes Modell',modelLabel(current(),state.model)],
-      ['Merkmalsversion',num(current().provenance?.feature_semantics_version,0)]]){
-      const cell=el('div');cell.append(el('small',label),el('span',value));detail.append(cell);
-    }context.append(detail);context.append(el('p','Ein Drittel Sieganteil ist der Orientierungswert gleich starker Dreispieler-Policies. Geteilte Siege zählen anteilig.','definition'));
-    strengthTable(panel(parent,'Entwicklung der Modellstände','Spaltenüberschriften anklicken, um die Reihenfolge zu ändern.'));
+  }
+  function strengthTable(parent,entry=current()) {
+    table(parent,[col('model','Modellstand','string'),col('win_share','Sieganteil','number',pct),col('points','Eigene Punkte Ø'),col('margin','Vorsprung Ø','number',signed)],
+      ()=>Object.entries(entry.report.models).map(([key,m])=>({model:modelLabel(entry,key),win_share:m.win_share,points:m.agent_vp_mean,margin:m.vp_diff_mean})),{sort:'win_share',filename:'modellvergleich.csv'});
+  }
+  function progressChoices() {
+    if(state.model!=='candidate')return [];
+    const choices=[];
+    if(report().previous_progress?.paired_valid)choices.push({key:'previous',label:t('Vorheriger Checkpoint')+(numeric(report().previous_step)?' · '+num(report().previous_step,0):''),data:report().previous_progress});
+    for(const [key,data] of Object.entries(report().paired_progress||{}))if(data.paired_valid)choices.push({key,label:modelLabel(current(),key),data});
+    return choices;
+  }
+  function progressPanel(parent,compact=false) {
+    const choices=progressChoices();
+    const box=panel(parent,'Fortschritt','Gepaarter Vergleich auf demselben Prüfplan.');
+    if(!choices.length){box.append(el('p','Noch kein passender Fortschrittsvergleich verfügbar.','muted'));if(compact){const a=el('a','Trainingsverlauf öffnen');a.href='#training';box.append(a);}return;}
+    let selected=choices.find(c=>c.key===state.progress)||choices[0];
+    const controls=el('div',null,'group-controls');box.append(controls);
+    const select=selectControl(controls,'Verglichen mit',choices.map(c=>[c.key,c.label]),()=>{state.progress=select.value;render();});select.value=selected.key;
+    const d=selected.data, value=el('div',null,'progress-value '+(d.vp_diff_gain>0?'positive':d.vp_diff_gain<0?'negative':''));
+    value.append(el('strong',signed(d.vp_diff_gain)+t(' Punkte')),el('span',testLabel(d.vp_diff_gain_p_value),'significance'));box.append(value);
+    const info=details(box,'Statistik zum Vergleich');
+    const dl=el('div',null,'detail-list');info.append(dl);
+    for(const [label,v] of [['95%-Intervall / Punkte',interval(d.vp_diff_gain_ci95)],['p-Wert',pText(d.vp_diff_gain_p_value)],['Unabhängige Spiel-Seeds',num(d.seed_blocks,0)],['Sieganteil-Zuwachs',signed(d.win_share_gain*100)+t(' Prozentpunkte')]]){
+      const row=el('div');row.append(el('small',label),el('span',v));dl.append(row);
+    }
+    info.append(el('p','* p < 0,05 · ** p < 0,01 · *** p < 0,001. Zweiseitiger gepaarter Test über Spiel-Seed-Blöcke. Sterne zeigen die Absicherung, das Vorzeichen die Richtung. Wiederholte Vergleiche sind explorativ und nicht für Mehrfachtests korrigiert.','definition'));
+    if(compact){const a=el('a','Trainingsverlauf öffnen');a.href='#training';a.className='text-link';box.append(a);}
+  }
+  function comparisonOptions() {
+    const options=[{value:'best',label:t('Bester Gegner je Partie'),m:null}];
+    for(const key of Object.keys(report().models))if(key!==state.model)options.push({value:'model:'+key,label:modelLabel(current(),key),m:report().models[key]});
+    if(report().plan_id)entries.forEach((e,i)=>{
+      if(i!==state.entry&&!e.historical_reference&&e.report?.plan_id===report().plan_id&&e.report.models?.candidate)
+        options.push({value:'entry:'+i,label:entryTitle(e),m:e.report.models.candidate});
+    });
+    return options;
   }
   function points(parent) {
-    const box=panel(parent,'Punkteherkunft und Verteilung','P10–P90 beschreibt den mittleren Bereich der Einzelspiele, kein Unsicherheitsintervall des Durchschnitts.');
-    table(box,[col('category','Kategorie','string'),col('n','Spiele','number',v=>num(v,0)),col('mean','Mittelwert'),col('median','Median'),col('p10','P10'),col('p90','P90'),col('max','Maximum'),
-      col('zero_fraction','Ohne Punkte','number',pct),col('positive_mean','Ø bei positiven Punkten')],()=>scoreRows(model()),{sort:'mean',filename:'punkteherkunft.csv'});
-    const grid=el('div',null,'grid-two');parent.append(grid);pointBars(panel(grid,'Punkteprofil'),model());
-    const delta=panel(grid,'Abstand zum besten Gegner','Je Partie derselbe Gegner, ausgewählt anhand seiner Gesamtpunkte.');
-    const rows=Object.entries(CATEGORY).map(([key,category])=>({category,...(model().category_margin_to_best?.[key]||{})}));
-    table(delta,[col('category','Kategorie','string'),col('mean','Abstand Ø','number',signed),col('p10','P10'),col('p90','P90')],()=>rows,{sort:'mean'});
-    notice(parent,'Kartenfarbe und Punkteherkunft sind verschieden: Wunder und Wissenschaftsgilden können zu Wissenschaft beitragen; Wunderschilde zu Militär. Kategorien-Maxima stammen möglicherweise aus unterschiedlichen Spielen.');
+    strengthStats(parent);
+    const hero=panel(parent,'Punkteprofil','Durchschnittliche Punkte je Spiel.');
+    const options=comparisonOptions(), selected=options.find(o=>o.value===state.compare)||options[0];
+    const controls=el('div',null,'group-controls');hero.append(controls);
+    const compare=selectControl(controls,'Vergleichen mit',options.map(o=>[o.value,o.label]),()=>{state.compare=compare.value;render();});compare.value=selected.value;
+    const head=el('div',null,'score-heading');head.append(el('span','Punktekategorie'),el('span','Punkte Ø'),el('span','Abstand Ø'));hero.append(head);
+    const rows=scoreRows(model()).filter(r=>r.key!=='total'), max=Math.max(1,...rows.filter(r=>numeric(r.mean)).map(r=>Math.abs(r.mean)));
+    for(const row of rows){
+      const line=el('div',null,'score-row');const label=el('div',null,'score-label');
+      label.append(artwork('resources',SCORE_ICONS[row.key],row.category),el('span',row.category));
+      const track=el('div',null,'profile-track'),fill=el('div',null,'profile-fill');
+      if(numeric(row.mean)){fill.style.width=(Math.abs(row.mean)/max*48)+'%';fill.style.left=(row.mean<0?50-Math.abs(row.mean)/max*48:50)+'%';fill.style.background=PALETTE[row.key]||'#9ca79e';track.append(fill);}
+      const amount=el('div',null,'score-amount');amount.append(track,el('strong',num(row.mean)));
+      const delta=selected.m?(numeric(row.mean)&&numeric(selected.m.categories?.[row.key]?.mean)?row.mean-selected.m.categories[row.key].mean:null):model().category_margin_to_best?.[row.key]?.mean;
+      const difference=el('span',signed(delta),'score-delta '+(delta>0?'positive':delta<0?'negative':''));line.append(label,amount,difference);hero.append(line);
+    }
+    hero.append(el('p','Abstand = eigene Punkte minus Vergleich. Die Mittellinie der Balken markiert null.','definition'));
+    const distributions=details(parent,'Verteilungen · P10–P90 und Maximum','P10–P90 umfasst ungefähr die mittleren 80 % der einzelnen Partien. Es beschreibt keine Unsicherheit des Mittelwerts.');
+    table(distributions,[col('category','Kategorie','string'),col('mean','Mittelwert'),col('range','Typischer Bereich · P10–P90','string'),col('max','Maximum')],
+      ()=>scoreRows(model()).map(r=>({...r,range:numeric(r.p10)&&numeric(r.p90)?num(r.p10)+' – '+num(r.p90):null})),{sort:'mean',filename:'punkteherkunft.csv'});
+    progressPanel(parent,true);
+    const info=details(parent,'Datengrundlage und Export');quality(info);
+    info.append(el('p','Kartenfarbe und Punkteherkunft sind verschieden: Wunder und Wissenschaftsgilden können zu Wissenschaft beitragen; Wunderschilde zu Militär. Kategorien-Maxima stammen möglicherweise aus unterschiedlichen Spielen.','definition'));
   }
   function ages(parent) {
-    const m=model(),coverage=m.coverage?.complete_age_sequences||0;
-    if(coverage<m.completed) notice(parent,t('Vollständige Zeitalterfolgen: {covered} von {completed} Spielen. Mittelwerte können unterschiedliche verfügbare Teilmengen beschreiben.',{covered:num(coverage,0),completed:num(m.completed,0)}));
-    const box=panel(parent,'Aufbau über drei Zeitalter','Zustände nach der Militärwertung; Zeitalter III zusätzlich nach finalen Gildeneffekten.');
-    const tiles=el('div',null,'age-grid');for(const age of [1,2,3]){const card=el('div',null,'age-card'),stat=m.age_points?.[age]?.total;
-      card.append(el('strong',t('ENDE ZEITALTER {age}',{age})),el('div',num(stat?.mean)),el('small',stat?t('Punkte im Mittel · {games} Spiele',{games:num(stat.n,0)}):'Punktestand nicht erfasst'));tiles.append(card);
-    }box.append(tiles);
-    const rows=[...Object.entries(CATEGORY),['total','Gesamt']].map(([key,category])=>({category,a1:m.age_points?.[1]?.[key]?.mean,a2:m.age_points?.[2]?.[key]?.mean,a3:m.age_points?.[3]?.[key]?.mean}));
-    table(box,[col('category','Wertungsbereich','string'),col('a1','Ende I'),col('a2','Ende II'),col('a3','Ende III')],()=>rows,{sort:'a3',filename:'zeitalter-punkte.csv'});
+    const m=model();
+    const production=panel(parent,'Produktion nach Zeitalter','Durchschnittliche feste Produktionskapazität am Ende jedes Zeitalters. Wahlproduktion ist nicht enthalten.');
+    const matrix=el('div',null,'production-table');production.append(matrix);
+    const amount=value=>{const cell=el('span',num(value),'production-amount');if(numeric(value))cell.style.background='color-mix(in srgb, var(--gold) '+Math.min(45,Math.max(0,value)*15)+'%, transparent)';return cell;};
+    table(matrix,[col('resource','Produktionsgut','string',null,(value,row)=>{
+      const label=el('div',null,'resource-label');label.append(artwork('resources',row.key,value),el('span',value));return label;
+    }),...['I','II','III'].map((age,i)=>col('a'+(i+1),t('Ende {age}',{age}),'number',null,amount))],
+      ()=>['wood','ore','clay','stone','loom','glass','papyrus'].map(key=>({key,resource:RESOURCE_LABELS[key],...Object.fromEntries([1,2,3].map(age=>['a'+age,m.age_economy?.[age]?.[key]?.mean]))})),
+      {sort:'resource',direction:1,filename:'produktion-je-zeitalter.csv'});
     const economy=panel(parent,'Wirtschaft und Spielaufbau');
-    const metrics={coins:'Münzbestand',shields:'Militärstärke / Schilde',wonder_stage:'Vollendete Wunderabschnitte',wood:'Feste Produktion Holz',ore:'Feste Produktion Erz',clay:'Feste Produktion Lehm',stone:'Feste Produktion Stein',loom:'Feste Produktion Stoff',glass:'Feste Produktion Glas',papyrus:'Feste Produktion Papyrus'};
-    table(economy,[col('metric','Kennzahl','string'),col('a1','Ende I'),col('a2','Ende II'),col('a3','Ende III')],()=>Object.entries(metrics).map(([key,metric])=>({metric,a1:m.age_economy?.[1]?.[key]?.mean,a2:m.age_economy?.[2]?.[key]?.mean,a3:m.age_economy?.[3]?.[key]?.mean})),{sort:'metric',direction:1,filename:'zeitalter-wirtschaft.csv'});
-    notice(parent,'Zwischenstände sind Wertungen des aktuellen Zustands. Münzen können später ausgegeben werden; Wissenschaft und Gilden wachsen mit weiteren Karten. Ein Wertungszuwachs ist keine kausale Bewertung der zuletzt gewählten Aktion. Wahlproduktion ist nicht als feste Produktion eingerechnet.');
+    table(economy,[col('metric','Kennzahl','string',null,(v,r)=>{const w=el('div',null,'resource-label');if(r.key!=='wonder_stage')w.append(artwork('resources',r.key,v));w.append(el('span',v));return w;}),col('a1','Ende I'),col('a2','Ende II'),col('a3','Ende III')],
+      ()=>['coins','shields','wonder_stage'].map(key=>({key,metric:RESOURCE_LABELS[key],...Object.fromEntries([1,2,3].map(age=>['a'+age,m.age_economy?.[age]?.[key]?.mean]))})),{sort:'metric',direction:1,filename:'zeitalter-wirtschaft.csv'});
+    const box=panel(parent,'Punkte über die Zeitalter','Zustände nach der Militärwertung; Zeitalter III zusätzlich nach finalen Gildeneffekten.');
+    const tiles=el('div',null,'age-grid');for(const age of [1,2,3]){const tile=el('div',null,'age-card');tile.append(el('strong',t('ENDE ZEITALTER {age}',{age})),el('div',num(m.age_points?.[age]?.total?.mean)),el('small','Punkte Ø'));tiles.append(tile);}box.append(tiles);
+    const breakdown=details(box,'Punkte nach Kategorie');
+    table(breakdown,[col('category','Wertungsbereich','string',null,(v,r)=>{const label=el('span',v),swatch=el('span',null,'swatch');swatch.style.background=PALETTE[r.key]||'var(--muted)';label.prepend(swatch);return label;}),col('a1','Ende I'),col('a2','Ende II'),col('a3','Ende III')],
+      ()=>scoreRows(m).map(r=>({key:r.key,category:r.category,...Object.fromEntries([1,2,3].map(age=>['a'+age,m.age_points?.[age]?.[r.key]?.mean]))})),{sort:'a3',filename:'zeitalter-punkte.csv'});
+  }
+  function cardCell(value,row) {
+    const box=el('details',null,'card-detail'),summary=el('summary',null,'card-summary');
+    const swatch=el('span',null,'card-swatch');swatch.style.background=COLOR_HEX[row.color]||'var(--muted)';swatch.setAttribute('aria-label',t(COLORS[row.color]||'Unbekannt'));
+    summary.append(swatch,artwork('cards',value,value,'card-thumbnail'),el('span',value));box.append(summary);
+    const content=el('div',null,'card-expanded');content.append(artwork('cards',value,value,'card-image'),el('p',t('Legale Angebote: {count}',{count:num(row.legal_opportunities,0)}),'definition'));box.append(content);return box;
   }
   function cards(parent) {
-    const m=model(), box=panel(parent,'Einzelne Karten und legale Alternativen','Suche, Farbe und Zeitalter sind kombinierbar. CSV exportiert alle aktuell gefilterten Zeilen, auch über mehrere Seiten.');
+    const m=model(),box=panel(parent,'Kartenwahl','Kartenbild anklicken, um die Karte und ihre Datengrundlage zu öffnen.');
     const filters=el('div',null,'filters');box.append(filters);
     const searchLabel=el('label','Kartenname'),search=el('input');search.type='search';search.placeholder=t('Zum Beispiel Workshop');search.value=state.filters.query;searchLabel.append(search);filters.append(searchLabel);
     let refresh=()=>{};
     const color=selectControl(filters,'Farbe',[['','Alle Farben'],...Object.entries(COLORS)],()=>{state.filters.color=color.value;refresh(true);});
-    const age=selectControl(filters,'Zeitalter',[['','Alle Zeitalter'],['1','I'],['2','II'],['3','III']],()=>{state.filters.age=age.value;refresh(true);});
-    color.value=state.filters.color;age.value=state.filters.age;
-    refresh=table(box,[col('card','Karte','string'),col('color_label','Farbe','string'),col('era','Zeitalter','number',v=>num(v,0)),col('built','Bauaktionen','number',v=>num(v,0)),
-      col('games_built','Partien mit Bau (#)','number',v=>num(v,0)),col('build_game_fraction','Partien mit Bau (%)','number',pct),col('legal_opportunities','Legale Angebote','number',v=>num(v,0)),
-      col('selection_fraction','Auswahlquote','number',pct)],()=>filterCards(m.cards||[],{query:search.value,color:color.value,age:age.value}).map(c=>({...c,color_label:COLORS[c.color]||c.color})),{sort:'built',filename:'karten-gefiltert.csv'});
+    color.value=state.filters.color;
+    const ageFilter=el('fieldset',null,'age-filter');ageFilter.append(el('legend','Zeitalter'));filters.append(ageFilter);
+    const ageButtons=[];
+    for(const [value,label] of [['','Alle Zeitalter'],['1','Zeitalter I'],['2','Zeitalter II'],['3','Zeitalter III']]){
+      const choice=button(label,()=>{state.filters.age=value;updateAges();refresh(true);});
+      ageButtons.push([choice,value]);ageFilter.append(choice);
+    }
+    function updateAges(){for(const [choice,value] of ageButtons)choice.setAttribute('aria-pressed',String(state.filters.age===value));}
+    updateAges();
+    refresh=table(box,[col('card','Karte','string',null,cardCell),col('era','Zeitalter','number',v=>num(v,0)),col('build_game_fraction','Partien mit Bau (%)','number',pct),col('selection_fraction','Auswahlquote','number',pct)],
+      ()=>filterCards(m.cards||[],{query:search.value,color:color.value,age:state.filters.age}),{sort:'build_game_fraction',filename:'karten-gefiltert.csv'});
     search.addEventListener('input',()=>{state.filters.query=search.value;refresh(true);});
     box.append(el('p','Partien mit Bau = Anteil der Spiele, in denen die Karte als Gebäude gebaut wurde. Auswahlquote = Bauaktionen / Entscheidungen mit dieser legal baubaren Karte. Wiederholte Angebote zählen mehrfach. Verkäufe und Wunderbau zählen nicht als Gebäude.','definition'));
     const actions=panel(parent,'Gebaute Farben und Aktionen je Zeitalter','Durchschnitt tatsächlich bestätigter Aktionen je Spiel.');
-    const buckets={...COLORS,wonder:'Wunderbau',discard:'Kartenverkauf'};
-    table(actions,[col('category','Karten / Aktionen','string'),col('a1','Zeitalter I'),col('a2','Zeitalter II'),col('a3','Zeitalter III'),col('total','Gesamt')],()=>Object.entries(buckets).map(([key,category])=>{
-      const known=(m.coverage?.action_traces||0)>0, values=[1,2,3].map(a=>known?(m.age_actions?.[a]?.[key]??0):null);
-      return {category,a1:values[0],a2:values[1],a3:values[2],total:known?values.reduce((a,b)=>a+b,0):null};
-    }),{sort:'total',filename:'aktionen-je-zeitalter.csv'});
+    table(actions,[col('category','Karten / Aktionen','string',null,(v,r)=>{const label=el('span',v),swatch=el('span',null,'swatch');swatch.style.background=COLOR_HEX[r.key]||PALETTE.wonder;label.prepend(swatch);return label;}),col('a1','Zeitalter I'),col('a2','Zeitalter II'),col('a3','Zeitalter III'),col('total','Gesamt')],
+      ()=>Object.entries({...COLORS,wonder:'Wunderbau',discard:'Kartenverkauf'}).filter(([key])=>key!=='unknown'||[1,2,3].some(a=>m.age_actions?.[a]?.unknown)).map(([key,category])=>{
+        const known=(m.coverage?.action_traces||0)>0,v=[1,2,3].map(a=>known?(m.age_actions?.[a]?.[key]??0):null);return {key,category,a1:v[0],a2:v[1],a3:v[2],total:known?v.reduce((a,b)=>a+b,0):null};
+      }),{sort:'total',filename:'aktionen-je-zeitalter.csv'});
   }
-  function comparisons(parent) {
-    strengthTable(panel(parent,'Modellstände auf demselben Testplan','Vergleiche funktionieren innerhalb dieser Auswertung gegen unveränderte Gegner und Spiel-Seeds.'));
-    const paired=panel(parent,'Direkter Fortschrittsvergleich','Das geprüfte End-/Testmodell wird jeweils mit einem früheren Stand auf demselben Plan verglichen.');
-    const rows=Object.entries(report().paired_progress||{}).filter(([,p])=>p.paired_valid).map(([key,p])=>({model:modelLabel(current(),key),margin:p.vp_diff_gain,share:p.win_share_gain,
-      margin_ci:interval(p.vp_diff_gain_ci95),share_ci:Array.isArray(p.win_share_gain_ci95)?num(100*p.win_share_gain_ci95[0])+t(' bis ')+num(100*p.win_share_gain_ci95[1])+t(' Prozentpunkte'):t('nicht verfügbar'),
-      interpretation:Array.isArray(p.vp_diff_gain_ci95)?p.vp_diff_gain_ci95[0]>0?'Hinweis auf Verbesserung':p.vp_diff_gain_ci95[1]<0?'Hinweis auf Verschlechterung':'Noch nicht eindeutig':'Zu wenige Daten'}));
-    table(paired,[col('model','Verglichen mit','string'),col('margin','Vorsprung-Zuwachs','number',signed),col('margin_ci','95%-Intervall / Punkte','string'),col('share','Sieganteil-Zuwachs','number',v=>signed(v*100)+t(' Prozentpunkte')),col('share_ci','95%-Intervall / Prozentpunkte','string'),col('interpretation','Einordnung des Vorsprungs','string')],()=>rows,{sort:'margin',filename:'fortschritt.csv'});
-    const groups=panel(parent,'Unterschiede zwischen Spielsituationen');const controls=el('div',null,'group-controls');groups.append(controls);let update=()=>{};
-    const kind=selectControl(controls,'Gruppieren nach',[['opponents','Gegnerpaar'],['seat','Spielerposition'],['wonder','Wunder'],['outcome','Spielausgang']],()=>{state.groups.kind=kind.value;update(true);});
-    const category=selectControl(controls,'Punkteprofil',[['total','Gesamtpunkte'],...Object.entries(CATEGORY)],()=>{state.groups.category=category.value;update(true);});
-    kind.value=state.groups.kind;category.value=state.groups.category;
-    const groupLabel=group=>kind.value==='wonder'&&i18n?.language()==='en'?
-      group.replace(/^(Gizah|Halikarnassos|Ephesos|Rhodos)\b/,name=>({Gizah:'Giza',Halikarnassos:'Halicarnassus',Ephesos:'Ephesus',Rhodos:'Rhodes'})[name]):t(group);
+  function curveRows() {
+    if(context.training?.evaluations?.length&&context.training.plan_id===report()?.plan_id&&!current()?.historical_reference)return context.training.evaluations;
+    if(!report()?.plan_id)return [];
+    return entries.filter(e=>!e.historical_reference&&e.report?.plan_id===report().plan_id&&numeric(e.report.training_step)).map(e=>({step:e.report.training_step,...e.report.models.candidate})).sort((a,b)=>a.step-b.step);
+  }
+  function curveChart(parent,rows) {
+    const key=state.metric,percent=key==='win_share',fmt=percent?pct:signed;
+    const points=rows.filter(r=>numeric(r[key]));
+    if(!points.length){parent.append(el('p','Noch keine Lernkurve vorhanden. Einzelne Auswertungen bleiben unten vergleichbar.','empty'));return;}
+    const reference=context.training&&context.training.plan_id===report()?.plan_id&&!current().historical_reference?context.training.reference?.[key]:null;
+    const values=points.map(p=>p[key]);if(numeric(reference))values.push(reference);
+    const minX=Math.min(...points.map(p=>p.step)),maxX=Math.max(minX+1,...points.map(p=>p.step));
+    const bottom=Math.min(0,...values),top=Math.max(bottom+.1,...values),pad=(top-bottom)*.1;
+    const x=v=>80+(v-minX)/(maxX-minX)*790,y=v=>260-(v-bottom+pad)/(top-bottom+2*pad)*220;
+    const svg=(tag,attrs={},text=null)=>{const n=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,v);if(text!==null)n.textContent=text;return n;};
+    const chart=svg('svg',{viewBox:'0 0 920 330',class:'training-chart',role:'img','aria-label':t('Trainingsverlauf')});chart.append(svg('title',{},t('Fortschritt nach Trainingsschritt')));
+    for(let i=0;i<5;i++){const v=bottom-pad+(top-bottom+2*pad)*i/4,py=y(v);chart.append(svg('line',{x1:80,x2:870,y1:py,y2:py,class:'chart-grid'}),svg('text',{x:68,y:py+4,'text-anchor':'end'},fmt(v)));}
+    if(numeric(reference))chart.append(svg('line',{x1:80,x2:870,y1:y(reference),y2:y(reference),class:'reference-line'}));
+    const path=points.map((p,i)=>(i?'L':'M')+x(p.step)+','+y(p[key])).join(' ');chart.append(svg('path',{d:path,fill:'none',stroke:PALETTE.science,'stroke-width':3}));
+    points.forEach(p=>{const dot=svg('circle',{cx:x(p.step),cy:y(p[key]),r:5,fill:PALETTE.science,tabindex:0,role:'button','aria-label':t('Schritt {step}: {value}',{step:num(p.step,0),value:fmt(p[key])})});
+      dot.append(svg('title',{},num(p.step,0)+' · '+fmt(p[key])));
+      const choose=()=>{const i=entries.findIndex(e=>!e.historical_reference&&e.report?.plan_id===report().plan_id&&e.report.training_step===p.step);if(i>=0){state.entry=i;state.model='candidate';populateReports();populateModels();render();}else{state.focusStep=p.step;render();}};
+      dot.addEventListener('click',choose);dot.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();}});chart.append(dot);
+    });
+    for(const step of [minX,(minX+maxX)/2,maxX])chart.append(svg('text',{x:x(step),y:292,'text-anchor':'middle'},num(step,0)));
+    chart.append(svg('text',{x:475,y:322,'text-anchor':'middle'},t('Trainingsschritte')));parent.append(chart);
+    if(numeric(reference))parent.append(el('p','Gestrichelte Linie: festes Referenzmodell auf demselben Prüfplan.','definition'));
+    const focused=rows.find(r=>r.step===state.focusStep)||rows.find(r=>r.step===report().training_step)||rows[rows.length-1];
+    if(focused){const info=el('div',null,'checkpoint-info');info.append(el('strong',t('Schritt {step}: {value}',{step:num(focused.step,0),value:fmt(focused[key])})));
+      if(focused.previous_progress?.paired_valid){const p=focused.previous_progress;info.append(el('span',t('Zum vorherigen Checkpoint: {value}',{value:signed(p.vp_diff_gain)+t(' Punkte')+' · '+testLabel(p.vp_diff_gain_p_value)})));}
+
+      const ci=key==='vp_diff_mean'?focused.vp_diff_ci95:key==='win_share'?focused.win_share_ci95:null;
+      if(ci)info.append(el('span',t('95%-Intervall: {value}',{value:interval(ci,percent)})));
+      if(!entries.some(e=>e.report?.training_step===focused.step)){const link=el('a','Älterer Detailbericht');link.href='evaluations/step_'+String(focused.step).padStart(7,'0')+'/dashboard.html#points';info.append(link);}
+      parent.append(info);
+    }
+  }
+  function training(parent) {
+    const box=panel(parent,'Lernkurve','Wähle eine Kennzahl und klicke auf einen Checkpoint für Details.');
+    const controls=el('div',null,'filters');box.append(controls);
+    const metric=selectControl(controls,'Kennzahl',[['vp_diff_mean','Punktevorsprung'],['win_share','Sieganteil'],['agent_vp_mean','Eigene Punkte']],()=>{state.metric=metric.value;render();});metric.value=state.metric;
+    const rows=curveRows();
+    for(const [key,label] of [['from','Ab Schritt'],['to','Bis Schritt']]){const wrap=el('label',label),input=el('input');input.type='number';input.min='0';input.placeholder=key==='from'?'0':'∞';input.value=state[key];input.addEventListener('change',()=>{state[key]=input.value;render();});wrap.append(input);controls.append(wrap);}
+    curveChart(box,rows.filter(r=>(state.from===''||r.step>=Number(state.from))&&(state.to===''||r.step<=Number(state.to))));
+    if(context.training&&context.training.plan_id===report().plan_id&&!current().historical_reference){const status=context.training.status||{};box.append(el('p',t('Stand: {step} Schritte · Nächste Evaluation: {next}',{step:num(status.timestep,0),next:num(status.next_evaluation,0)}),'definition'));
+      if(context.training.continuous)box.append(el('p','Fortlaufendes Training','definition'));
+    }
+    progressPanel(parent);
+    const models=details(parent,'Modellstände auf demselben Testplan');strengthTable(models);
+    const groups=details(parent,'Unterschiede zwischen Spielsituationen');const groupControls=el('div',null,'group-controls');groups.append(groupControls);let update=()=>{};
+    const kind=selectControl(groupControls,'Gruppieren nach',[['opponents','Gegnerpaar'],['seat','Spielerposition'],['wonder','Wunder'],['outcome','Spielausgang']],()=>{state.groups.kind=kind.value;update(true);});
+    const category=selectControl(groupControls,'Punkteprofil',[['total','Gesamtpunkte'],...Object.entries(CATEGORY)],()=>{state.groups.category=category.value;update(true);});kind.value=state.groups.kind;category.value=state.groups.category;
+    const groupLabel=group=>kind.value==='wonder'&&i18n?.language()==='en'?group.replace(/^(Gizah|Halikarnassos|Ephesos|Rhodos)\b/,name=>({Gizah:'Giza',Halikarnassos:'Halicarnassus',Ephesos:'Ephesus',Rhodos:'Rhodes'})[name]):t(group);
     update=table(groups,[col('group','Gruppe','string'),col('games','Spiele','number',v=>num(v,0)),col('share','Sieganteil','number',pct),col('margin','Vorsprung Ø','number',signed),col('points','Ausgewählte Punkte Ø')],()=>Object.entries(model().groups?.[kind.value]||{}).map(([group,g])=>({group:groupLabel(group),games:g.games,share:g.win_share,margin:g.vp_diff_mean,points:g.categories?.[category.value]?.mean})),{sort:'share',filename:'untergruppen.csv'});
-    const runs=panel(parent,'Geladene Trainingsläufe vergleichen','Weitere analysis.json-Dateien kannst du oben über „Auswertung hinzufügen“ öffnen.');
-    table(runs,[col('run','Auswertung','string'),col('model','Modell','string'),col('version','Merkmalsversion','number',v=>num(v,0)),col('share','Sieganteil','number',pct),col('points','Punkte Ø'),col('margin','Vorsprung Ø','number',signed),col('opponents','Gegnerreferenzen','string')],()=>entries.map(e=>{
-      const key=e.report.models[state.model]?state.model:'candidate',m=e.report.models[key];return {run:entryTitle(e),model:modelLabel(e,key),share:m.win_share,points:m.agent_vp_mean,margin:m.vp_diff_mean,
-        version:e.provenance?.feature_semantics_version,opponents:(e.report.references||[]).map(r=>String(r.checkpoint).split(/[\\/]/).pop()).join(' / ')};
-    }),{sort:'share',filename:'laufvergleich.csv'});
-    notice(parent,'Laufübergreifende Werte sind nur bei vergleichbaren Gegnern und Testbedingungen direkt interpretierbar. Gleich benannte Checkpoints aus verschiedenen Trainingsläufen sind verschiedene Modelle. Untergruppen sind beschreibend, keine separaten Signifikanztests.');
+    const runs=details(parent,'Geladene Trainingsläufe vergleichen','Laufübergreifende Werte sind nur bei vergleichbaren Gegnern und Testbedingungen direkt interpretierbar.');
+    table(runs,[col('run','Auswertung','string'),col('share','Sieganteil','number',pct),col('margin','Vorsprung Ø','number',signed)],()=>entries.filter(e=>!isScience(e)&&!e.historical_reference).map(e=>({run:entryTitle(e),share:e.report.models.candidate?.win_share,margin:e.report.models.candidate?.vp_diff_mean})),{sort:'share',filename:'laufvergleich.csv'});
+    if(context.training?.league&&context.training.plan_id===report().plan_id&&!current().historical_reference){const league=details(parent,'Trainingsliga · Gegnerauswahl'),data=context.training.league;league.append(el('p',t('{count} aktive Modelle',{count:num(data.active_checkpoints?.length,0)}),'definition'));
+      table(league,[col('left','Linker Gegner · Schritt'),col('right','Rechter Gegner · Schritt'),col('probability','Auswahlchance','number',pct)],()=>data.pairs||[],{sort:'probability',filename:'liga.csv'});
+    }
   }
   function quality(parent) {
-    const m=model(),box=panel(parent,'Vollständigkeit der Spieldaten','Erfasste Spiele im Verhältnis zu den abgeschlossenen Partien des ausgewählten Modells.');
-    const coverage=m.coverage||{};
-    table(box,[col('metric','Information','string'),col('n','Erfasst / Anzahl','number',v=>num(v,0)),col('expected','Abgeschlossene Spiele','number',v=>num(v,0))],()=>[
-      {metric:'Endzustände aller Spieler',n:coverage.final_states,expected:m.completed},
-      {metric:'Vollständige Zeitalterfolgen',n:coverage.complete_age_sequences,expected:m.completed},
-      {metric:'Aktionsprotokolle',n:coverage.action_traces,expected:m.completed},
-      {metric:'Fehlgeschlagene Spiele',n:m.failed}, {metric:'Abgebrochene Spiele',n:m.truncated},
-      {metric:'Fehlerhafte Punktesummen',n:coverage.score_sum_mismatches},
-      {metric:'Fehlerhafte Zeitalterfolgen',n:coverage.invalid_age_sequences}, {metric:'Unbekannte gebaute Karten',n:coverage.unknown_built_cards}
-    ],{sort:'metric',direction:1,filename:'datenqualitaet.csv'});
-    const settings=panel(parent,'Testbedingungen und Modellidentität');
-    const info=el('div',null,'detail-list');for(const [key,value] of [['Auswertung',entryTitle(current())],['Modellstand',modelLabel(current(),state.model)],
-      ['Test-Seed',num(report().seed,0)],['Unabhängige Spiel-Seeds',num(m.seed_blocks,0)],['Modellpfad',report().model_descriptors?.[state.model]?.checkpoint||t('nicht erfasst')],
-      ['Modell SHA-256',report().model_descriptors?.[state.model]?.sha256||t('nicht erfasst')],
-      ['Merkmalsversion',num(current().provenance?.feature_semantics_version,0)],
-      ['Simulator SHA-256',current().provenance?.engine_sha256||t('nicht erfasst')],
-      ['Kartendaten SHA-256',current().provenance?.card_database_sha256||t('nicht erfasst')]]){const row=el('div');row.append(el('small',key),el('span',value));info.append(row);}settings.append(info);
-    settings.append(button('Auswertungsdaten herunterladen',()=>download(JSON.stringify(report(),null,2),'analysis.json','application/json')));
-    notice(parent,'Die Interpretation gilt für die verwendete Simulatorvariante. Gespeicherte Berichte älterer Läufe können andere Merkmalsversionen verwenden. Wissenschaftsarmut ist ein Beobachtungsbefund, kein Beweis für die optimale Strategie.');
+    const m=model(),info=el('div',null,'detail-list');parent.append(info);
+    for(const [label,value] of [['Modellstand',modelLabel(current(),state.model)],['Abgeschlossene Spiele',num(m.completed,0)],['Unabhängige Spiel-Seeds',num(m.seed_blocks,0)],['Test-Seed',num(report().seed,0)],['Modellpfad',report().model_descriptors?.[state.model]?.checkpoint||t('nicht erfasst')],['Modell SHA-256',report().model_descriptors?.[state.model]?.sha256||t('nicht erfasst')]]){
+      const row=el('div');row.append(el('small',label),el('span',value));info.append(row);
+    }
+    table(parent,[col('label','Information','string'),col('value','Anzahl','number',v=>num(v,0))],()=>[
+      {label:'Fehlgeschlagene Spiele',value:m.failed},{label:'Abgebrochene Spiele',value:m.truncated},
+      ...Object.entries({final_states:'Endzustände aller Spieler',complete_age_sequences:'Vollständige Zeitalterfolgen',action_traces:'Aktionsprotokolle',score_sum_mismatches:'Fehlerhafte Punktesummen',invalid_age_sequences:'Fehlerhafte Zeitalterfolgen',unknown_built_cards:'Unbekannte gebaute Karten'}).map(([key,label])=>({label,value:m.coverage?.[key]}))
+    ],{filename:'datenqualitaet.csv'});
+    parent.append(button('Auswertungsdaten herunterladen',()=>download(JSON.stringify(report(),null,2),'analysis.json','application/json')));
   }
   function populateModels(){
-    const select=$('model-select');select.replaceChildren();
-    if(!report().models[state.model])state.model='candidate';
+    const select=$('model-select');select.replaceChildren();select.disabled=!current()?.report;
+    if(!current()?.report)return;
+    if(!report().models[state.model])state.model=report().models.candidate?'candidate':Object.keys(report().models)[0];
     for(const key of Object.keys(report().models)){const option=el('option',modelLabel(current(),key));option.value=key;select.append(option);}select.value=state.model;
   }
   function populateReports(){
     $('report-select').replaceChildren();entries.forEach((entry,i)=>{const option=el('option',entryTitle(entry));option.value=i;$('report-select').append(option);});$('report-select').value=state.entry;
   }
   function render(){
-    const requested=location.hash.slice(1);state.view=VIEWS[requested]?requested:'overview';
+    const requested=location.hash.slice(1),aliases={overview:'points',comparisons:'training',quality:'points',science:'training'};
+    state.view=VIEWS[requested]?requested:aliases[requested]||'points';
     for(const link of $('navigation').children){const active=link.hash==='#'+state.view;link.classList.toggle('active',active);if(active)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');}
     $('page-title').textContent=t(VIEWS[state.view][0]);$('page-description').textContent=t(VIEWS[state.view][2]);
-    $('dataset-meta').textContent=t('{games} Spiele · {seeds} Spiel-Seeds',{games:num(model().completed,0),seeds:num(model().seed_blocks,0)});
     $('error').hidden=!state.error;if(state.error)$('error').textContent=t('Import nicht möglich: ')+t(state.error);
-    const parent=$('content');parent.replaceChildren();({overview,points,ages,cards,comparisons,quality})[state.view](parent);
+    const parent=$('content');parent.replaceChildren();
+    if(!current()?.report){
+      $('dataset-meta').textContent='';
+      notice(parent,context.training&&!entries.length?'Noch keine abgeschlossene Evaluation. Das Dashboard erscheint nach dem ersten Kontrollpunkt.':'Für diese Ansicht fehlt eine detaillierte Auswertung. Lade eine analysis.json; die Wissenschaftsdiagnose enthält keine vollständigen Testspiel-Daten.');return;
+    }
+    $('dataset-meta').textContent=t('{games} Spiele · {seeds} Spiel-Seeds',{games:num(model()?.completed,0),seeds:num(model()?.seed_blocks,0)});
+    if(current().historical_reference)notice(parent,'Historische Referenz · ursprünglicher Prüfplan. Neue Trainingsstände erscheinen nach der ersten Evaluation.');
+    if(model().valid_for_selection===false)notice(parent,'Diese Auswertung enthält unvollständige Spiele. Kennzahlen beziehen sich auf abgeschlossene Partien.');
+    if((model().coverage?.complete_age_sequences||0)<model().completed)notice(parent,'Für diesen Modellstand fehlen teilweise Zeitalter- oder Aktionsdaten. Fehlende Werte werden als „nicht erfasst“ angezeigt.');
+    if(model().coverage?.score_sum_mismatches>0)notice(parent,'Die Punktesummen enthalten Unstimmigkeiten. Details stehen unter Datengrundlage und Export.');
+    ({points,ages,cards,training})[state.view](parent);
   }
   function navigation(){
-    $('navigation').replaceChildren();
-    for(const [key,[name,index]] of Object.entries(VIEWS)){const a=el('a');a.href='#'+key;a.append(el('span',index),el('strong',name));$('navigation').append(a);}
+    $('navigation').replaceChildren();for(const [key,[name,index]] of Object.entries(VIEWS)){const a=el('a');a.href='#'+key;a.append(el('span',index),el('strong',name));$('navigation').append(a);}
   }
-  $('report-select').addEventListener('change',()=>{state.entry=Number($('report-select').value);populateModels();render();});
+  $('report-select').addEventListener('change',()=>{state.entry=Number($('report-select').value);state.compare='best';state.focusStep=null;populateModels();render();});
   $('model-select').addEventListener('change',()=>{state.model=$('model-select').value;render();});
   $('import-file').addEventListener('change',async event=>{
-    state.error=null;$('error').hidden=true;
+    state.error=null;
     try{
       const incoming=[];
       for(const file of event.target.files){
@@ -306,13 +409,15 @@
         if(!data?.models?.candidate?.categories||!data.models.candidate.groups)throw new Error('Bitte eine analysis.json aus der detaillierten Auswertung auswählen.');
         incoming.push({title:file.name+' · Seed '+(data.seed??'?')+' · '+(entries.length+incoming.length+1),report:data});
       }
-      entries.push(...incoming);if(incoming.length)state.entry=entries.length-incoming.length;populateReports();populateModels();render();
-    }catch(error){state.error=error.message;render();}
-    event.target.value='';
+      entries.push(...incoming);if(incoming.length){state.entry=entries.length-incoming.length;state.model='candidate';state.compare='best';}populateReports();populateModels();render();
+    }catch(error){state.error=error.message;render();}event.target.value='';
   });
   window.addEventListener('hashchange',render);
   function refreshLanguage(){i18n?.apply();navigation();populateReports();populateModels();render();}
   i18n?.subscribe(refreshLanguage);
   $('language-select').addEventListener('change',event=>i18n?.setLanguage(event.target.value));
+  // Prefer the latest evaluated checkpoint; keep historical reference as fallback.
+  const candidates=entries.map((e,i)=>({e,i})).filter(({e})=>e.report&&!e.historical_reference);
+  if(candidates.length)state.entry=candidates.reduce((a,b)=>(b.e.report.training_step??-1)>(a.e.report.training_step??-1)?b:a).i;
   refreshLanguage();
 })();

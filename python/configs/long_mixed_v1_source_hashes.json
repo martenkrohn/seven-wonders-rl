@@ -1,0 +1,8 @@
+{
+  "runs/multihead-v1-seed31/latest.pt": "5928b98dbc66df812d83a04e180a6ba592658d393aed6e1c4c8c71186094720b",
+  "runs/multihead-v2-priors-seed31/latest.pt": "c047b7236793506cdd0e0e0f454d2d2d37be2c50aeaea8abdd9b896ae8d20beb",
+  "runs/multihead-v1-seed31/frozen_opponents/opponent_000.pt": "c81d68ebdf9ec7f4f3cd21ca35014809b612872a0a65ac202818caa81a5fd302",
+  "runs/multihead-v1-seed31/frozen_opponents/opponent_001.pt": "ad49e5bc05adca5050e4beb6c24b219c5c94cd2e3cdfe41334a17e8c294f4f73",
+  "runs/multihead-v1-seed31/frozen_opponents/opponent_002.pt": "88c8ba2a94f6f88e3784a1d62264672270890ed1d400459792f5993a624d2cec",
+  "runs/multihead-v1-seed31/frozen_opponents/opponent_003.pt": "5e15a83fa7d9de3a27499671dde9734af886dbdbdaee06c2a8e3b0dbd6cfb76a"
+}
