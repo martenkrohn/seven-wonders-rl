@@ -28,6 +28,11 @@ Das [bereinigte Dashboard](guides/EVALUATION.md#bereinigte-dashboard-auswahl)
 zeigt nur diese neuen Auswertungen und die letzte Evaluation des festgelegten
 bisherigen Endmodells als Referenz.
 
+Engine und alte GUI sind jetzt getrennt vom RL-Projekt wartbar. Die weiteren
+Schritte zur BGA-Edition stehen im [Engine-Arbeitsplan](../engine/docs/MIGRATION_PLAN.md).
+Der [nächste Agentenauftrag](../engine/docs/NEXT_AGENT_TASK.md) beschränkt sich
+auf das erste offene Arbeitspaket; Regellogik und neue Grafik folgen getrennt.
+
 ## Aktueller Bezugspunkt
 
 Der letzte abgeschlossene Lauf ist `long-mixed-wonders-v2-seed231`: vier Köpfe,

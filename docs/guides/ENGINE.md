@@ -12,6 +12,12 @@ Der [Prüfnachweis der Trennung](../reference/engine-split-validation.json)
 enthält Quell- und Binary-Prüfsummen, sieben identische vollständige
 Spielverläufe sowie lokale und GitHub-Prüfergebnisse.
 
+Die alte Tk-GUI ist mit `v0.1.1-legacy` wieder als optionales Frontend verfügbar;
+der C++-Regelstand bleibt gleich. [Start und Bedienung](../../engine/docs/GUI.md),
+[GUI-Audit](../../engine/docs/GUI_AUDIT.md),
+[verbindlicher Arbeitsplan](../../engine/docs/MIGRATION_PLAN.md) und
+[nächster Agentenauftrag](../../engine/docs/NEXT_AGENT_TASK.md) liegen in der Engine.
+
 ## Bestehenden Stand verwenden
 
 ```sh
