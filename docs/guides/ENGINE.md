@@ -53,10 +53,11 @@ selbst nur CMake, C++17 und optional Python für ihren Protokolltest.
 
 Die Audit-/Export-/Vergleichsskripte lesen die Quellen jetzt aus `engine/`;
 ihre Ausgaben bleiben im RL-Projekt. Alte Auditberichte behalten ihre
-historischen Pfadangaben. Die im Editionsaudit belegten Exportfehler
-(unter anderem verschobene Wunder-IDs und Produktionsmengen) bestehen weiter;
-die gepflegten JSON-Daten wurden bei der Trennung bewusst nicht neu erzeugt.
-Vor einer Datenmigration sind diese Exportfehler separat zu korrigieren.
+historischen Pfadangaben. Paket 2 hat die im Editionsaudit belegten Exportfehler
+bei Wunder-IDs, Spielerzahlen und Produktionsmengen behoben und die beiden
+veralteten Zusatzflags entfernt. [Exportanleitung und Daten-Diff](LEGACY_DATA_EXPORT.md)
+beschreiben den reproduzierbaren Legacy-Stand. Die Wunderdaten und Mechanikdaten
+bleiben unverändert; die BGA-Definitionen sind noch nicht aktiv.
 Neue Trainingsmanifeste erfassen zusätzlich den
 Engine-Quellcommit, Arbeitsstatus und Regelnamen; der vorhandene Binary-Hash
 bleibt erhalten. Ein neu gebautes Binary kann trotz gleicher Regeln einen

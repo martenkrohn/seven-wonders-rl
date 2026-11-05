@@ -250,7 +250,14 @@ Empfehlung: Alle Verteilungen der wenigen Joker auf die drei Symbole
 durchprobieren und das Maximum wählen. C++-Endwertung und Python-
 Punktevorschau müssen für identische Symbolbestände dasselbe Ergebnis liefern.
 
-### P1: Exporter sind aktuell keine sichere Regenerationsquelle
+### P1: Ursprüngliche Exporter-Befunde – seit Paket 2 behoben
+
+**Nachtrag, 5. November 2026:** Paket 2 behebt die folgenden Exportfehler,
+prüft alle 78 Legacy-Kartenzeilen und reproduziert die 14 gepflegten
+Wunderseiten unverändert. [Anleitung und geprüfter Diff](../guides/LEGACY_DATA_EXPORT.md),
+[Prüfnachweis](legacy-export-validation.json). Die folgende Tabelle und
+Einschätzung dokumentieren den ursprünglichen Auditstand vor der Korrektur;
+sie sind keine aktuelle Warnung vor den reparierten Exportern.
 
 | Befund | Nachweis | Konsequenz |
 | --- | --- | --- |

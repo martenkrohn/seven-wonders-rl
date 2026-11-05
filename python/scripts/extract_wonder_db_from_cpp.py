@@ -10,51 +10,10 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Tuple, Any, Optional
 
+from legacy_export_common import check_export, export_arguments, parse_enum
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 ENGINE_ROOT = REPO_ROOT / "engine"
-
-
-def parse_enum(file_path: Path, namespace_name: str) -> Tuple[Dict[str, int], Dict[int, str]]:
-    """Parse C++ enum with implicit increments."""
-    content = file_path.read_text()
-    
-    # Find namespace block
-    pattern = rf'namespace {namespace_name}\s*{{(.*?)}};'
-    match = re.search(pattern, content, re.DOTALL)
-    if not match:
-        raise ValueError(f"Namespace {namespace_name} not found in {file_path}")
-    
-    enum_block = match.group(1)
-    name_to_int = {}
-    int_to_name = {}
-    current_value = 0
-    
-    for line in enum_block.split('\n'):
-        line = line.strip()
-        # Remove comments
-        line = re.sub(r'//.*', '', line)
-        line = re.sub(r'/\*.*?\*/', '', line)
-        line = line.strip()
-        
-        if not line or line == '{' or line == '}' or line.startswith('enum '):
-            continue
-        
-        # Remove trailing comma
-        line = line.rstrip(',')
-        
-        if '=' in line:
-            parts = line.split('=')
-            name = parts[0].strip()
-            value = int(parts[1].strip())
-            current_value = value
-        else:
-            name = line
-        
-        name_to_int[name] = current_value
-        int_to_name[current_value] = name
-        current_value += 1
-    
-    return name_to_int, int_to_name
 
 
 def _find_block_by_braces(content: str, brace_start: int) -> Tuple[str, int]:
@@ -306,15 +265,17 @@ def write_json_atomic(data: Any, file_path: Path):
     temp_path.replace(file_path)
 
 
-def main():
+def main(argv=None):
+    args = export_arguments(argv, __doc__)
+    engine_root = args.engine_root
     print("=" * 60)
     print("Wonder Database Extraction")
     print("=" * 60)
     
     # Parse enums
     print("\n1. Parsing enums...")
-    wonder_h = ENGINE_ROOT / "include/wonder.h"
-    resources_h = ENGINE_ROOT / "include/resources.h"
+    wonder_h = engine_root / "include/wonder.h"
+    resources_h = engine_root / "include/resources.h"
     
     wonder_id_name_to_int, wonder_id_int_to_name = parse_enum(wonder_h, 'WONDER_ID')
     print(f"   - Found {len(wonder_id_name_to_int)} WONDER_ID entries")
@@ -327,7 +288,7 @@ def main():
     
     # Parse wonder classes
     print("\n2. Parsing wonder class definitions from wonder.cpp...")
-    wonder_cpp = ENGINE_ROOT / "src/wonder.cpp"
+    wonder_cpp = engine_root / "src/wonder.cpp"
     wonder_classes = parse_wonder_classes(wonder_cpp)
     print(f"   - Found {len(wonder_classes)} wonder classes")
     
@@ -370,11 +331,14 @@ def main():
     
     # Write output
     print("\n6. Writing output file...")
-    output_dir = REPO_ROOT / "python/src/sevenwonders_rl/data"
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir = args.output_dir
     
     wonder_db_sorted = dict(sorted(wonder_db.items(), key=lambda x: int(x[0])))
     
+    if args.check:
+        return check_export(output_dir, {"wonder_db.json": wonder_db_sorted})
+    output_dir.mkdir(parents=True, exist_ok=True)
+
     wonder_db_path = output_dir / "wonder_db.json"
     write_json_atomic(wonder_db_sorted, wonder_db_path)
     print(f"   - {wonder_db_path}")

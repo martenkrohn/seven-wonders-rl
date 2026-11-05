@@ -38,8 +38,10 @@ konvertiert. Checkpoint-, Feature- und Datenbankschemata müssen kompatibel sein
 Die aktuelle Engine ist keine vollständige Migration auf jede neuere Edition.
 Der [Editionsaudit](EDITION_AUDIT.md) belegt, dass die Kartendeklarationen noch
 mit dem festgehaltenen Upstream übereinstimmen, und dokumentiert insbesondere
-Exportfehler bei Wunder-IDs, Spielerzahlen und Produktionsmengen. Er beschreibt
-die Migration auf das Grundspiel von 2020; umgesetzt ist sie noch nicht.
+die ursprünglichen Exportfehler bei Wunder-IDs, Spielerzahlen und
+Produktionsmengen. Diese Exportfehler sind seit Paket 2 vom 5. November 2026
+[behoben und geprüft](../guides/LEGACY_DATA_EXPORT.md). Der Audit beschreibt
+auch die Migration auf das Grundspiel von 2020; umgesetzt ist sie noch nicht.
 Weitere geerbte Regelfehler außerhalb gezielter Regressionen sind möglich.
 Insbesondere bleibt die zusätzliche Auswahl aus dem Ablagestapel bei
 Halikarnassos über `extra` unvollständig unterstützt. Handelsdetails werden von

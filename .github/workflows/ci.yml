@@ -18,6 +18,10 @@ jobs:
       - run: python python/scripts/check_engine.py
       - name: Exact simulator change inventory
         run: python python/scripts/audit_simulator.py --check
+      - name: Reproducible legacy data exports
+        run: |
+          python python/scripts/extract_card_db_from_cpp.py --check
+          python python/scripts/extract_wonder_db_from_cpp.py --check
       - run: python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
       - run: python -m pip install -e './python[dev]'
       - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build --parallel 2

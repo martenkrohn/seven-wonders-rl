@@ -32,6 +32,8 @@ Engine und alte GUI sind jetzt getrennt vom RL-Projekt wartbar. Die weiteren
 Schritte zur BGA-Edition stehen im [Engine-Arbeitsplan](../engine/docs/MIGRATION_PLAN.md).
 Der [nächste Agentenauftrag](../engine/docs/NEXT_AGENT_TASK.md) beschränkt sich
 auf das erste offene Arbeitspaket; Regellogik und neue Grafik folgen getrennt.
+Paket 2 macht die [alten Datenexporte](guides/LEGACY_DATA_EXPORT.md) mit
+geprüftem Daten-Diff reproduzierbar; die aktiven Regeln bleiben Legacy.
 
 ## Aktueller Bezugspunkt
 

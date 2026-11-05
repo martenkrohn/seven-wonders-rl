@@ -6,6 +6,7 @@ External edition rules are assessed separately in docs/reference/EDITION_AUDIT.m
 """
 from __future__ import annotations
 
+import argparse
 import contextlib
 import hashlib
 import io
@@ -35,7 +36,7 @@ def regeneration(module):
         {path.name: json.loads(json.dumps(data))})
     try:
         with contextlib.redirect_stdout(io.StringIO()):
-            module.main()
+            module.main([])
     finally:
         module.write_json_atomic = original
     result = {}
@@ -55,7 +56,10 @@ def regeneration(module):
     return result
 
 
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--check', action='store_true', help='Exit 1 if package data differs from the legacy export')
+    args = parser.parse_args(argv)
     current_main = (ENGINE_ROOT / "main.cpp").read_text()
     pattern = r"(?:cards|guild_cards)\.push_back\(Card\(.*?\)\);"
     old = re.findall(pattern, upstream("main.cpp"))
@@ -73,11 +77,13 @@ def main():
         if card["free_with_raw"] != -1 and data["chain_from"] != card["free_with_raw"]:
             mismatches.append({"id": card["id"], "field": "chain_from"})
     files = ["main.cpp", "src/card.cpp", "src/player.cpp", "src/wonder.cpp",
-             "include/card.h", "include/wonder.h",
+             "include/card.h", "include/wonder.h", "include/resources.h",
+             "python/scripts/legacy_export_common.py",
              "python/scripts/extract_card_db_from_cpp.py",
              "python/scripts/extract_wonder_db_from_cpp.py",
              "python/src/sevenwonders_rl/data/card_db.json",
-             "python/src/sevenwonders_rl/data/wonder_db.json"]
+             "python/src/sevenwonders_rl/data/wonder_db.json",
+             "python/src/sevenwonders_rl/data/mechanics.json"]
     result = {
         "baseline": BASELINE,
         "working_tree_sha256": {
@@ -88,11 +94,16 @@ def main():
         "card_cpp_unchanged": upstream("src/card.cpp") == (ENGINE_ROOT / "src/card.cpp").read_text(),
         "card_id_header_unchanged": upstream("include/card.h") == (ENGINE_ROOT / "include/card.h").read_text(),
         "unique_card_ids": len(card_db),
+        "card_era_rows": len(parsed),
+        "engine_contract": json.loads((ENGINE_ROOT / 'engine-contract.json').read_text()),
         "card_cost_or_single_chain_mismatches": mismatches,
         "regeneration": {**regeneration(cards), **regeneration(wonders)},
     }
     print(json.dumps(result, indent=2, ensure_ascii=False))
+    if args.check and (mismatches or any(not row['identical'] for row in result['regeneration'].values())):
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

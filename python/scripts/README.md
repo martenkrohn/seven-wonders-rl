@@ -48,7 +48,7 @@ current panel for paired comparisons; see the
 | Evaluation analysis | `ppo_training/analyze_eval.py` |
 | Heuristic and population comparisons | `roundrobin_eval.py`, `population_tournament.py`, `simple_roundrobin.py` |
 | Trace/debug evaluation | `eval_policy.py`, `eval_with_traces.py` |
-| Engine data extraction | `extract_card_db_from_cpp.py`, `extract_wonder_db_from_cpp.py` |
+| Engine data extraction | `extract_card_db_from_cpp.py --check`, `extract_wonder_db_from_cpp.py --check`; [legacy export workflow](../../docs/guides/LEGACY_DATA_EXPORT.md) |
 | Fixture and action diagnostics | `capture_fixtures.py`, `fixture_stats.py`, `inspect_fixture_actions.py`, `validate_action_features.py` |
 | Paired runtime benchmark | `benchmark_runtime.py --help` |
 | Before/after self-play, evaluation and feature benchmark | `benchmark_optimizations.py --help` |
