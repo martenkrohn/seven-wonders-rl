@@ -61,3 +61,8 @@ results.txt
 
 # Preserved local pre-cleanup sources, old GUI artifacts and runtime exchange.
 /.local-archive/
+
+# Machine-specific assistant and account state at any workspace depth.
+**/.aws/
+**/.codex/
+**/.agents/

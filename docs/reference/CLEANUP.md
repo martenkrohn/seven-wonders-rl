@@ -2,7 +2,7 @@
 
 The project now supports one three-player Second Edition agent with visible
 memory. This supersedes the [pre-cleanup audit](../research/PROJECT_CLEANUP_AUDIT_2026-11-06.md).
-The selected source tree has 86 entries (previously 395), about 0.8 MB excluding
+The selected source tree has 87 entries (previously 395), about 0.8 MB excluding
 the separate engine and Git history; active Python modules fell from 62 to 21.
 
 ## Implementation
@@ -28,6 +28,8 @@ the separate engine and Git history; active Python modules fell from 62 to 21.
 - Fast unit/component checks are separate from active integration tests.
   `make test-all` selects the entire suite. Pytest no longer builds an old engine.
   CI checks the pinned current engine and the remaining active contracts.
+- Repository instructions scope future agent verification to the affected area;
+  documentation-only pushes do not trigger the full integration job.
 - Direct dependency constraints, portable VS Code workspace and package metadata
   support the documented Python 3.12 setup. Active Python files use consistent formatting.
 
