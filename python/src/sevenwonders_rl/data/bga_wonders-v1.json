@@ -1,12 +1,12 @@
 {
   "format_version": 1,
-  "ruleset": "bga-second-edition-development",
+  "ruleset": "bga-second-edition",
   "source": {
     "path": "data/bga-second-edition/targets.json",
     "sha256": "c654f36c96fdd325dc6e26cbe8ed9808ff9ea884a94d8e1eaa49284ac4a864b1",
     "format_version": 1
   },
-  "second_edition_implemented": false,
+  "second_edition_implemented": true,
   "wonders": [
     {
       "key": "gizah_a",

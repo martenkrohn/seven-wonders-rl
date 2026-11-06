@@ -18,7 +18,7 @@ def main():
     if len(entry) < 2 or entry[0] != "160000" or entry[1] != actual:
         raise SystemExit("The staged engine submodule commit does not match engine.lock.json")
     contract = json.loads((engine / "engine-contract.json").read_text())
-    for key in ("release", "ruleset", "protocol_version", "players"):
+    for key in ("release", "ruleset", "protocol_version", "players", "second_edition_implemented"):
         if contract[key] != lock[key]:
             raise SystemExit(f"Engine contract differs from lock: {key}")
     dirty = subprocess.check_output(["git", "-C", str(engine), "status", "--porcelain"], text=True).strip()

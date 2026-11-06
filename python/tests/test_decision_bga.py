@@ -91,7 +91,7 @@ def test_actual_wonder_features_describe_stage_and_foregone_hand_card():
 
 def test_real_games_every_seat_special_decisions_and_receipt_history():
     seen=set();histories=[]
-    for seat,seed in ((0,0),(1,7),(2,8),(2,3),(2,9)):
+    for seat,seed in ((0,0),(1,7),(2,8),(2,6),(2,9)):
         e=make(seat)
         try:
             obs,info=e.reset(seed=seed);before=[v.copy() for v in obs.values()];steps=0

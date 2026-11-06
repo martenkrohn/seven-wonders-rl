@@ -29,7 +29,7 @@ jobs:
         run: python -m pytest
         working-directory: python
       - name: Active BGA PPO smoke
-        run: python python/scripts/train_decision_ppo.py --allow-development --steps 64 --eval-games 2 --output-dir "$RUNNER_TEMP/bga-smoke"
+        run: python python/scripts/train_decision_ppo.py --steps 64 --eval-games 2 --output-dir "$RUNNER_TEMP/bga-smoke"
       - name: Documented legacy entry points
         working-directory: python
         run: |

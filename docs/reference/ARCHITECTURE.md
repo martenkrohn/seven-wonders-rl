@@ -1,5 +1,9 @@
 # Environment and training contracts
 
+This document describes the retained legacy research architecture. The active
+protocol-3 BGA environment, offered actions and checkpoint contract are described
+in [BGA_RL.md](../guides/BGA_RL.md).
+
 Reviewed 29 October 2026. This reference describes supported modes; defaults
 and the configuration of a particular experiment are distinct. For the latest
 completed setup and its scientific interpretation, see the

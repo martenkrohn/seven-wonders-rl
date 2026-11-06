@@ -75,9 +75,12 @@ class DecisionEnv(gym.Env):
             engine=self.state['engine']
             allowed={'bga-second-edition'}|({'bga-second-edition-development'} if self.allow_development else set())
             if engine['ruleset'] not in allowed:raise EngineError('A released BGA engine is required; development use must be explicit')
-            if engine['card_data']['source_sha256']!=dataset()['source_hash'] or not engine['card_data']['effects_complete'] or not engine['wonder_data']['effects_complete']:
+            if (engine['card_data']['source_sha256']!=dataset()['source_hash']
+                or engine['wonder_data']['source_sha256']!=dataset()['source_hash']
+                or not engine['card_data']['effects_complete'] or not engine['wonder_data']['effects_complete']):
                 raise EngineError('Engine and packaged BGA data/capabilities differ')
             if not self.allow_development:
+                if not engine.get('second_edition_implemented'):raise EngineError('BGA acceptance is incomplete')
                 if engine.get('source_dirty'):raise EngineError('A clean released binary is required')
                 lock_path=ROOT/'engine.lock.json'
                 if not self.explicit_engine and lock_path.is_file():

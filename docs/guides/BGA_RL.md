@@ -1,6 +1,7 @@
 # BGA-Entscheidungen und frisches Training
 
-Stand: 6. November 2026. Der aktive Einstieg ist `DecisionEnv`, auch unter
+Stand: 6. November 2026. Release: `v0.2.0-bga`, Regeln `bga-second-edition`,
+Protokoll 3, `second_edition_implemented=true`. Der aktive Einstieg ist `DecisionEnv`, auch unter
 `SevenWondersEnv` exportiert und als `SevenWondersBGA-v0` registriert. Er benötigt
 den gemeinsamen Client aus dem Engine-Repository, Protokoll 3 und `decision-v1`.
 Das Grundspiel ist auf drei Spieler begrenzt. Eine Entwicklungsengine muss

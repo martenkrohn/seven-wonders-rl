@@ -4,7 +4,12 @@ A work-in-progress reinforcement-learning project for three-player **7 Wonders**
 
 The simulator comes from [DMAG/UFSM's 7Wonders](https://github.com/dmag-ufsm/7Wonders). This project adds the RL environment, observation and action features, heuristic opponents, training/evaluation tools and snapshot self-play. The maintained [engine fork](https://github.com/martenkrohn/seven-wonders-engine) is a separate project, included at a fixed commit under `engine/`. Its legacy releases preserve earlier experiments. The active BGA path uses protocol 3, generated card/wonder data and offered physical-card decisions.
 
-**Current stage:** exploratory training has demonstrated learning, including
+**BGA release:** `v0.2.0-bga`, ruleset `bga-second-edition`, protocol 3.
+The [acceptance record](docs/reference/bga-release-validation.json) records the
+exact engine pin and local checks. Remote publication still requires approval.
+Start new training with the [BGA guide](docs/guides/BGA_RL.md).
+
+**Legacy research stage:** exploratory training has demonstrated learning, including
 improved resource preparation in longer runs. The project is now moving toward
 targeted, scientifically grounded experiments on exploration, opponent
 populations and robust evaluation. Further gains in the latest continuation
@@ -29,7 +34,7 @@ flowchart LR
     B --> C[Observations and legal-action mask]
     C --> D[PPO policy or heuristic opponent]
     D -->|Encoded actions| B
-    B -->|Player JSON files and ready signal| A
+    B -->|Versioned option bundles and ready signal| A
 ```
 
 The active `DecisionEnv` starts the engine through the shared standard-library
@@ -58,6 +63,7 @@ old models and learning curves do not transfer to the new contract.
 | Core C++ simulator and file protocol | DMAG/UFSM's upstream project |
 | Most engine source and bundled JSON headers | Preserved from upstream |
 | Engine corrections and protocol v2 | Selectable production, trading, Gizah B, final status, seeded RNG and atomic publication |
+| BGA data and protocol 3 | Generated definitions, optimal science, simultaneous settlement, explicit special decisions and new GUI |
 | Gymnasium wrapper, masks and feature extraction | RL extension in this project |
 | PyTorch actor-critic, PPO scripts, opponent policies and self-play pool | RL extension in this project |
 | Detailed evaluation, strategy telemetry and interactive HTML dashboard | RL extension in this project |
