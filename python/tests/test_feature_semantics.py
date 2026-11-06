@@ -1,5 +1,6 @@
 """Feature regressions use game facts, never strategic reward preferences."""
 import copy
+import os
 import json
 from pathlib import Path
 import shutil
@@ -183,7 +184,7 @@ def test_features_match_real_engine_free_chains_trade_direction_and_science(requ
     compiler = shutil.which('c++')
     if not compiler:
         pytest.skip('C++ compiler required for controlled engine probe')
-    root = Path(__file__).parents[2] / 'engine'
+    root = Path(os.environ.get('SEVENWONDERS_LEGACY_ENGINE_ROOT',Path(__file__).parents[2] / 'engine'))
     source = tmp_path / 'probe.cpp'
     source.write_text(PROBE.replace('ENGINE_MAIN', str(root / 'main.cpp')))
     binary = tmp_path / 'probe'

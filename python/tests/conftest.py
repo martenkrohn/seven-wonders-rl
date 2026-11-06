@@ -1,4 +1,6 @@
 import json
+import os
+import subprocess
 from pathlib import Path
 
 import numpy as np
@@ -30,7 +32,7 @@ def repo_root_from_tests() -> Path:
 
 
 def engine_path() -> Path:
-    return repo_root_from_tests() / "build" / "7Wonders"
+    return Path(os.environ.get("SEVENWONDERS_LEGACY_ENGINE", repo_root_from_tests() / "build" / "7Wonders"))
 
 
 def engine_exists() -> bool:
@@ -115,3 +117,39 @@ def card_db() -> dict:
     if not src_path.exists():
         raise FileNotFoundError(f"card_db.json not found at {src_path}")
     return json.loads(src_path.read_text())
+
+
+@pytest.fixture(scope="session", autouse=True)
+def legacy_runtime(tmp_path_factory, request):
+    """Historical V2 contracts use the actual retained release, never BGA data.
+
+    New DecisionEnv tests ignore these explicit legacy-only overrides. The
+    common test run exercises both editions without disguising failing V2 tests.
+    """
+    root=repo_root_from_tests();engine=root/'engine'
+    contract=json.loads((engine/'engine-contract.json').read_text())
+    needs=any(item.module.__name__.endswith(('test_legacy_data_export','test_long_training'))
+              or ('require_engine' in item.fixturenames)
+              or (item.get_closest_marker('integration') and not item.module.__name__.endswith('test_decision_bga'))
+              for item in request.session.items)
+    if not needs or contract['protocol_version']==2:
+        yield engine
+        return
+    if os.environ.get('SEVENWONDERS_LEGACY_ENGINE_ROOT'):
+        retained=Path(os.environ['SEVENWONDERS_LEGACY_ENGINE_ROOT'])
+        binary=Path(os.environ.get('SEVENWONDERS_LEGACY_ENGINE',retained/'build/7Wonders'))
+        if not (retained/'include/wonder.h').is_file() or not binary.is_file():
+            raise RuntimeError('Explicit legacy checkout/binary does not exist; remove stale legacy overrides')
+        yield retained
+        return
+    checkout=tmp_path_factory.mktemp('legacy-runtime')/'engine'
+    subprocess.run(['git','clone','--quiet','--no-hardlinks',str(engine),str(checkout)],check=True)
+    subprocess.run(['git','checkout','--quiet','f39c1d7ead271df437269b7f555a2c7a0d4b9ad1'],cwd=checkout,check=True)
+    subprocess.run(['cmake','-S',str(checkout),'-B',str(checkout/'build'),'-DCMAKE_BUILD_TYPE=Release'],check=True,capture_output=True)
+    subprocess.run(['cmake','--build',str(checkout/'build'),'--target','7Wonders','--parallel','2'],check=True,capture_output=True)
+    os.environ['SEVENWONDERS_LEGACY_ENGINE_ROOT']=str(checkout)
+    os.environ['SEVENWONDERS_LEGACY_ENGINE']=str(checkout/'build/7Wonders')
+    try:yield checkout
+    finally:
+        os.environ.pop('SEVENWONDERS_LEGACY_ENGINE_ROOT',None)
+        os.environ.pop('SEVENWONDERS_LEGACY_ENGINE',None)

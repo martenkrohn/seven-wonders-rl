@@ -18,7 +18,7 @@ import numpy as np
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "python" / "src"))
 
-from sevenwonders_rl.envs import SevenWondersEnv
+from sevenwonders_rl.envs import LegacySevenWondersEnv as SevenWondersEnv
 from sevenwonders_rl.policies import (
     BaselinePolicy,
     MilitaryTempoPolicy,

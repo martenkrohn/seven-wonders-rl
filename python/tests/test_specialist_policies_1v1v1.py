@@ -6,7 +6,7 @@ from typing import Dict, Any, Tuple
 import numpy as np
 import pytest
 
-from sevenwonders_rl.envs import SevenWondersEnv, SeatPolicy
+from sevenwonders_rl.envs import LegacySevenWondersEnv as SevenWondersEnv, SeatPolicy
 from sevenwonders_rl.policies import BaselinePolicy, MilitaryTempoPolicy, MadScientistPolicy
 from sevenwonders_rl.policies.feature_policy_base import get_action_type
 from sevenwonders_rl.policies.specialist_policies import _is_science_action, _is_military_action

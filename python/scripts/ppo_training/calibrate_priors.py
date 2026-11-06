@@ -13,7 +13,7 @@ import shutil
 import numpy as np
 import torch
 
-from sevenwonders_rl.envs import SevenWondersEnv, SeatPolicy
+from sevenwonders_rl.envs import LegacySevenWondersEnv as SevenWondersEnv, SeatPolicy
 from sevenwonders_rl.evaluation.runner import run_game
 from sevenwonders_rl.evaluation.selfplay import evaluation_plan
 from sevenwonders_rl.features.action_feature_schema import IDX

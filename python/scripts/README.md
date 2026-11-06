@@ -1,5 +1,10 @@
 # Script index
 
+The active BGA entry point is `train_decision_ppo.py`; neutral data are checked
+with `export_bga_data.py --check`. See the [BGA guide](../../docs/guides/BGA_RL.md)
+for protocol 3, offered actions and incompatible checkpoint semantics. The
+research trainers and results below use the explicitly retained legacy API.
+
 The [documentation index](../../docs/README.md) is the entry point for current
 research, operating guides and technical limitations. The experiment-specific
 sections below describe tools and historical wrappers, not a prescribed next
@@ -54,7 +59,7 @@ current panel for paired comparisons; see the
 | Before/after self-play, evaluation and feature benchmark | `benchmark_optimizations.py --help` |
 | Historical, disabled trainers | `train_ppo.py`, `train_ppovppo.py` |
 
-The unified trainer is the main development entry point. Earlier trainer source is retained for history; its executable entry points are disabled because they contain the old GAE and evaluation paths. Individual diagnostic scripts may assume local fixtures or checkpoints that are not distributed.
+The unified trainer is the retained legacy research entry point. Earlier trainer source is retained for history; its executable entry points are disabled because they contain the old GAE and evaluation paths. Individual diagnostic scripts may assume local fixtures or checkpoints that are not distributed.
 
 To retry an interrupted run, add `--restart-incomplete --skip-completed` to the
 same training command. Incomplete matching output is archived under `runs/archive/`

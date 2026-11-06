@@ -10,6 +10,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -18,18 +19,18 @@ jobs:
       - run: python python/scripts/check_engine.py
       - name: Exact simulator change inventory
         run: python python/scripts/audit_simulator.py --check
-      - name: Reproducible legacy data exports
-        run: |
-          python python/scripts/extract_card_db_from_cpp.py --check
-          python python/scripts/extract_wonder_db_from_cpp.py --check
+      - name: Reproducible BGA data resources
+        run: python python/scripts/export_bga_data.py --check
       - run: python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
-      - run: python -m pip install -e './python[dev]'
+      - run: python -m pip install -e './engine' -e './python[dev]'
       - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build --parallel 2
       - run: ctest --test-dir build --output-on-failure
       - name: Python contracts, seeded engine replays and short PPO runs
         run: python -m pytest
         working-directory: python
-      - name: Documented entry points
+      - name: Active BGA PPO smoke
+        run: python python/scripts/train_decision_ppo.py --allow-development --steps 64 --eval-games 2 --output-dir "$RUNNER_TEMP/bga-smoke"
+      - name: Documented legacy entry points
         working-directory: python
         run: |
           python scripts/ppo_training/train_unified.py --help

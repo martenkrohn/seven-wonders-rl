@@ -26,7 +26,7 @@ import torch
 # Setup path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from sevenwonders_rl.envs import SevenWondersEnv, SeatPolicy
+from sevenwonders_rl.envs import LegacySevenWondersEnv as SevenWondersEnv, SeatPolicy
 from sevenwonders_rl.utils.ppo_model import ActorCritic
 from sevenwonders_rl.utils.ppo_utils import flatten_global, masked_logits
 

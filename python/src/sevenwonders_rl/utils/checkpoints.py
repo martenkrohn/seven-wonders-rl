@@ -5,6 +5,7 @@ import hashlib
 import importlib.metadata
 import json
 import platform
+import os
 import subprocess
 from pathlib import Path
 
@@ -32,7 +33,7 @@ def file_hash(path):
 def manifest(repo_root, config):
     def git(*args):
         return subprocess.check_output(["git", "-C", str(repo_root), *args], text=True).strip()
-    engine_root = Path(repo_root) / "engine"
+    engine_root = Path(os.environ.get("SEVENWONDERS_LEGACY_ENGINE_ROOT", Path(repo_root) / "engine"))
     engine_contract = json.loads((engine_root / "engine-contract.json").read_text())
     engine_commit = subprocess.check_output(
         ["git", "-C", str(engine_root), "rev-parse", "HEAD"], text=True).strip()
@@ -41,7 +42,7 @@ def manifest(repo_root, config):
     return {
         "config": config, "git_commit": git("rev-parse", "HEAD"),
         "dirty": bool(git("status", "--porcelain")),
-        "engine_sha256": file_hash(Path(repo_root) / "build/7Wonders"),
+        "engine_sha256": file_hash(os.environ.get("SEVENWONDERS_LEGACY_ENGINE", Path(repo_root) / "build/7Wonders")),
         "engine_source_commit": engine_commit, "engine_source_dirty": engine_dirty,
         "engine_ruleset": engine_contract["ruleset"], "engine_release": engine_contract["release"],
         "protocol_version": 2, "seed_version": SEED_VERSION,

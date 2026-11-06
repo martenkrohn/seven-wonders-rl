@@ -18,7 +18,7 @@ import torch.optim as optim
 torch.set_num_threads(1)
 torch.set_num_interop_threads(1)
 
-from sevenwonders_rl.envs import SevenWondersEnv, SeatPolicy
+from sevenwonders_rl.envs import LegacySevenWondersEnv as SevenWondersEnv, SeatPolicy
 from sevenwonders_rl.envs.sevenwonders_env import N_ACTIONS
 from sevenwonders_rl.features.action_feature_schema import FEATURE_NAMES, K as K_ACTION_FEATS
 from sevenwonders_rl.utils.ppo_model import ActorCritic

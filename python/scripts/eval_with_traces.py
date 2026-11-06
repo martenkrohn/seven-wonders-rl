@@ -40,7 +40,7 @@ from typing import Dict, Any
 import numpy as np
 import torch
 
-from sevenwonders_rl.envs import SevenWondersEnv, SeatPolicy
+from sevenwonders_rl.envs import LegacySevenWondersEnv as SevenWondersEnv, SeatPolicy
 from sevenwonders_rl.policies import HeuristicPolicy
 from sevenwonders_rl.policies.registry import make_policy
 from sevenwonders_rl.features.action_feature_schema import FEATURE_NAMES, K as K_ACTION_FEATS, IDX

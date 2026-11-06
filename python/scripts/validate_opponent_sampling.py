@@ -15,7 +15,7 @@ from collections import Counter
 repo_root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(repo_root / "python" / "src"))
 
-from sevenwonders_rl.envs import SevenWondersEnv
+from sevenwonders_rl.envs import LegacySevenWondersEnv as SevenWondersEnv
 
 
 # Expected weights from train_ppo.py

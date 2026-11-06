@@ -162,6 +162,8 @@ class SevenWondersEnv(gym.Env):
             base = rr  # will fail later with clear error
 
         self.repo_root = Path(base)
+        if engine_path == "build/7Wonders" and os.environ.get("SEVENWONDERS_LEGACY_ENGINE"):
+            engine_path = os.environ["SEVENWONDERS_LEGACY_ENGINE"]
         self.engine_path = (self.repo_root / engine_path).resolve()
         self.io_dir = ((self.repo_root / io_dir).resolve() if io_dir is not None
                        else run_io_root(self.repo_root / "io", "env") / "io")
@@ -323,7 +325,7 @@ class SevenWondersEnv(gym.Env):
     def _validate_status(self, status: Dict[str, Any]) -> None:
         try:
             if status["protocol_version"] != 2:
-                raise ValueError("Engine protocol v2 required; rebuild the engine")
+                raise ValueError("Legacy 28-action API requires protocol v2; use DecisionEnv for BGA")
             if status["game"]["engine_seed"] != self.engine_seed:
                 raise ValueError("Status belongs to another engine seed")
             turn = status["game"]["turn"]

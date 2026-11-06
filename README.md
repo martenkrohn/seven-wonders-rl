@@ -2,7 +2,7 @@
 
 A work-in-progress reinforcement-learning project for three-player **7 Wonders**. It adds a Python Gymnasium environment and PyTorch PPO agents to an existing C++ game simulator.
 
-The simulator comes from [DMAG/UFSM's 7Wonders](https://github.com/dmag-ufsm/7Wonders). This project adds the RL environment, observation and action features, heuristic opponents, training/evaluation tools and snapshot self-play. The maintained [engine fork](https://github.com/martenkrohn/seven-wonders-engine) is a separate project, included at a fixed commit under `engine/`. Its initial `v0.1.0-legacy` release preserves existing rules and corrections; the BGA second-edition migration is pending.
+The simulator comes from [DMAG/UFSM's 7Wonders](https://github.com/dmag-ufsm/7Wonders). This project adds the RL environment, observation and action features, heuristic opponents, training/evaluation tools and snapshot self-play. The maintained [engine fork](https://github.com/martenkrohn/seven-wonders-engine) is a separate project, included at a fixed commit under `engine/`. Its legacy releases preserve earlier experiments. The active BGA path uses protocol 3, generated card/wonder data and offered physical-card decisions.
 
 **Current stage:** exploratory training has demonstrated learning, including
 improved resource preparation in longer runs. The project is now moving toward
@@ -32,9 +32,24 @@ flowchart LR
     B -->|Player JSON files and ready signal| A
 ```
 
-Python starts the simulator, reads its state and submits actions for all three seats. The learner controls one seat; the other two use heuristic policies or frozen policy snapshots. Communication is currently file-based: `game_status.json`, `player_1.json` through `player_3.json`, and `ready.txt`.
+The active `DecisionEnv` starts the engine through the shared standard-library
+client and submits versioned bundles of offered options. Every environment step
+is an actual learner decision, including mandatory discard choices and eligible
+seventh cards. Other seats advance automatically; there are no fabricated steps
+for a skipped seventh card. Options are bound to physical card instances,
+decision IDs and offered revisions.
 
-The environment exposes 28 action slots: four action types for each of seven hand positions. These cover building a structure, building a wonder stage, using a free-build action and discarding. Masks restrict the available choices. Observation builders rotate player information relative to the learner and provide global state and per-action features. The terminal reward compares the learner's victory points with the strongest opponent, scaled by the training configuration.
+The policy receives a seat-relative public table, its own visible candidates,
+an option mask and versioned action features. Up to 128 offered options cover
+both ordinary hands and the discard pile. Wonder construction describes the
+next stage and the foregone hand card separately. Science features optimize
+existing jokers. Opponent private hands are absent from observations and info.
+The terminal objective is the learner's VP margin against the strongest rival.
+
+`SevenWondersEnv` exported by `sevenwonders_rl.envs` now aliases `DecisionEnv`.
+The old 28-action environment, features and research tools remain explicitly
+`LegacySevenWondersEnv` / protocol 2. They require the retained legacy engine;
+old models and learning curves do not transfer to the new contract.
 
 ## What is inherited and what is added
 
@@ -58,7 +73,7 @@ The supported development environment is **Linux/Ubuntu, including WSL**. Use Py
 git submodule update --init --recursive
 python3.12 -m venv python/.venv
 source python/.venv/bin/activate
-python -m pip install -e './python[dev]'
+python -m pip install -e './engine' -e './python[dev]'
 cmake -S . -B build
 cmake --build build --parallel 2
 ```
@@ -82,7 +97,25 @@ python -m pytest -m integration
 
 Unit/component tests use recorded game-state fixtures. Integration tests require `build/7Wonders`. These checks cover the implemented interfaces and selected rule regressions; they do not establish complete board-game rule correctness or successful learning. See the [validation record](docs/archive/validation/VALIDATION.md) for the checks performed during this cleanup and the [architecture notes](docs/reference/ARCHITECTURE.md) for the environment and training interfaces.
 
-## Training and evaluation
+## Active BGA training and evaluation
+
+```sh
+python python/scripts/train_decision_ppo.py --steps 256 --eval-games 3 --output-dir python/runs/bga-fresh
+python python/scripts/train_decision_ppo.py --steps 256 --resume python/runs/bga-fresh/checkpoint.pt --output-dir python/runs/bga-resume
+```
+
+Use `--allow-development` only when deliberately testing an unreleased
+BGA development engine. Dataset, ruleset, protocol, action semantics and
+feature names are checked before checkpoint loading. Resume restores model,
+optimizer and Torch state and starts a fresh engine game; it is not a midgame
+restoration. Short tests validate the pipeline, not playing strength.
+See [the BGA migration guide](docs/guides/BGA_RL.md).
+
+## Historical training and evaluation
+
+The following entry points preserve protocol-2 research and old experiments.
+They require an explicit legacy engine and do not operate the BGA environment.
+
 
 The main training and evaluation entry points are below. From `python/`:
 

@@ -22,6 +22,14 @@ finally:
 pytestmark = pytest.mark.unit
 
 
+@pytest.fixture(scope="module", autouse=True)
+def historical_source(legacy_runtime):
+    global ENGINE
+    original=ENGINE;ENGINE=legacy_runtime
+    yield
+    ENGINE=original
+
+
 def card_declarations():
     identities, _ = cards.parse_enum(ENGINE / "include/card.h", "CARD_ID")
     types, _ = cards.parse_enum(ENGINE / "include/card.h", "CARD_TYPE")
@@ -117,6 +125,8 @@ def test_existing_production_consumer_reads_two_without_feature_changes(identity
 
 
 def export(script, *arguments, cwd):
+    if '--engine-root' not in arguments:
+        arguments=(*arguments,'--engine-root',ENGINE)
     return subprocess.run([sys.executable, str(ROOT / 'python/scripts' / script), *map(str, arguments)],
                           cwd=cwd, capture_output=True, text=True, timeout=15)
 

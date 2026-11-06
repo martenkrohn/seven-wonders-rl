@@ -16,7 +16,7 @@ from pathlib import Path
 
 import numpy as np
 
-from sevenwonders_rl.envs import SevenWondersEnv
+from sevenwonders_rl.envs import LegacySevenWondersEnv as SevenWondersEnv
 from sevenwonders_rl.envs.sevenwonders_env import EngineError
 from sevenwonders_rl.utils.checkpoints import file_hash
 from sevenwonders_rl.utils.runtime import atomic_json, run_io_root

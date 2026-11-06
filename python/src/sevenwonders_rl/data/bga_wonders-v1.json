@@ -1,0 +1,685 @@
+{
+  "format_version": 1,
+  "ruleset": "bga-second-edition-development",
+  "source": {
+    "path": "data/bga-second-edition/targets.json",
+    "sha256": "c654f36c96fdd325dc6e26cbe8ed9808ff9ea884a94d8e1eaa49284ac4a864b1",
+    "format_version": 1
+  },
+  "second_edition_implemented": false,
+  "wonders": [
+    {
+      "key": "gizah_a",
+      "name": "Gizah Tag",
+      "engine_id": 0,
+      "engine_symbol": "gizah_a",
+      "bga_id": 1,
+      "bga_name": "The Pyramids of Giza",
+      "side": "a",
+      "starting_resource": "stone",
+      "stages": [
+        {
+          "cost": {
+            "wood": 2
+          },
+          "vp": 3,
+          "effects": []
+        },
+        {
+          "cost": {
+            "clay": 2,
+            "loom": 1
+          },
+          "vp": 5,
+          "effects": []
+        },
+        {
+          "cost": {
+            "stone": 4
+          },
+          "vp": 7,
+          "effects": []
+        }
+      ],
+      "sprite_index": 0,
+      "sprite": {
+        "file": "img/boards_v2.jpg",
+        "x": 0,
+        "y": 0,
+        "width": 450,
+        "height": 223
+      }
+    },
+    {
+      "key": "babylon_a",
+      "name": "Babylon Tag",
+      "engine_id": 1,
+      "engine_symbol": "babylon_a",
+      "bga_id": 2,
+      "bga_name": "The Hanging Gardens of Babylon",
+      "side": "a",
+      "starting_resource": "wood",
+      "stages": [
+        {
+          "cost": {
+            "clay": 2
+          },
+          "vp": 3,
+          "effects": []
+        },
+        {
+          "cost": {
+            "ore": 2,
+            "loom": 1
+          },
+          "vp": 0,
+          "effects": [
+            {
+              "type": "add_science"
+            }
+          ]
+        },
+        {
+          "cost": {
+            "wood": 4
+          },
+          "vp": 7,
+          "effects": []
+        }
+      ],
+      "sprite_index": 1,
+      "sprite": {
+        "file": "img/boards_v2.jpg",
+        "x": 0,
+        "y": 223,
+        "width": 450,
+        "height": 223
+      }
+    },
+    {
+      "key": "olympia_a",
+      "name": "Olympia Tag",
+      "engine_id": 2,
+      "engine_symbol": "olympia_a",
+      "bga_id": 3,
+      "bga_name": "The Statue of Zeus in Olympia",
+      "side": "a",
+      "starting_resource": "clay",
+      "stages": [
+        {
+          "cost": {
+            "stone": 2
+          },
+          "vp": 3,
+          "effects": []
+        },
+        {
+          "cost": {
+            "wood": 2
+          },
+          "vp": 0,
+          "effects": [
+            {
+              "type": "first_color_free"
+            }
+          ]
+        },
+        {
+          "cost": {
+            "clay": 3
+          },
+          "vp": 7,
+          "effects": []
+        }
+      ],
+      "sprite_index": 2,
+      "sprite": {
+        "file": "img/boards_v2.jpg",
+        "x": 0,
+        "y": 446,
+        "width": 450,
+        "height": 223
+      }
+    },
+    {
+      "key": "rhodos_a",
+      "name": "Rhodos Tag",
+      "engine_id": 3,
+      "engine_symbol": "rhodos_a",
+      "bga_id": 4,
+      "bga_name": "The Colossus of Rhodes",
+      "side": "a",
+      "starting_resource": "ore",
+      "stages": [
+        {
+          "cost": {
+            "wood": 2
+          },
+          "vp": 3,
+          "effects": []
+        },
+        {
+          "cost": {
+            "clay": 3
+          },
+          "vp": 0,
+          "effects": [
+            {
+              "type": "add_shields",
+              "amount": 2
+            }
+          ]
+        },
+        {
+          "cost": {
+            "ore": 4
+          },
+          "vp": 7,
+          "effects": []
+        }
+      ],
+      "sprite_index": 3,
+      "sprite": {
+        "file": "img/boards_v2.jpg",
+        "x": 0,
+        "y": 669,
+        "width": 450,
+        "height": 223
+      }
+    },
+    {
+      "key": "ephesos_a",
+      "name": "Ephesos Tag",
+      "engine_id": 4,
+      "engine_symbol": "ephesos_a",
+      "bga_id": 5,
+      "bga_name": "The Temple of Artemis in Ephesus",
+      "side": "a",
+      "starting_resource": "papyrus",
+      "stages": [
+        {
+          "cost": {
+            "clay": 2
+          },
+          "vp": 3,
+          "effects": []
+        },
+        {
+          "cost": {
+            "wood": 2
+          },
+          "vp": 0,
+          "effects": [
+            {
+              "type": "add_coins",
+              "amount": 9
+            }
+          ]
+        },
+        {
+          "cost": {
+            "ore": 2,
+            "glass": 1
+          },
+          "vp": 7,
+          "effects": []
+        }
+      ],
+      "sprite_index": 4,
+      "sprite": {
+        "file": "img/boards_v2.jpg",
+        "x": 0,
+        "y": 892,
+        "width": 450,
+        "height": 223
+      }
+    },
+    {
+      "key": "alexandria_a",
+      "name": "Alexandria Tag",
+      "engine_id": 5,
+      "engine_symbol": "alexandria_a",
+      "bga_id": 6,
+      "bga_name": "The Lighthouse of Alexandria",
+      "side": "a",
+      "starting_resource": "glass",
+      "stages": [
+        {
+          "cost": {
+            "stone": 2
+          },
+          "vp": 3,
+          "effects": []
+        },
+        {
+          "cost": {
+            "ore": 2
+          },
+          "vp": 0,
+          "effects": [
+            {
+              "type": "choose_raw_nontradable"
+            }
+          ]
+        },
+        {
+          "cost": {
+            "papyrus": 1,
+            "loom": 1
+          },
+          "vp": 7,
+          "effects": []
+        }
+      ],
+      "sprite_index": 5,
+      "sprite": {
+        "file": "img/boards_v2.jpg",
+        "x": 0,
+        "y": 1115,
+        "width": 450,
+        "height": 223
+      }
+    },
+    {
+      "key": "halikarnassos_a",
+      "name": "Halikarnassos Tag",
+      "engine_id": 6,
+      "engine_symbol": "halikarnassos_a",
+      "bga_id": 7,
+      "bga_name": "The Mausoleum of Halicarnassus",
+      "side": "a",
+      "starting_resource": "loom",
+      "stages": [
+        {
+          "cost": {
+            "ore": 2
+          },
+          "vp": 3,
+          "effects": []
+        },
+        {
+          "cost": {
+            "glass": 1,
+            "papyrus": 1
+          },
+          "vp": 0,
+          "effects": [
+            {
+              "type": "discard_build_for_free"
+            }
+          ]
+        },
+        {
+          "cost": {
+            "stone": 3
+          },
+          "vp": 7,
+          "effects": []
+        }
+      ],
+      "sprite_index": 6,
+      "sprite": {
+        "file": "img/boards_v2.jpg",
+        "x": 0,
+        "y": 1338,
+        "width": 450,
+        "height": 223
+      }
+    },
+    {
+      "key": "gizah_b",
+      "name": "Gizah Nacht",
+      "engine_id": 7,
+      "engine_symbol": "gizah_b",
+      "bga_id": 8,
+      "bga_name": "The Pyramids of Giza",
+      "side": "b",
+      "starting_resource": "stone",
+      "stages": [
+        {
+          "cost": {
+            "wood": 2
+          },
+          "vp": 3,
+          "effects": []
+        },
+        {
+          "cost": {
+            "stone": 3
+          },
+          "vp": 5,
+          "effects": []
+        },
+        {
+          "cost": {
+            "clay": 3
+          },
+          "vp": 5,
+          "effects": []
+        },
+        {
+          "cost": {
+            "stone": 4,
+            "papyrus": 1
+          },
+          "vp": 7,
+          "effects": []
+        }
+      ],
+      "sprite_index": 7,
+      "sprite": {
+        "file": "img/boards_v2.jpg",
+        "x": 0,
+        "y": 1561,
+        "width": 450,
+        "height": 223
+      }
+    },
+    {
+      "key": "babylon_b",
+      "name": "Babylon Nacht",
+      "engine_id": 8,
+      "engine_symbol": "babylon_b",
+      "bga_id": 9,
+      "bga_name": "The Hanging Gardens of Babylon",
+      "side": "b",
+      "starting_resource": "wood",
+      "stages": [
+        {
+          "cost": {
+            "stone": 2
+          },
+          "vp": 0,
+          "effects": [
+            {
+              "type": "play_seventh_card"
+            }
+          ]
+        },
+        {
+          "cost": {
+            "clay": 3,
+            "glass": 1
+          },
+          "vp": 0,
+          "effects": [
+            {
+              "type": "add_science"
+            }
+          ]
+        }
+      ],
+      "sprite_index": 8,
+      "sprite": {
+        "file": "img/boards_v2.jpg",
+        "x": 0,
+        "y": 1784,
+        "width": 450,
+        "height": 223
+      }
+    },
+    {
+      "key": "olympia_b",
+      "name": "Olympia Nacht",
+      "engine_id": 9,
+      "engine_symbol": "olympia_b",
+      "bga_id": 10,
+      "bga_name": "The Statue of Zeus in Olympia",
+      "side": "b",
+      "starting_resource": "clay",
+      "stages": [
+        {
+          "cost": {
+            "ore": 2
+          },
+          "vp": 2,
+          "effects": [
+            {
+              "type": "first_age_card_free"
+            }
+          ]
+        },
+        {
+          "cost": {
+            "clay": 3
+          },
+          "vp": 3,
+          "effects": [
+            {
+              "type": "last_age_card_free"
+            }
+          ]
+        },
+        {
+          "cost": {
+            "glass": 1,
+            "papyrus": 1,
+            "loom": 1
+          },
+          "vp": 5,
+          "effects": []
+        }
+      ],
+      "sprite_index": 9,
+      "sprite": {
+        "file": "img/boards_v2.jpg",
+        "x": 0,
+        "y": 2007,
+        "width": 450,
+        "height": 223
+      }
+    },
+    {
+      "key": "rhodos_b",
+      "name": "Rhodos Nacht",
+      "engine_id": 10,
+      "engine_symbol": "rhodos_b",
+      "bga_id": 11,
+      "bga_name": "The Colossus of Rhodes",
+      "side": "b",
+      "starting_resource": "ore",
+      "stages": [
+        {
+          "cost": {
+            "stone": 3
+          },
+          "vp": 3,
+          "effects": [
+            {
+              "type": "add_shields",
+              "amount": 1
+            },
+            {
+              "type": "add_coins",
+              "amount": 3
+            }
+          ]
+        },
+        {
+          "cost": {
+            "ore": 4
+          },
+          "vp": 4,
+          "effects": [
+            {
+              "type": "add_shields",
+              "amount": 1
+            },
+            {
+              "type": "add_coins",
+              "amount": 4
+            }
+          ]
+        }
+      ],
+      "sprite_index": 10,
+      "sprite": {
+        "file": "img/boards_v2.jpg",
+        "x": 0,
+        "y": 2230,
+        "width": 450,
+        "height": 223
+      }
+    },
+    {
+      "key": "ephesos_b",
+      "name": "Ephesos Nacht",
+      "engine_id": 11,
+      "engine_symbol": "ephesos_b",
+      "bga_id": 12,
+      "bga_name": "The Temple of Artemis in Ephesus",
+      "side": "b",
+      "starting_resource": "papyrus",
+      "stages": [
+        {
+          "cost": {
+            "stone": 2
+          },
+          "vp": 2,
+          "effects": [
+            {
+              "type": "add_coins",
+              "amount": 4
+            }
+          ]
+        },
+        {
+          "cost": {
+            "wood": 2
+          },
+          "vp": 3,
+          "effects": [
+            {
+              "type": "add_coins",
+              "amount": 4
+            }
+          ]
+        },
+        {
+          "cost": {
+            "ore": 2,
+            "loom": 1
+          },
+          "vp": 5,
+          "effects": [
+            {
+              "type": "add_coins",
+              "amount": 4
+            }
+          ]
+        }
+      ],
+      "sprite_index": 11,
+      "sprite": {
+        "file": "img/boards_v2.jpg",
+        "x": 0,
+        "y": 2453,
+        "width": 450,
+        "height": 223
+      }
+    },
+    {
+      "key": "alexandria_b",
+      "name": "Alexandria Nacht",
+      "engine_id": 12,
+      "engine_symbol": "alexandria_b",
+      "bga_id": 13,
+      "bga_name": "The Lighthouse of Alexandria",
+      "side": "b",
+      "starting_resource": "glass",
+      "stages": [
+        {
+          "cost": {
+            "clay": 2
+          },
+          "vp": 0,
+          "effects": [
+            {
+              "type": "choose_raw_nontradable"
+            }
+          ]
+        },
+        {
+          "cost": {
+            "ore": 3
+          },
+          "vp": 0,
+          "effects": [
+            {
+              "type": "choose_manuf_nontradable"
+            }
+          ]
+        },
+        {
+          "cost": {
+            "wood": 4
+          },
+          "vp": 7,
+          "effects": []
+        }
+      ],
+      "sprite_index": 12,
+      "sprite": {
+        "file": "img/boards_v2.jpg",
+        "x": 0,
+        "y": 2676,
+        "width": 450,
+        "height": 223
+      }
+    },
+    {
+      "key": "halikarnassos_b",
+      "name": "Halikarnassos Nacht",
+      "engine_id": 13,
+      "engine_symbol": "halikarnassos_b",
+      "bga_id": 14,
+      "bga_name": "The Mausoleum of Halicarnassus",
+      "side": "b",
+      "starting_resource": "loom",
+      "stages": [
+        {
+          "cost": {
+            "clay": 2
+          },
+          "vp": 2,
+          "effects": [
+            {
+              "type": "discard_build_for_free"
+            }
+          ]
+        },
+        {
+          "cost": {
+            "glass": 1,
+            "papyrus": 1
+          },
+          "vp": 1,
+          "effects": [
+            {
+              "type": "discard_build_for_free"
+            }
+          ]
+        },
+        {
+          "cost": {
+            "wood": 3
+          },
+          "vp": 0,
+          "effects": [
+            {
+              "type": "discard_build_for_free"
+            }
+          ]
+        }
+      ],
+      "sprite_index": 13,
+      "sprite": {
+        "file": "img/boards_v2.jpg",
+        "x": 0,
+        "y": 2899,
+        "width": 450,
+        "height": 223
+      }
+    }
+  ]
+}

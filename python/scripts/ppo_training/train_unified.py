@@ -14,7 +14,7 @@ from typing import Dict, List, Optional
 import numpy as np
 import torch
 
-from sevenwonders_rl.envs import SevenWondersEnv, SeatPolicy
+from sevenwonders_rl.envs import LegacySevenWondersEnv as SevenWondersEnv, SeatPolicy
 from sevenwonders_rl.envs.sevenwonders_env import EngineError
 from sevenwonders_rl.evaluation.runner import evaluate_model
 from sevenwonders_rl.evaluation.selfplay import reference, evaluation_plan, paired_progress, rolling_references, plan_identity

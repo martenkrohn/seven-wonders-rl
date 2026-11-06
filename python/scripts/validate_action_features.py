@@ -19,7 +19,7 @@ repo_root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(repo_root / 'src'))
 sys.path.insert(0, str(repo_root / 'python' / 'src'))
 
-from sevenwonders_rl.envs import SevenWondersEnv
+from sevenwonders_rl.envs import LegacySevenWondersEnv as SevenWondersEnv
 from sevenwonders_rl.data.cards import by_name_strict, load_card_db
 from sevenwonders_rl.features.action_feature_schema import K, FEATURE_NAMES
 

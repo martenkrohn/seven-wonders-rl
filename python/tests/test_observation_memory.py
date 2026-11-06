@@ -9,7 +9,7 @@ import numpy as np
 import pytest
 import torch
 
-from sevenwonders_rl.envs import SevenWondersEnv, SeatPolicy
+from sevenwonders_rl.envs import LegacySevenWondersEnv as SevenWondersEnv, SeatPolicy
 from sevenwonders_rl.features.obs_builder import build_obs
 from sevenwonders_rl.features.observation_history import (
     ObservationHistory, MEMORY_KEY, MEMORY_DIM, BASE_GLOBAL_DIM, ACTION_DIM,

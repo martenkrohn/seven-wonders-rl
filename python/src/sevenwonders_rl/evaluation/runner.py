@@ -8,7 +8,7 @@ from pathlib import Path
 
 import numpy as np
 
-from sevenwonders_rl.envs import SevenWondersEnv, SeatPolicy
+from sevenwonders_rl.envs import LegacySevenWondersEnv as SevenWondersEnv, SeatPolicy
 from sevenwonders_rl.envs.sevenwonders_env import EngineError
 from sevenwonders_rl.features.action_feature_schema import IDX
 from sevenwonders_rl.policies.registry import make_policy

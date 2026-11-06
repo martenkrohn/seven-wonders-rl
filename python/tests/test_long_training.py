@@ -1,5 +1,6 @@
 """Public observability, neutral migration, mixed populations and durable reports."""
 import copy
+import os
 import json
 import re
 from pathlib import Path
@@ -21,9 +22,9 @@ from sevenwonders_rl.utils.phase_resume import runtime_snapshot, restore_runtime
 
 
 @pytest.mark.component
-def test_wonder_database_matches_current_cpp_costs_rewards_and_abilities():
+def test_legacy_wonder_database_matches_retained_cpp_costs_rewards_and_abilities():
     from sevenwonders_rl.features.public_state import ABILITIES
-    root = Path(__file__).resolve().parents[2] / 'engine'
+    root = Path(os.environ.get('SEVENWONDERS_LEGACY_ENGINE_ROOT',Path(__file__).resolve().parents[2] / 'engine'))
     source = (root / 'src/wonder.cpp').read_text()
     header = (root / 'include/wonder.h').read_text().split('namespace EFFECT')[0]
     header = re.sub(r'//[^\n]*', '', header)

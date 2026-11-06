@@ -9,7 +9,7 @@ import numpy as np
 import hashlib
 import torch
 
-from sevenwonders_rl.envs import SevenWondersEnv, SeatPolicy
+from sevenwonders_rl.envs import LegacySevenWondersEnv as SevenWondersEnv, SeatPolicy
 from sevenwonders_rl.policies import (
     HeuristicPolicy,
     MilitaryTempoPolicy,

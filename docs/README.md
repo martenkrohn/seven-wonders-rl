@@ -1,6 +1,11 @@
 # Projektdokumentation
 
-Stand: **29. Oktober 2026**. Das Projekt wechselt von explorativen Versuchen
+Stand der BGA-Anbindung: **6. November 2026**. Aktive Installation, Daten,
+Entscheidungen und neues Training stehen im [BGA-RL-Leitfaden](guides/BGA_RL.md).
+Die Forschungsübersicht und die nachfolgenden Versuche beziehen sich auf den
+erhaltenen Legacy-Regelstand.
+
+Stand der Forschungsübersicht: **29. Oktober 2026**. Das Projekt wechselt von explorativen Versuchen
 zu gezielten, wissenschaftlich begründeten Vergleichen. Dieser Einstieg zeigt,
 welche Dokumente heute maßgeblich sind und welche frühere Versuche belegen.
 
@@ -30,10 +35,10 @@ bisherigen Endmodells als Referenz.
 
 Engine und alte GUI sind jetzt getrennt vom RL-Projekt wartbar. Die weiteren
 Schritte zur BGA-Edition stehen im [Engine-Arbeitsplan](../engine/docs/MIGRATION_PLAN.md).
-Der [nächste Agentenauftrag](../engine/docs/NEXT_AGENT_TASK.md) beschränkt sich
-auf das erste offene Arbeitspaket; Regellogik und neue Grafik folgen getrennt.
-Paket 2 macht die [alten Datenexporte](guides/LEGACY_DATA_EXPORT.md) mit
-geprüftem Daten-Diff reproduzierbar; die aktiven Regeln bleiben Legacy.
+Der [Gesamtauftrag](../engine/docs/NEXT_AGENT_TASK.md) umfasst die verbleibenden
+Pakete bis einschließlich 9. Paket 2 hält die [alten Datenexporte](guides/LEGACY_DATA_EXPORT.md)
+für historische Versuche reproduzierbar; die BGA-Anbindung verwendet die neutralen
+Engine-Exporte, Protokoll 3 und neue Checkpoint-Verträge.
 
 ## Aktueller Bezugspunkt
 

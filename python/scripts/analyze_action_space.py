@@ -17,7 +17,7 @@ import json
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "python" / "src"))
 
-from sevenwonders_rl.envs import SevenWondersEnv
+from sevenwonders_rl.envs import LegacySevenWondersEnv as SevenWondersEnv
 from sevenwonders_rl.features.action_feature_schema import (
     FEATURE_NAMES, IDX, K, ACTION_TYPES, CARD_COLORS, RESOURCE_ORDER,
     SCIENCE_SYMBOLS
