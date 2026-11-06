@@ -1,212 +1,143 @@
 # Seven Wonders RL
 
-A work-in-progress reinforcement-learning project for three-player **7 Wonders**. It adds a Python Gymnasium environment and PyTorch PPO agents to an existing C++ game simulator.
+**Learning a three-player strategy game from partial information.** A personal
+reinforcement learning project built with Python, PyTorch and Gymnasium, using
+a separately maintained C++ simulator for **7 Wonders: Second Edition (2020)**.
 
-The simulator comes from [DMAG/UFSM's 7Wonders](https://github.com/dmag-ufsm/7Wonders). This project adds the RL environment, observation and action features, heuristic opponents, training/evaluation tools and snapshot self-play. The maintained [engine fork](https://github.com/martenkrohn/seven-wonders-engine) is a separate project, included at a fixed commit under `engine/`. Its legacy releases preserve earlier experiments. The active BGA path uses protocol 3, generated card/wonder data and offered physical-card decisions.
+[**Explore the evaluation dashboard →**](https://martenkrohn.github.io/seven-wonders-rl/)
+· [Training](TRAINING.md) · [Method & results](docs/results/README.md) · [Documentation](docs/README.md)
 
-**BGA release:** `v0.2.0-bga`, ruleset `bga-second-edition`, protocol 3.
-The [acceptance record](docs/reference/bga-release-validation.json) records the
-exact engine pin and local checks. Remote publication still requires approval.
-Start new training with the [BGA guide](docs/guides/BGA_RL.md).
+[![Second Edition evaluation dashboard: 1,080 games, score sources and table positions](docs/assets/evaluation.png)](https://martenkrohn.github.io/seven-wonders-rl/)
 
-**Legacy research stage:** exploratory training has demonstrated learning, including
-improved resource preparation in longer runs. The project is now moving toward
-targeted, scientifically grounded experiments on exploration, opponent
-populations and robust evaluation. Further gains in the latest continuation
-remain uncertain. An explicit observation-history extension is implemented;
-its playing-strength benefit and the next opponent-selection rule remain open.
+The interesting challenge is planning with hidden information: cards circulate
+between players, early choices affect later possibilities, and two opponents
+change as the learner improves. This project explores how to represent what an
+agent can legitimately know, learn against frozen predecessors and evaluate
+progress without confusing a changing opponent pool with a better policy.
 
-Start with the [documentation index](docs/README.md) and the
-[research overview](docs/research/OVERVIEW.md). Current guides and technical
-references are separated from the [exploratory experiment archive](docs/archive/README.md).
-The implementation includes PPO/GAE, optional multiple heads and frozen priors,
-public card/wonder information, mixed frozen-opponent pools and milestone
-dashboards. The optional [memory mode](docs/guides/OBSERVATION_MEMORY.md) shares
-complete own-hand, legal-action and observed-history inputs with actor and critic.
-See the [known limitations](docs/reference/KNOWN_ISSUES.md) before
-interpreting results as general playing strength.
+## What I built
 
-## How it works
+- A **Gymnasium decision environment** with legal offered options, real follow-up
+  choices and no fabricated skipped-turn samples.
+- A **shared hand/history representation for actor and critic**: complete own
+  hands, public table and ordered visible history; no opponent private hands.
+- **PPO with one learner and parallel CPU game collection**, immutable own-policy
+  opponents, ordered-pair PFSP-inspired matchmaking and rotating seats.
+- **Durable training and resume** with atomic checkpoints, reserved seeds,
+  journal repair and clean stop after a complete update.
+- **Fixed-panel evaluation and a portable dashboard** with paired comparisons,
+  block-bootstrap intervals, score categories, seat/opponent breakdowns and CSV export.
+
+The simulator originates from [DMAG/UFSM](https://github.com/dmag-ufsm/7Wonders).
+My maintained [engine fork](https://github.com/martenkrohn/seven-wonders-engine)
+provides the Second Edition rules, protocol and GUI; this repository contains
+the RL system. [Origin and contribution boundary](docs/ORIGIN.md) distinguish
+inherited work from downstream extensions. Development uses coding assistants.
+
+## Current evidence
+
+The public example evaluates the **196,608-decision snapshot** on **1,080 completed
+games over 40 engine-seed blocks**, against three frozen same-run policies, all
+nine ordered opponent pairs and all three seats:
+
+| Mean own VP | Mean margin to strongest rival | Shared win rate | Failed games |
+| --- | --- | --- | --- |
+| 46.61 | −2.80 VP | 41.9% | 0 / 1,080 |
+
+This is a development-panel result, **not a general playing-strength claim**.
+The dashboard shows uncertainty and provenance. It is a saved evaluation, not the
+latest local training state. Historical protocol-2 experiments demonstrated
+learning, but their results do not transfer to the new agent. See
+[results and limitations](docs/results/README.md).
+
+## Design decisions
+
+**Treat information as a contract.** Both network heads use the same permitted
+observations. Known/unknown masks and visible history make memory explicit;
+hidden engine state and transport identities never become model inputs.
+
+**Separate learning opponents from evaluation opponents.** The league adapts
+using training outcomes. Evaluation keeps opponents, seeds and seats fixed,
+retains failures and resamples whole seed blocks for uncertainty estimates.
+
+**Keep experimentation recoverable.** One PPO implementation handles every
+worker count. Resume preserves the durable learner and league state while
+recording unfinished games as abandoned, rather than manufacturing outcomes.
 
 ```mermaid
 flowchart LR
-    A[C++ simulator] -->|JSON game state| B[Gymnasium environment]
-    B --> C[Observations and legal-action mask]
-    C --> D[PPO policy or heuristic opponent]
-    D -->|Encoded actions| B
-    B -->|Versioned option bundles and ready signal| A
+    A[C++ game instances] --> B[Own hand + visible history + legal options]
+    B --> C[Shared actor / critic]
+    C --> D[PPO learner]
+    D --> E[Frozen policy league]
+    E --> A
+    D --> F[Immutable evaluation snapshot]
+    F --> G[Fixed panel → report → dashboard]
 ```
 
-The active `DecisionEnv` starts the engine through the shared standard-library
-client and submits versioned bundles of offered options. Every environment step
-is an actual learner decision, including mandatory discard choices and eligible
-seventh cards. Other seats advance automatically; there are no fabricated steps
-for a skipped seventh card. Options are bound to physical card instances,
-decision IDs and offered revisions.
-
-The policy receives a seat-relative public table, its own visible candidates,
-an option mask and versioned action features. Up to 128 offered options cover
-both ordinary hands and the discard pile. Wonder construction describes the
-next stage and the foregone hand card separately. Science features optimize
-existing jokers. Opponent private hands are absent from observations and info.
-The terminal objective is the learner's VP margin against the strongest rival.
-
-`SevenWondersEnv` exported by `sevenwonders_rl.envs` now aliases `DecisionEnv`.
-The old 28-action environment, features and research tools remain explicitly
-`LegacySevenWondersEnv` / protocol 2. They require the retained legacy engine;
-old models and learning curves do not transfer to the new contract.
-
-## What is inherited and what is added
-
-| Component | Origin |
-| --- | --- |
-| Core C++ simulator and file protocol | DMAG/UFSM's upstream project |
-| Most engine source and bundled JSON headers | Preserved from upstream |
-| Engine corrections and protocol v2 | Selectable production, trading, Gizah B, final status, seeded RNG and atomic publication |
-| BGA data and protocol 3 | Generated definitions, optimal science, simultaneous settlement, explicit special decisions and new GUI |
-| Gymnasium wrapper, masks and feature extraction | RL extension in this project |
-| PyTorch actor-critic, PPO scripts, opponent policies and self-play pool | RL extension in this project |
-| Detailed evaluation, strategy telemetry and interactive HTML dashboard | RL extension in this project |
-| Python tests, C++ regression checks and CI setup | Downstream development and validation |
-
-The [origin record](docs/ORIGIN.md) pins the upstream commit. The [simulator change log](docs/SIMULATOR_CHANGES.md) documents each C++ correction, with an exact patch and checked file inventory. This distinguishes inherited implementation from downstream work; it does not claim that every line of the extension was written manually. Development has used coding assistants.
+[Architecture](docs/reference/ARCHITECTURE.md)
+and the [observation contract](docs/reference/DECISION_OBSERVATION_CONTRACT.md)
+describe the implementation.
 
 ## Setup
 
-The supported development environment is **Linux/Ubuntu, including WSL**. Use Python 3.12, a C++17 compiler and CMake. From the repository root:
+Tested on **Linux/Ubuntu / WSL, Python 3.12, C++17 and CMake**.
 
 ```sh
-git submodule update --init --recursive
+git clone --recurse-submodules https://github.com/martenkrohn/seven-wonders-rl.git
+cd seven-wonders-rl
 python3.12 -m venv python/.venv
-source python/.venv/bin/activate
-python -m pip install -e './engine' -e './python[dev]'
-cmake -S . -B build
+python/.venv/bin/python -m pip install -c python/constraints.txt -e './engine' -e './python[dev]'
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --parallel 2
 ```
 
-The package declares Python >=3.10; Python 3.12 is the tested baseline. Dependencies include Gymnasium, NumPy and PyTorch. Versions are not locked, so the package declaration is not a fully pinned reproduction environment.
+The engine is pinned by commit and protocol in `engine.lock.json`. Tested direct
+Python dependency versions are recorded in `python/constraints.txt`.
 
-Clone with `git clone --recurse-submodules` or initialize the submodule as above.
-See the [engine workflow](docs/guides/ENGINE.md) for separate development and updates.
+## Try it
 
-For the optional English desktop GUI, install Tk support and the GUI dependency,
-then launch a human game with two bots from the repository root:
-
-```sh
-python -m pip install -e './engine[gui]'
-python engine/Game.py 2 --engine build/7Wonders
-```
-
-The human sits between the labeled neighbors. Full portrait hand cards use a
-separate confirmation step; built effects appear in compact color columns,
-including the wonder's starting production. The required artwork is included
-with the engine.
-See the [GUI guide](engine/docs/GUI.md) and [design audit](docs/reference/GUI_DESIGN_REUSE_AUDIT.md).
-
-## Run the checks
-
-From the repository root, with the environment active:
+Run a small technical training check in a new output directory:
 
 ```sh
-python python/scripts/check_engine.py
-ctest --test-dir build --output-on-failure
-cd python
-python -m pytest -m 'unit or component'
-python -m pytest -m integration
+python/.venv/bin/python python/scripts/train_decision_ppo.py \
+  --steps 128 --workers 4 --output-dir python/runs/smoke
 ```
 
-Unit/component tests use recorded game-state fixtures. Integration tests require `build/7Wonders`. These checks cover the implemented interfaces and selected rule regressions; they do not establish complete board-game rule correctness or successful learning. See the [validation record](docs/archive/validation/VALIDATION.md) for the checks performed during this cleanup and the [architecture notes](docs/reference/ARCHITECTURE.md) for the environment and training interfaces.
+For continuous training, clean stop and resume, use [TRAINING.md](TRAINING.md).
+Independent evaluation requires three trained reference snapshots (normally
+196,608 decisions); [the evaluation guide](docs/guides/EVALUATION.md) explains
+the plan and dashboard export. Existing reports can be rendered without
+replaying games or loading weights.
 
-## Active BGA training and evaluation
+Fast checks: `cd python && make test-fast`. Full active-system checks:
+`make test-all`. Choose targeted tests for small edits; historical trainers and
+legacy engine builds are no longer part of normal validation.
 
-```sh
-python python/scripts/train_decision_ppo.py --steps 256 --eval-games 3 --output-dir python/runs/bga-fresh
-python python/scripts/train_decision_ppo.py --steps 256 --resume python/runs/bga-fresh/checkpoint.pt --output-dir python/runs/bga-resume
-```
+## Next questions
 
-Use `--allow-development` only when deliberately testing an unreleased
-BGA development engine. Dataset, ruleset, protocol, action semantics and
-feature names are checked before checkpoint loading. Resume restores model,
-optimizer and Torch state and starts a fresh engine game; it is not a midgame
-restoration. Short tests validate the pipeline, not playing strength.
-See [the BGA migration guide](docs/guides/BGA_RL.md).
+How much does explicit history help at a matched compute budget? Does opponent
+selection discover different strategies? Do gains survive independent training
+seeds and new opponents? These remain [research questions](docs/research/AGENDA.md).
+The current model does not implement recurrent memory, a multiplayer equilibrium
+solver or a demonstrated optimal strategy.
 
-## Historical training and evaluation
-
-The following entry points preserve protocol-2 research and old experiments.
-They require an explicit legacy engine and do not operate the BGA environment.
-
-
-The main training and evaluation entry points are below. From `python/`:
-
-```sh
-python scripts/ppo_training/train_unified.py --help
-python scripts/eval_selfplay.py --help
-python scripts/build_dashboard.py --help
-```
-
-- **Fixed opponents:** `--mode fixed` trains against a mixture of heuristic policies.
-- **Neural opponents:** `--mode selfplay` supports fresh initialization or compatible pretrained weights, frozen snapshots and optional configured opponent groups. Ordinary evaluation uses rolling predecessors; milestone mode uses an unchanged panel. The [architecture reference](docs/reference/ARCHITECTURE.md) distinguishes these modes.
-- **Training evaluation:** readable console summaries show victory-point sources, score distributions and science participation. Opponent identities are recorded; changing reference opponents are not presented as directly comparable progress measurements.
-- **Detailed evaluation:** the separate evaluator compares final and intermediate models on the same opponent, seed and seat plan. Reports include score categories, age-by-age development, card choices relative to legal opportunities, and bootstrap uncertainty intervals over engine-seed blocks. See the [evaluation guide](docs/guides/EVALUATION.md).
-
-Base feature semantics are **version 3**. The optional public-state extension
-adds public played-card identities and wonder identities/stage plans. Checkpoints
-enforce compatible schemas. The [latest completed long-run assessment](docs/archive/long-training/LONG_TRAINING_V2_RESULTS_2026-10-29.md)
-and [earlier fresh-seed comparison](docs/archive/long-training/LONG_FRESH_RESULTS_2026-10-26.md)
-describe the current evidence and its limits. Historical runs affected by
-incorrect GAE or premature scoring are not evidence for the corrected trainer.
-No checkpoints are bundled. The [script index](python/scripts/README.md) lists
-main tools, diagnostics and historical experiment wrappers.
-
-## Analysis dashboard
-
-[**Explore the evaluation dashboard →**](https://martenkrohn.github.io/seven-wonders-rl/)
-
-The public example is a historical snapshot of the completed **Seed 31, feature
-semantics v3** experiment: 262,144 training transitions, followed by a detailed
-evaluation of initial, intermediate and final models against trained predecessors.
-It does not represent the latest local model. See its
-[assessment](docs/archive/selfplay/SELFPLAY_FEATURE_V3_RESULTS_2026-10-24.md) and the
-[snapshot/update guide](docs/guides/DASHBOARD_DEMO.md).
-
-Each detailed evaluation produces a standalone `dashboard.html` that opens directly in a browser, without a server or external dependencies. It provides sortable tables, card search and filters, score distributions, age-by-age summaries, model comparisons and CSV exports. Additional evaluation reports can be loaded locally. English is the default; an English/German selector updates labels, number formatting and CSV exports and remembers a manual choice. Both languages are available locally and in the public demo. Light and dark themes follow the system preference until a manual choice is saved.
-
-Existing evaluation data can be turned into a dashboard without replaying games or loading model weights. From `python/`, replace the example directory with an evaluation directory containing `analysis.json`:
-
-```sh
-python scripts/build_dashboard.py --evaluation-dir runs/YOUR-EVALUATION
-```
-
-Open `runs/YOUR-EVALUATION/dashboard.html` in your browser. The [evaluation guide](docs/guides/EVALUATION.md#interaktives-dashboard) explains report comparison, available metrics and how missing data are handled. Training logs, checkpoints and routine generated dashboards remain local; only the explicitly selected public demo snapshot is bundled in `demo/`.
-
-## Repository layout
+## Project layout
 
 ```text
-engine/                          Pinned standalone C++ engine (Git submodule)
-engine.lock.json                 Engine commit, release, ruleset and protocol
-CMakeLists.txt                   Compatibility build: still produces build/7Wonders
-python/src/sevenwonders_rl/
-  envs/                          Gymnasium wrapper and engine transport
-  features/                      Observations, action features and trade estimates
-  policies/                      Heuristics and checkpoint-backed opponents
-  evaluation/                    Game telemetry, evaluation reports and dashboard
-  selfplay/                      Frozen-checkpoint opponent pool
-  utils/                         Actor-critic model and PPO utilities
-  data/                          Engine-derived card/wonder data and mechanics
-python/scripts/ppo_training/     Main training and evaluation tools
-python/scripts/eval_selfplay.py  Detailed self-play evaluation and report rendering
-python/scripts/build_dashboard.py  Dashboard generation from saved analysis
-python/tests/                   Python tests and a selected fixture pool
-docs/README.md                   Documentation entry point and current status
-docs/research/                   Research agenda, overview and detailed sources
-docs/experiments/                Protocols and results for upcoming focused experiments
-docs/reference/, docs/guides/    Technical contracts and operational instructions
-docs/archive/                    Exploratory protocols, results and measurement summaries
+engine/                         Pinned standalone engine and client
+python/src/sevenwonders_rl/      Environment, memory, PPO, league and evaluation
+python/scripts/                 Seven supported operational tools
+python/tests/                   Active contracts and recovery checks
+docs/                           Current guides, contracts, results and research
+demo/                           Deliberately selected public aggregate snapshot
 ```
 
-Generated builds, runtime exchange files, logs, training runs and checkpoints are ignored. The original GUI, its artwork and unrelated reference archives are not distributed in this source tree.
+Training runs, model weights, generated builds and caches stay local. Historical
+code and complete experiment records remain in Git history.
 
-## License and attribution
+## License
 
-This project is distributed under **GNU GPL version 3**; see [LICENSE](LICENSE) and [NOTICE](NOTICE). The inherited GPLv3 license is retained and also applies to the downstream RL code and simulator modifications. The vendored **nlohmann/json** library retains its MIT license and copyright notices.
+**GPL-3.0-only**, inherited from the simulator and retained for the downstream
+RL code. See [LICENSE](LICENSE), [NOTICE](NOTICE) and [origin](docs/ORIGIN.md).
+Bundled engine dependencies and assets retain their respective notices.

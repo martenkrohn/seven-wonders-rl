@@ -2,41 +2,101 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Training starten / fortsetzen (fortlaufend)",
+      "label": "Training starten / fortsetzen (Second Edition, Dauerbetrieb)",
       "type": "process",
       "command": "${workspaceFolder:python}/.venv/bin/python",
-      "args": ["-u", "${workspaceFolder:python}/scripts/ppo_training/run_fresh_pair_pfsp.py", "--continuous", "--auto-resume"],
-      "options": {"cwd": "${workspaceFolder:python}"},
+      "args": [
+        "-u",
+        "${workspaceFolder:python}/scripts/train_decision_ppo.py",
+        "--continuous",
+        "--auto-resume",
+        "--workers",
+        "4",
+        "--eval-every-games",
+        "5000",
+        "--seed",
+        "331",
+        "--engine",
+        "${workspaceFolder:python}/../build/7Wonders",
+        "--output-dir",
+        "${workspaceFolder:python}/runs/continuous-decision-pfsp-v1-seed331"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder:python}"
+      },
       "problemMatcher": [],
-      "runOptions": {"instanceLimit": 1},
-      "presentation": {"reveal": "always", "panel": "dedicated", "clear": false}
+      "runOptions": {
+        "instanceLimit": 1
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": false
+      }
     },
     {
-      "label": "Training sauber stoppen (nach aktuellem Update)",
+      "label": "Training sauber stoppen (Second Edition, nach aktuellem Update)",
       "type": "process",
       "command": "${workspaceFolder:python}/.venv/bin/python",
-      "args": ["${workspaceFolder:python}/scripts/ppo_training/run_fresh_pair_pfsp.py", "--continuous", "--stop"],
-      "options": {"cwd": "${workspaceFolder:python}"},
+      "args": [
+        "${workspaceFolder:python}/scripts/train_decision_ppo.py",
+        "--stop",
+        "--output-dir",
+        "${workspaceFolder:python}/runs/continuous-decision-pfsp-v1-seed331"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder:python}"
+      },
       "problemMatcher": [],
-      "presentation": {"reveal": "always", "panel": "dedicated"}
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
     },
     {
-      "label": "Trainings-Dashboard öffnen (fortlaufender Lauf)",
+      "label": "Aktuellen Snapshot separat evaluieren (Second Edition)",
       "type": "process",
       "command": "${workspaceFolder:python}/.venv/bin/python",
-      "args": ["${workspaceFolder:python}/scripts/open_dashboard.py", "--run-dir", "runs/continuous-pair-pfsp-v1-seed331"],
-      "options": {"cwd": "${workspaceFolder:python}"},
+      "args": [
+        "-u",
+        "${workspaceFolder:python}/scripts/eval_decision.py",
+        "--workers",
+        "4",
+        "--run-dir",
+        "${workspaceFolder:python}/runs/continuous-decision-pfsp-v1-seed331",
+        "--engine",
+        "${workspaceFolder:python}/../build/7Wonders"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder:python}"
+      },
       "problemMatcher": [],
-      "presentation": {"reveal": "silent", "panel": "dedicated"}
+      "runOptions": {
+        "instanceLimit": 1
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": false
+      }
     },
     {
       "label": "Analyse-Dashboard im Browser öffnen",
       "type": "process",
       "command": "${workspaceFolder:python}/.venv/bin/python",
-      "args": ["${workspaceFolder:python}/scripts/open_dashboard.py"],
-      "options": {"cwd": "${workspaceFolder:python}"},
+      "args": [
+        "${workspaceFolder:python}/scripts/open_dashboard.py",
+        "--run-dir",
+        "runs/continuous-decision-pfsp-v1-seed331"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder:python}"
+      },
       "problemMatcher": [],
-      "presentation": {"reveal": "silent", "panel": "dedicated"}
+      "presentation": {
+        "reveal": "silent",
+        "panel": "dedicated"
+      }
     }
   ]
 }

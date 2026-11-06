@@ -1,8 +1,9 @@
 [project]
 name = "sevenwonders-rl"
 version = "0.2.0"
-description = "RL environment for 7 Wonders card game"
+description = "Partial-information PPO and snapshot self-play for 7 Wonders Second Edition"
 requires-python = ">=3.10"
+readme = {file = "scripts/README.md", content-type = "text/markdown"}
 license = {file = "LICENSE"}
 classifiers = [
   "Development Status :: 3 - Alpha",
@@ -18,6 +19,11 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<10"]
+
+[project.urls]
+Repository = "https://github.com/martenkrohn/seven-wonders-rl"
+Documentation = "https://github.com/martenkrohn/seven-wonders-rl/tree/main/docs"
+Demo = "https://martenkrohn.github.io/seven-wonders-rl/"
 
 [build-system]
 requires = ["setuptools>=68"]

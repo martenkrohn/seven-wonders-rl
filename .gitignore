@@ -55,3 +55,9 @@ results.txt
 
 # Isolated performance benchmark exchange files
 /io_benchmark/
+
+# Portable checked-in workspace; other personal workspace files stay local.
+!seven-wonders.code-workspace
+
+# Preserved local pre-cleanup sources, old GUI artifacts and runtime exchange.
+/.local-archive/

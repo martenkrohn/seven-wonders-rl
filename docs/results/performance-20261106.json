@@ -1,0 +1,1056 @@
+{
+  "cpu": [
+    {
+      "mode": "training",
+      "variant": "baseline",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 19.978191382790257,
+      "min_rate": 14.844975406332779,
+      "max_rate": 20.07671203861894,
+      "median_seconds": 19.220959127000242,
+      "paired_median_gain_percent": 0.0,
+      "paired_gain_range_percent": [
+        0.0,
+        0.0
+      ],
+      "measurements": [
+        "cpu-baseline-r0/measurement.json",
+        "cpu-baseline-r1/measurement.json",
+        "cpu-baseline-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "data",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 21.38827837438975,
+      "min_rate": 15.633826842984883,
+      "max_rate": 21.828354915555575,
+      "median_seconds": 17.95375921700179,
+      "paired_median_gain_percent": 7.05813136225224,
+      "paired_gain_range_percent": [
+        5.313928888798181,
+        8.724749717818492
+      ],
+      "measurements": [
+        "cpu-data-r0/measurement.json",
+        "cpu-data-r1/measurement.json",
+        "cpu-data-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "tensor",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 20.846323819775805,
+      "min_rate": 15.356485028342705,
+      "max_rate": 21.068459144528703,
+      "median_seconds": 18.420514010998886,
+      "paired_median_gain_percent": 3.833355679338646,
+      "paired_gain_range_percent": [
+        3.4456751056099355,
+        5.457289605692894
+      ],
+      "measurements": [
+        "cpu-tensor-r0/measurement.json",
+        "cpu-tensor-r1/measurement.json",
+        "cpu-tensor-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "history",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 23.502629393779493,
+      "min_rate": 13.727428022452287,
+      "max_rate": 24.248885950537126,
+      "median_seconds": 16.338597421003215,
+      "paired_median_gain_percent": 17.064135544558123,
+      "paired_gain_range_percent": [
+        -7.528118796368988,
+        21.37678274233452
+      ],
+      "measurements": [
+        "cpu-history-r0/measurement.json",
+        "cpu-history-r1/measurement.json",
+        "cpu-history-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "cache",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 23.411304417892243,
+      "min_rate": 14.988109668551493,
+      "max_rate": 24.566866908349283,
+      "median_seconds": 16.402332529003615,
+      "paired_median_gain_percent": 16.60925540426632,
+      "paired_gain_range_percent": [
+        0.9641933267040326,
+        22.968423105165737
+      ],
+      "measurements": [
+        "cpu-cache-r0/measurement.json",
+        "cpu-cache-r1/measurement.json",
+        "cpu-cache-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "poll",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 18.713257876883805,
+      "min_rate": 15.733843082357666,
+      "max_rate": 20.47204354191993,
+      "median_seconds": 20.520210992996,
+      "paired_median_gain_percent": 2.471956293076105,
+      "paired_gain_range_percent": [
+        -6.7912223829899805,
+        5.987666881857567
+      ],
+      "measurements": [
+        "cpu-poll-r0/measurement.json",
+        "cpu-poll-r1/measurement.json",
+        "cpu-poll-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "checkpoint4",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 18.833983368410493,
+      "min_rate": 16.582745312330236,
+      "max_rate": 20.88360264619107,
+      "median_seconds": 20.388676813003258,
+      "paired_median_gain_percent": 4.531998147643912,
+      "paired_gain_range_percent": [
+        -6.189901353458538,
+        11.7061150889892
+      ],
+      "measurements": [
+        "cpu-checkpoint4-r0/measurement.json",
+        "cpu-checkpoint4-r1/measurement.json",
+        "cpu-checkpoint4-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "combined",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 25.033698311128493,
+      "min_rate": 24.444834406600116,
+      "max_rate": 26.195657234413847,
+      "median_seconds": 15.339323627995327,
+      "paired_median_gain_percent": 31.12126484572313,
+      "paired_gain_range_percent": [
+        24.690229470714375,
+        64.66739578545946
+      ],
+      "measurements": [
+        "cpu-combined-r0/measurement.json",
+        "cpu-combined-r1/measurement.json",
+        "cpu-combined-r2/measurement.json"
+      ]
+    }
+  ],
+  "followup": [
+    {
+      "mode": "training",
+      "variant": "baseline",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 20.468009149240828,
+      "min_rate": 20.000406980159134,
+      "max_rate": 20.73079380418574,
+      "median_seconds": 18.760984382999595,
+      "paired_median_gain_percent": 0.0,
+      "paired_gain_range_percent": [
+        0.0,
+        0.0
+      ],
+      "measurements": [
+        "follow-training-baseline-w1-r0/measurement.json",
+        "follow-training-baseline-w1-r1/measurement.json",
+        "follow-training-baseline-w1-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "trim",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 24.64523182371272,
+      "min_rate": 24.34011506596349,
+      "max_rate": 24.862248847207848,
+      "median_seconds": 15.581107240002893,
+      "paired_median_gain_percent": 21.468818319978155,
+      "paired_gain_range_percent": [
+        18.882238936439656,
+        21.698098894234754
+      ],
+      "measurements": [
+        "follow-training-trim-w1-r0/measurement.json",
+        "follow-training-trim-w1-r1/measurement.json",
+        "follow-training-trim-w1-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "combined-trim",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 27.522432588007174,
+      "min_rate": 27.415983354349738,
+      "max_rate": 27.986105578408726,
+      "median_seconds": 13.952255083997443,
+      "paired_median_gain_percent": 33.94553009258654,
+      "paired_gain_range_percent": [
+        32.76111299920479,
+        39.927680502559724
+      ],
+      "measurements": [
+        "follow-training-combined-trim-w1-r0/measurement.json",
+        "follow-training-combined-trim-w1-r1/measurement.json",
+        "follow-training-combined-trim-w1-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "smart",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 27.014317874237427,
+      "min_rate": 26.747061494450122,
+      "max_rate": 27.3174739352784,
+      "median_seconds": 14.214684293998289,
+      "paired_median_gain_percent": 33.464245281967855,
+      "paired_gain_range_percent": [
+        29.020922918299654,
+        35.06884085426989
+      ],
+      "measurements": [
+        "follow-training-smart-w1-r0/measurement.json",
+        "follow-training-smart-w1-r1/measurement.json",
+        "follow-training-smart-w1-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "parallel-training",
+      "variant": "combined-trim",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 28.661246922606427,
+      "min_rate": 28.43406773893004,
+      "max_rate": 29.678988439274818,
+      "median_seconds": 13.397881851997226,
+      "paired_median_gain_percent": 0.0,
+      "paired_gain_range_percent": [
+        0.0,
+        0.0
+      ],
+      "measurements": [
+        "follow-parallel-training-combined-trim-w1-r0/measurement.json",
+        "follow-parallel-training-combined-trim-w1-r1/measurement.json",
+        "follow-parallel-training-combined-trim-w1-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "parallel-training",
+      "variant": "combined-trim",
+      "workers": 2,
+      "repeats": 3,
+      "median_rate": 35.22836667553071,
+      "min_rate": 34.58233819645154,
+      "max_rate": 36.39054434885969,
+      "median_seconds": 10.900306663002993,
+      "paired_median_gain_percent": 22.613829724409797,
+      "paired_gain_range_percent": [
+        20.658875344236606,
+        23.894924211980985
+      ],
+      "measurements": [
+        "follow-parallel-training-combined-trim-w2-r0/measurement.json",
+        "follow-parallel-training-combined-trim-w2-r1/measurement.json",
+        "follow-parallel-training-combined-trim-w2-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "parallel-training",
+      "variant": "combined-trim",
+      "workers": 4,
+      "repeats": 3,
+      "median_rate": 41.95932406023995,
+      "min_rate": 39.34994082618668,
+      "max_rate": 42.20535986057849,
+      "median_seconds": 9.151720352994744,
+      "paired_median_gain_percent": 42.20619394402023,
+      "paired_gain_range_percent": [
+        38.39012127101093,
+        46.39741311165611
+      ],
+      "measurements": [
+        "follow-parallel-training-combined-trim-w4-r0/measurement.json",
+        "follow-parallel-training-combined-trim-w4-r1/measurement.json",
+        "follow-parallel-training-combined-trim-w4-r2/measurement.json"
+      ]
+    }
+  ],
+  "gpu": [
+    {
+      "mode": "training",
+      "variant": "baseline",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 20.852547093322624,
+      "min_rate": 20.79357826229815,
+      "max_rate": 21.09459688897088,
+      "median_seconds": 18.41501655799948,
+      "paired_median_gain_percent": 0.0,
+      "paired_gain_range_percent": [
+        0.0,
+        0.0
+      ],
+      "measurements": [
+        "gpuenv-baseline-r0/measurement.json",
+        "gpuenv-baseline-r1/measurement.json",
+        "gpuenv-baseline-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "gpu-all",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 13.736621640139644,
+      "min_rate": 13.20468861457699,
+      "max_rate": 14.363268549055691,
+      "median_seconds": 27.95447163499921,
+      "paired_median_gain_percent": -34.88085260675584,
+      "paired_gain_range_percent": [
+        -36.675895968577485,
+        -30.924498093248175
+      ],
+      "measurements": [
+        "gpuenv-gpu-all-r0/measurement.json",
+        "gpuenv-gpu-all-r1/measurement.json",
+        "gpuenv-gpu-all-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "gpu-ppo",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 22.228454604937397,
+      "min_rate": 22.172063827529804,
+      "max_rate": 22.882093386892222,
+      "median_seconds": 17.275155057999655,
+      "paired_median_gain_percent": 6.629381186070571,
+      "paired_gain_range_percent": [
+        6.598270731422362,
+        8.473717261958758
+      ],
+      "measurements": [
+        "gpuenv-gpu-ppo-r0/measurement.json",
+        "gpuenv-gpu-ppo-r1/measurement.json",
+        "gpuenv-gpu-ppo-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "combined",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 27.505509984519286,
+      "min_rate": 26.247193022903396,
+      "max_rate": 27.91101416772279,
+      "median_seconds": 13.960839127001236,
+      "paired_median_gain_percent": 31.904797344047566,
+      "paired_gain_range_percent": [
+        26.227399112414716,
+        32.31356974788084
+      ],
+      "measurements": [
+        "gpuenv-combined-r0/measurement.json",
+        "gpuenv-combined-r1/measurement.json",
+        "gpuenv-combined-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "combined+gpu-all",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 8.654973706552612,
+      "min_rate": 8.586548392003706,
+      "max_rate": 8.807591459176432,
+      "median_seconds": 44.367552463998436,
+      "paired_median_gain_percent": -58.376698818378145,
+      "paired_gain_range_percent": [
+        -58.82254405864269,
+        -58.24716866819388
+      ],
+      "measurements": [
+        "gpuenv-combined-gpu-all-r0/measurement.json",
+        "gpuenv-combined-gpu-all-r1/measurement.json",
+        "gpuenv-combined-gpu-all-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "combined+gpu-ppo",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 22.617594752159025,
+      "min_rate": 22.358961847354717,
+      "max_rate": 23.173093673089053,
+      "median_seconds": 16.977932631998556,
+      "paired_median_gain_percent": 8.772018297437945,
+      "paired_gain_range_percent": [
+        7.22412829133221,
+        9.853218788953932
+      ],
+      "measurements": [
+        "gpuenv-combined-gpu-ppo-r0/measurement.json",
+        "gpuenv-combined-gpu-ppo-r1/measurement.json",
+        "gpuenv-combined-gpu-ppo-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "combined-trim+gpu-all",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 12.930431199505446,
+      "min_rate": 12.604813731646576,
+      "max_rate": 13.406780875495178,
+      "median_seconds": 29.69738549899921,
+      "paired_median_gain_percent": -38.70263903328721,
+      "paired_gain_range_percent": [
+        -39.38121869817386,
+        -35.70674692403269
+      ],
+      "measurements": [
+        "gpuenv-combined-trim-gpu-all-r0/measurement.json",
+        "gpuenv-combined-trim-gpu-all-r1/measurement.json",
+        "gpuenv-combined-trim-gpu-all-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "combined-trim+gpu-ppo",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 24.62822488775907,
+      "min_rate": 24.151251108990827,
+      "max_rate": 25.179420394278843,
+      "median_seconds": 15.591866719994869,
+      "paired_median_gain_percent": 16.75134167003549,
+      "paired_gain_range_percent": [
+        16.14764329803031,
+        20.749855073300694
+      ],
+      "measurements": [
+        "gpuenv-combined-trim-gpu-ppo-r0/measurement.json",
+        "gpuenv-combined-trim-gpu-ppo-r1/measurement.json",
+        "gpuenv-combined-trim-gpu-ppo-r2/measurement.json"
+      ]
+    }
+  ],
+  "evaluation": [
+    {
+      "mode": "evaluation",
+      "variant": "baseline",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 104.43424746837071,
+      "min_rate": 104.38571549957784,
+      "max_rate": 104.64739017792628,
+      "median_seconds": 14.832414589996915,
+      "paired_median_gain_percent": 0.0,
+      "paired_gain_range_percent": [
+        0.0,
+        0.0
+      ],
+      "median_steady_games_per_minute": 109.22024800281267,
+      "measurements": [
+        "eval-baseline-w1-r0/measurement.json",
+        "eval-baseline-w1-r1/measurement.json",
+        "eval-baseline-w1-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "evaluation",
+      "variant": "baseline",
+      "workers": 2,
+      "repeats": 3,
+      "median_rate": 132.88771367881301,
+      "min_rate": 124.3788101387429,
+      "max_rate": 133.6065475507559,
+      "median_seconds": 9.309813327003212,
+      "paired_median_gain_percent": 27.304500470038384,
+      "paired_gain_range_percent": [
+        18.855147679524897,
+        27.93365279069051
+      ],
+      "median_steady_games_per_minute": 174.00993372242738,
+      "measurements": [
+        "eval-baseline-w2-r0/measurement.json",
+        "eval-baseline-w2-r1/measurement.json",
+        "eval-baseline-w2-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "evaluation",
+      "variant": "baseline",
+      "workers": 4,
+      "repeats": 3,
+      "median_rate": 144.6609092614699,
+      "min_rate": 140.5421382950273,
+      "max_rate": 149.0908562722915,
+      "median_seconds": 7.132269950998307,
+      "paired_median_gain_percent": 38.58305091758933,
+      "paired_gain_range_percent": [
+        34.57476038939462,
+        42.46973194343442
+      ],
+      "median_steady_games_per_minute": 227.136663520882,
+      "measurements": [
+        "eval-baseline-w4-r0/measurement.json",
+        "eval-baseline-w4-r1/measurement.json",
+        "eval-baseline-w4-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "evaluation",
+      "variant": "combined-trim",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 132.18966470378172,
+      "min_rate": 124.94462197904971,
+      "max_rate": 132.19943481093674,
+      "median_seconds": 11.716990735993022,
+      "paired_median_gain_percent": 26.586285644443475,
+      "paired_gain_range_percent": [
+        19.39583181827387,
+        26.63577968607813
+      ],
+      "median_steady_games_per_minute": 138.26075623867973,
+      "measurements": [
+        "eval-combined-trim-w1-r0/measurement.json",
+        "eval-combined-trim-w1-r1/measurement.json",
+        "eval-combined-trim-w1-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "evaluation",
+      "variant": "combined-trim",
+      "workers": 2,
+      "repeats": 3,
+      "median_rate": 151.27294501018366,
+      "min_rate": 148.0469982418641,
+      "max_rate": 153.83422272384294,
+      "median_seconds": 7.9962042620027205,
+      "paired_median_gain_percent": 44.849940203761854,
+      "paired_gain_range_percent": [
+        41.82687500232043,
+        47.00244550990422
+      ],
+      "median_steady_games_per_minute": 202.5961252263279,
+      "measurements": [
+        "eval-combined-trim-w2-r0/measurement.json",
+        "eval-combined-trim-w2-r1/measurement.json",
+        "eval-combined-trim-w2-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "evaluation",
+      "variant": "combined-trim",
+      "workers": 4,
+      "repeats": 3,
+      "median_rate": 155.0906844043685,
+      "min_rate": 154.98989869791225,
+      "max_rate": 157.57496080534503,
+      "median_seconds": 6.425156227000116,
+      "paired_median_gain_percent": 48.50557950478815,
+      "paired_gain_range_percent": [
+        48.47807284373029,
+        50.577057428215724
+      ],
+      "median_steady_games_per_minute": 252.1339470614511,
+      "measurements": [
+        "eval-combined-trim-w4-r0/measurement.json",
+        "eval-combined-trim-w4-r1/measurement.json",
+        "eval-combined-trim-w4-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "evaluation",
+      "variant": "gpu-all",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 51.44109346123716,
+      "min_rate": 51.28643265975102,
+      "max_rate": 52.17120163976391,
+      "median_seconds": 29.71146504599892,
+      "paired_median_gain_percent": -50.720179274485886,
+      "paired_gain_range_percent": [
+        -50.99119760889261,
+        -50.04397225578262
+      ],
+      "median_steady_games_per_minute": 54.524406571400505,
+      "measurements": [
+        "eval-gpu-all-w1-r0/measurement.json",
+        "eval-gpu-all-w1-r1/measurement.json",
+        "eval-gpu-all-w1-r2/measurement.json"
+      ]
+    }
+  ],
+  "hybrid": [
+    {
+      "mode": "training",
+      "variant": "baseline",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 19.489849586520638,
+      "min_rate": 19.46661444779716,
+      "max_rate": 20.8505936101473,
+      "median_seconds": 19.70256354700541,
+      "paired_median_gain_percent": 0.0,
+      "paired_gain_range_percent": [
+        0.0,
+        0.0
+      ],
+      "measurements": [
+        "hybrid-training-baseline-w1-r0/measurement.json",
+        "hybrid-training-baseline-w1-r1/measurement.json",
+        "hybrid-training-baseline-w1-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "combined-trim",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 25.512773997692697,
+      "min_rate": 25.429455246050253,
+      "max_rate": 27.95364475684442,
+      "median_seconds": 15.05128372299805,
+      "paired_median_gain_percent": 30.902877851543664,
+      "paired_gain_range_percent": [
+        30.631113665108046,
+        34.06642170245118
+      ],
+      "measurements": [
+        "hybrid-training-combined-trim-w1-r0/measurement.json",
+        "hybrid-training-combined-trim-w1-r1/measurement.json",
+        "hybrid-training-combined-trim-w1-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "gpu-ppo+gpu-indices",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 21.53061731763632,
+      "min_rate": 21.47027183880852,
+      "max_rate": 23.46302031648493,
+      "median_seconds": 17.835066888001165,
+      "paired_median_gain_percent": 10.602782910064379,
+      "paired_gain_range_percent": [
+        10.161300853022293,
+        12.529267776176155
+      ],
+      "measurements": [
+        "hybrid-training-gpu-ppo-gpu-indices-w1-r0/measurement.json",
+        "hybrid-training-gpu-ppo-gpu-indices-w1-r1/measurement.json",
+        "hybrid-training-gpu-ppo-gpu-indices-w1-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "gpu-all+packed+gpu-indices",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 15.293546783326562,
+      "min_rate": 14.938673115480752,
+      "max_rate": 16.95169057169086,
+      "median_seconds": 25.1086295050045,
+      "paired_median_gain_percent": -21.437048931447965,
+      "paired_gain_range_percent": [
+        -23.351521779765417,
+        -18.69924238779931
+      ],
+      "measurements": [
+        "hybrid-training-gpu-all-packed-gpu-indices-w1-r0/measurement.json",
+        "hybrid-training-gpu-all-packed-gpu-indices-w1-r1/measurement.json",
+        "hybrid-training-gpu-all-packed-gpu-indices-w1-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "combined-trim+gpu-ppo+gpu-indices",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 25.352581670911476,
+      "min_rate": 23.39871260078569,
+      "max_rate": 25.74935549386975,
+      "median_seconds": 15.146386470005382,
+      "paired_median_gain_percent": 23.49459193017116,
+      "paired_gain_range_percent": [
+        20.19918853138578,
+        30.080950898900525
+      ],
+      "measurements": [
+        "hybrid-training-combined-trim-gpu-ppo-gpu-indices-w1-r0/measurement.json",
+        "hybrid-training-combined-trim-gpu-ppo-gpu-indices-w1-r1/measurement.json",
+        "hybrid-training-combined-trim-gpu-ppo-gpu-indices-w1-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "training",
+      "variant": "combined-trim+gpu-all+packed+gpu-indices",
+      "workers": 1,
+      "repeats": 3,
+      "median_rate": 14.635008811421825,
+      "min_rate": 13.41686054464488,
+      "max_rate": 15.353422176327353,
+      "median_seconds": 26.238453625002876,
+      "paired_median_gain_percent": -26.364580004785353,
+      "paired_gain_range_percent": [
+        -31.159753259850163,
+        -24.81995854662894
+      ],
+      "measurements": [
+        "hybrid-training-combined-trim-gpu-all-packed-gpu-indices-w1-r0/measurement.json",
+        "hybrid-training-combined-trim-gpu-all-packed-gpu-indices-w1-r1/measurement.json",
+        "hybrid-training-combined-trim-gpu-all-packed-gpu-indices-w1-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "parallel-training",
+      "variant": "combined-trim",
+      "workers": 4,
+      "repeats": 3,
+      "median_rate": 42.19236168285929,
+      "min_rate": 36.25569021315777,
+      "max_rate": 42.63236491217337,
+      "median_seconds": 9.101173404000292,
+      "paired_median_gain_percent": 0.0,
+      "paired_gain_range_percent": [
+        0.0,
+        0.0
+      ],
+      "measurements": [
+        "hybrid-parallel-training-combined-trim-w4-r0/measurement.json",
+        "hybrid-parallel-training-combined-trim-w4-r1/measurement.json",
+        "hybrid-parallel-training-combined-trim-w4-r2/measurement.json"
+      ]
+    },
+    {
+      "mode": "parallel-training",
+      "variant": "combined-trim+gpu-ppo+gpu-indices",
+      "workers": 4,
+      "repeats": 3,
+      "median_rate": 31.26417995685959,
+      "min_rate": 25.533445744228665,
+      "max_rate": 35.765461036236246,
+      "median_seconds": 12.282426742996904,
+      "paired_median_gain_percent": -15.232379488332803,
+      "paired_gain_range_percent": [
+        -40.10783638948969,
+        -13.767522358426055
+      ],
+      "measurements": [
+        "hybrid-parallel-training-combined-trim-gpu-ppo-gpu-indices-w4-r0/measurement.json",
+        "hybrid-parallel-training-combined-trim-gpu-ppo-gpu-indices-w4-r1/measurement.json",
+        "hybrid-parallel-training-combined-trim-gpu-ppo-gpu-indices-w4-r2/measurement.json"
+      ]
+    }
+  ],
+  "validation": {
+    "main_trials": 114,
+    "training_trials": 93,
+    "training_applied_decisions": 35712,
+    "evaluation_trials": 21,
+    "evaluation_games": 567,
+    "evaluation_fingerprints_identical": true,
+    "all_training_parameters_finite": true,
+    "all_training_budgets_met": true,
+    "original_run_files_unchanged": true,
+    "cpu_traces_identical": true,
+    "copy_tensor_poll_checkpoint_weights_bitwise_identical": true,
+    "repeated_model_weights_identical": true,
+    "nonidentical_repeat_groups": [],
+    "original_run_file_inventory_unchanged": true,
+    "engine_binary_unchanged": true,
+    "training_cli_unchanged": true,
+    "parallel_cpu_gpu_totals_identical": true
+  },
+  "numerical_verification": {
+    "observations": 18,
+    "max_output_abs_error": 9.5367431640625e-07,
+    "max_gradient_abs_error": 1.52587890625e-05,
+    "padding_isolation": true,
+    "frozen_cache_matches": true,
+    "single_tensor_exact": true,
+    "trim_gradient_matches": true
+  },
+  "production": {
+    "frozen": {
+      "run": "<repository>/python/runs/continuous-decision-pfsp-v1-seed331",
+      "stopped": {
+        "status": "stopped",
+        "continuous": true,
+        "steps": 215232,
+        "completed_games_total": 11762,
+        "completed_games_session": 635,
+        "training_seconds_total": 8977.13444410701,
+        "training_seconds_session": 650.4447309990064,
+        "training_duration_complete": false,
+        "checkpoint": "<repository>/python/runs/continuous-decision-pfsp-v1-seed331/checkpoint.pt"
+      },
+      "checkpoint_sha256": "427f0cfde9b2cb4d7e0b83d288b9f9901cd17e31d06fed4d1fa8334ae047fe18"
+    },
+    "source_hashes_unchanged": true,
+    "checkpoint_unchanged": true
+  },
+  "hardware": {
+    "cpu": "Intel Core i7-7700, 4 cores / 8 threads",
+    "gpu": "NVIDIA GeForce GTX 1080 Ti",
+    "gpu_memory_mib": 11264,
+    "driver": "582.28",
+    "production_torch": "2.10.0+cu128",
+    "gpu_test_torch": "2.10.0+cu126"
+  },
+  "method": {
+    "training_steps_per_trial": 384,
+    "rollout_size": 64,
+    "epochs": 4,
+    "minibatch_size": 16,
+    "repeats": 3,
+    "evaluation_games_per_trial": 27,
+    "gain": "Median of ratios within matching repetition; not ratio of medians",
+    "parallel_scope": "Shared-learner prototype, per-environment horizon 64 / workers; not production resumable",
+    "raw_artifacts": "python/runs/performance-decision-20261106"
+  },
+  "replay": {
+    "replay-baseline-cuda": {
+      "torch_version": "2.10.0+cu126",
+      "measurements": [
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 1,
+          "milliseconds": 9.591319920000387
+        },
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 4,
+          "milliseconds": 12.464593379991129
+        },
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 16,
+          "milliseconds": 19.330317139974795
+        },
+        {
+          "kind": "resident-minibatch-forward-backward-adam",
+          "batch": 16,
+          "milliseconds": 13.536295166704804
+        }
+      ],
+      "max_output_abs_error": 3.814697265625e-06
+    },
+    "replay-trim-packed-cuda": {
+      "torch_version": "2.10.0+cu126",
+      "measurements": [
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 1,
+          "milliseconds": 7.706364320038119
+        },
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 4,
+          "milliseconds": 10.344263320002938
+        },
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 16,
+          "milliseconds": 18.538924919994315
+        },
+        {
+          "kind": "resident-minibatch-forward-backward-adam",
+          "batch": 16,
+          "milliseconds": 16.577334199973848
+        }
+      ],
+      "max_output_abs_error": 4.291534423828125e-06
+    },
+    "replay-baseline-packed-cuda": {
+      "torch_version": "2.10.0+cu126",
+      "measurements": [
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 1,
+          "milliseconds": 7.144092740054475
+        },
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 4,
+          "milliseconds": 8.912120659952052
+        },
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 16,
+          "milliseconds": 18.40105126000708
+        },
+        {
+          "kind": "resident-minibatch-forward-backward-adam",
+          "batch": 16,
+          "milliseconds": 16.035736233364634
+        }
+      ],
+      "max_output_abs_error": 3.814697265625e-06
+    },
+    "replay-baseline-cpu": {
+      "torch_version": "2.10.0+cu126",
+      "measurements": [
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 1,
+          "milliseconds": 3.2856771200022195
+        },
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 4,
+          "milliseconds": 8.223723939881893
+        },
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 16,
+          "milliseconds": 44.093264260009164
+        },
+        {
+          "kind": "resident-minibatch-forward-backward-adam",
+          "batch": 16,
+          "milliseconds": 64.03123523341492
+        }
+      ],
+      "max_output_abs_error": 0.0
+    },
+    "replay-combined-cuda": {
+      "torch_version": "2.10.0+cu126",
+      "measurements": [
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 1,
+          "milliseconds": 15.68572126008803
+        },
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 4,
+          "milliseconds": 19.63389273994835
+        },
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 16,
+          "milliseconds": 26.107159120001597
+        },
+        {
+          "kind": "resident-minibatch-forward-backward-adam",
+          "batch": 16,
+          "milliseconds": 22.851265766560875
+        }
+      ],
+      "max_output_abs_error": 4.291534423828125e-06
+    },
+    "replay-trim-cpu": {
+      "torch_version": "2.10.0+cu126",
+      "measurements": [
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 1,
+          "milliseconds": 2.4565334799990524
+        },
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 4,
+          "milliseconds": 4.223775120044593
+        },
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 16,
+          "milliseconds": 14.958594259951496
+        },
+        {
+          "kind": "resident-minibatch-forward-backward-adam",
+          "batch": 16,
+          "milliseconds": 25.666178299919313
+        }
+      ],
+      "max_output_abs_error": 0.0
+    },
+    "replay-trim-cuda": {
+      "torch_version": "2.10.0+cu126",
+      "measurements": [
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 1,
+          "milliseconds": 13.720066219975706
+        },
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 4,
+          "milliseconds": 13.725674220040673
+        },
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 16,
+          "milliseconds": 18.01063097998849
+        },
+        {
+          "kind": "resident-minibatch-forward-backward-adam",
+          "batch": 16,
+          "milliseconds": 14.120399566794125
+        }
+      ],
+      "max_output_abs_error": 4.291534423828125e-06
+    },
+    "replay-combined-cpu": {
+      "torch_version": "2.10.0+cu126",
+      "measurements": [
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 1,
+          "milliseconds": 2.143243720056489
+        },
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 4,
+          "milliseconds": 4.6299273999466095
+        },
+        {
+          "kind": "inference-with-tensorization-transfer",
+          "batch": 16,
+          "milliseconds": 13.430334239965305
+        },
+        {
+          "kind": "resident-minibatch-forward-backward-adam",
+          "batch": 16,
+          "milliseconds": 20.205411533243023
+        }
+      ],
+      "max_output_abs_error": 0.0
+    }
+  },
+  "harness_sha256": "d6700ce19721b5a998111017833153a2550fbe93403252ce07606cd98a8adc52"
+}

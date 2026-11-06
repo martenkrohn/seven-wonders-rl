@@ -47,3 +47,10 @@ patch and the checked source checksum inventory.
 Since 2026-11-05 engine source paths above are relative to engine/. The engine
 owns its source, tests and provenance; python/ remains the RL extension here.
 The split does not change game rules or implement the BGA second edition.
+
+Current state (2026-11-06): the entries above describe the historical engine
+corrections and source extraction. The pinned engine now implements the
+Second Edition (2020), protocol 3, including the separately maintained GUI.
+Its own repository preserves source, library and asset notices. This RL tree
+supports only the current decision/history/PPO system; retired research code
+and detailed historical records remain available in Git history.

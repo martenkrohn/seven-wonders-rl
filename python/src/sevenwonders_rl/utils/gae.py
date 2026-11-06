@@ -1,12 +1,20 @@
 """GAE on [time, environment] arrays, before any minibatch flattening."""
+
 from __future__ import annotations
 
 import torch
 
 
 @torch.no_grad()
-def compute_gae(rewards, values, terminated, truncated, next_values,
-                gamma: float = 0.999, gae_lambda: float = 0.95):
+def compute_gae(
+    rewards,
+    values,
+    terminated,
+    truncated,
+    next_values,
+    gamma: float = 0.999,
+    gae_lambda: float = 0.95,
+):
     """Return raw advantages and returns; next_values are pre-reset values.
 
     Valid external truncations bootstrap but cut the trace. Transport failures

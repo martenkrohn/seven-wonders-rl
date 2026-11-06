@@ -1,13 +1,13 @@
 PYTHON ?= .venv/bin/python
-PYTEST=$(PYTHON) -m pytest
+PYTEST = $(PYTHON) -m pytest
 
 test-fast:
-	$(PYTEST) -m "unit or component" -q
+	$(PYTEST) -m "unit or component"
 
 test-integration:
-	$(PYTEST) -m integration -q
+	$(PYTEST) -m integration
 
 test-all:
-	$(PYTEST) -m "unit or component or integration" -q
+	$(PYTEST)
 
 .PHONY: test-fast test-integration test-all

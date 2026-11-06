@@ -1,1 +1,1 @@
-"""Shared game completion and evaluation contracts."""
+"""Evaluation for the Second Edition agent."""

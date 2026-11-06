@@ -1,44 +1,43 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; object-src 'none'">
-<title data-i18n="7 Wonders · Self-Play-Auswertung">7 Wonders · Self-play evaluation</title>
-<script>/* DASHBOARD_I18N */</script>
-<script>/* DASHBOARD_THEME */</script>
-<style>/* DASHBOARD_CSS */</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A reproducible evaluation of a 7 Wonders reinforcement learning agent. Fixed opponents, rotated seats and uncertainty over independent seed blocks.">
+  <title>Seven Wonders RL · Evaluation</title>
+  <style>/* DASHBOARD_CSS */</style>
 </head>
 <body>
-<aside class="sidebar">
-  <a href="#points" class="brand"><span class="brand-mark">VII</span><span>7 WONDERS<small data-i18n="SELF-PLAY LABOR">SELF-PLAY LAB</small></span></a>
-  <div class="sidebar-label" data-i18n="AUSWERTUNG">EVALUATION</div>
-  <nav aria-label="Evaluation sections" data-i18n-aria-label="Auswertungsbereiche" id="navigation"></nav>
-  <div class="sidebar-footer"><span class="status-dot"></span> <span data-i18n="Lokale Auswertung">Local evaluation</span><br><small data-i18n="Alle Daten bleiben in deinem Browser.">All data stays in your browser.</small></div>
-</aside>
-<main>
   <header class="topbar">
-    <span class="eyebrow" data-i18n="TRAINING VERSTEHEN">UNDERSTANDING TRAINING</span>
-    <div class="topbar-actions">
-      <label class="language-control"><span data-i18n="Sprache">Language</span><select id="language-select" aria-label="Language" data-i18n-aria-label="Sprache"><option value="en" lang="en">English</option><option value="de" lang="de">Deutsch</option></select></label>
-      <button id="theme-toggle" type="button" aria-pressed="false">Dark mode</button>
-      <label class="import-button"><span data-i18n="+ Auswertung hinzufügen">+ Add evaluation</span><input id="import-file" type="file" accept=".json,application/json" multiple></label>
-    </div>
+    <a class="brand" href="https://github.com/martenkrohn/seven-wonders-rl">7W <span>RESEARCH / RL</span></a>
+    <nav aria-label="Dashboard controls">
+      <label class="load"><span data-i18n="load">Load report</span><input id="file" type="file" accept=".json,application/json"></label>
+      <button id="csv" type="button">CSV ↓</button>
+      <button id="language" type="button" aria-label="Switch language">DE</button>
+      <button id="theme" type="button" aria-label="Toggle color theme">◐</button>
+    </nav>
   </header>
-  <div class="page-header"><div><p class="kicker" data-i18n="7 WONDERS / ANALYSE">7 WONDERS / ANALYSIS</p><h1 id="page-title">Score breakdown</h1><p id="page-description" class="muted"></p></div><span class="pill">SELF-PLAY</span></div>
-  <div id="error" role="alert" hidden></div>
-  <!-- DASHBOARD_INTRODUCTION -->
-  <section class="selectors" aria-label="Data selection" data-i18n-aria-label="Datenauswahl">
-    <label><span data-i18n="Auswertung">Evaluation</span><select id="report-select"></select></label>
-    <label><span data-i18n="Modellstand">Model checkpoint</span><select id="model-select"></select></label>
-    <span id="dataset-meta" class="dataset-meta"></span>
-  </section>
-  <div id="content"></div>
-  <footer><span data-i18n="7 Wonders · Lokale Trainingsanalyse">7 Wonders · Local training analysis</span><span data-i18n="Sortieren · Filtern · Vergleichen">Sort · Filter · Compare</span></footer>
-</main>
-<noscript>Enable JavaScript to sort tables and view the evaluation. / Bitte JavaScript aktivieren, um die Auswertung anzuzeigen.</noscript>
-<script id="dashboard-context" type="application/json">DASHBOARD_CONTEXT</script>
-<script id="evaluation-data" type="application/json">DASHBOARD_DATA</script>
-<script>/* DASHBOARD_JS */</script>
+  <main>
+    <p class="eyebrow" data-i18n="eyebrow">SECOND EDITION / THREE-PLAYER SELF-PLAY</p>
+    <h1 data-i18n="title">What has the agent learned?</h1>
+    <p class="intro" data-i18n="intro">An evaluation of one frozen PPO policy against a fixed panel of its own predecessors. Explore scores, opponent pairs and the effect of table position.</p>
+    <div class="runline"><span id="status"></span><span id="step"></span><span id="games"></span><span id="blocks"></span></div>
+    <p id="error" role="alert" hidden></p>
+    <section class="metrics" id="metrics" aria-label="Key evaluation results"></section>
+    <section class="context">
+      <p class="eyebrow" data-i18n="scopeTitle">HOW TO READ THIS RESULT</p>
+      <p data-i18n="scope">The opponent panel comes from the same training run. These results describe this development panel, not general playing strength. The displayed model is a saved snapshot, not a live training feed. Confidence intervals resample whole engine-seed blocks; a single block cannot provide one.</p>
+      <p id="comparison"></p>
+    </section>
+    <div class="charts">
+      <section class="panel"><div class="panelhead"><h2 data-i18n="categories">Where the points come from</h2><span data-i18n="average">Average VP per game</span></div><div id="categories" class="bars"></div></section>
+      <section class="panel"><div class="panelhead"><h2 data-i18n="seats">Position at the table</h2><span data-i18n="margin">VP margin vs strongest rival</span></div><div id="seats" class="seatgrid"></div><p class="caption" data-i18n="seatNote">All three seats are evaluated. Opponent identities and engine seeds stay fixed within each comparison.</p></section>
+    </div>
+    <section class="panel"><div class="panelhead"><h2 data-i18n="pairs">The opponent panel</h2><label><span data-i18n="model">Model</span> <select id="model"></select></label></div><div class="tablewrap"><table><thead><tr><th data-i18n="pair">Left / right opponent</th><th data-i18n="completed">Completed</th><th data-i18n="win">Win share</th><th data-i18n="points">Own VP</th><th data-i18n="marginShort">VP margin</th></tr></thead><tbody id="pairs"></tbody></table></div></section>
+    <details class="panel"><summary data-i18n="provenance">Method and provenance</summary><dl id="provenance"></dl><p data-i18n="method">Win share splits ties equally. The reward is the final VP margin against the strongest rival. Failed games are retained and invalidate progress comparisons. The panel covers every ordered opponent pair and all three seats.</p></details>
+    <footer><span data-i18n="footer">Built to understand decisions, not just report a win rate.</span><a href="https://github.com/martenkrohn/seven-wonders-rl" data-i18n="source">Project, method & source ↗</a></footer>
+  </main>
+  <script id="report-data" type="application/json">DASHBOARD_DATA</script>
+  <script>/* DASHBOARD_JS */</script>
 </body>
 </html>

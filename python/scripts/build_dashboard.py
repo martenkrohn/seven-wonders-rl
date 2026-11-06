@@ -1,34 +1,49 @@
-"""Build a local dashboard from saved evaluations or science summaries; no games are run."""
+#!/usr/bin/env python3
+"""Render a Decision evaluation without rerunning games or loading weights."""
+
 import argparse
 import json
 from pathlib import Path
 
-from sevenwonders_rl.evaluation.dashboard import write_dashboard, write_science_dashboard
+from sevenwonders_rl.evaluation.dashboard import (
+    dashboard_data,
+    render_dashboard,
+    write_dashboard,
+)
 
 
-def main(argv=None):
+def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--evaluation-dir')
-    parser.add_argument('--compare-dir', nargs='*', default=[])
-    parser.add_argument('--science-summary', help='Science diagnostics JSON; can also accompany an evaluation')
-    parser.add_argument('--out-dir', help='Output directory for a science-only dashboard')
-    args = parser.parse_args(argv)
-    if not args.evaluation_dir and not args.science_summary:
-        parser.error('provide --evaluation-dir or --science-summary')
-    if (args.compare_dir and not args.evaluation_dir) or (args.out_dir and args.evaluation_dir):
-        parser.error('--compare-dir requires --evaluation-dir; --out-dir is for science-only dashboards')
-    science = json.loads(Path(args.science_summary).read_text(encoding='utf-8')) if args.science_summary else None
-    if args.evaluation_dir:
-        output = Path(args.evaluation_dir).expanduser().resolve()
-        report = json.loads((output / 'analysis.json').read_text(encoding='utf-8'))
-        destination = write_dashboard(output, report, comparisons=[Path(p).expanduser().resolve() for p in args.compare_dir],
-                                      science_summary=science)
+    parser.add_argument(
+        "--evaluation-dir",
+        type=Path,
+        required=True,
+        help="Directory containing summary.json",
+    )
+    parser.add_argument(
+        "--publish-dir",
+        type=Path,
+        help="Export only index.html and sanitized snapshot.json here",
+    )
+    args = parser.parse_args()
+    if args.publish_dir:
+        summary = json.loads((args.evaluation_dir / "summary.json").read_text())
+        manifest = json.loads((args.evaluation_dir / "manifest.json").read_text())
+        if not summary["valid"]:
+            parser.error(
+                "An incomplete evaluation cannot be exported as the public example"
+            )
+        data = dashboard_data(summary, manifest)
+        args.publish_dir.mkdir(parents=True, exist_ok=True)
+        (args.publish_dir / "snapshot.json").write_text(
+            json.dumps(data, indent=2, allow_nan=False) + "\n"
+        )
+        path = args.publish_dir / "index.html"
+        path.write_text(render_dashboard(data))
     else:
-        output = Path(args.out_dir).expanduser().resolve() if args.out_dir else Path(args.science_summary).resolve().parent
-        destination = write_science_dashboard(output / 'dashboard.html', science)
-    print(f'Dashboard erstellt: {destination}\nIm Browser öffnen: {destination.as_uri()}')
-    return destination
+        path = write_dashboard(args.evaluation_dir)
+    print(path)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
