@@ -1,7 +1,7 @@
 {
   "format_version": 1,
   "repository": "https://github.com/martenkrohn/seven-wonders-engine.git",
-  "commit": "e59a3eb88da7f113fb8da64c498a42795030567e",
+  "commit": "a4f3186ee0ca634af57ca8919c92259620acb5e6",
   "release": "v0.2.0-bga",
   "ruleset": "bga-second-edition",
   "protocol_version": 3,

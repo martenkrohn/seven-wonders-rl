@@ -18,6 +18,11 @@ der C++-Regelstand bleibt gleich. [Start und Bedienung](../../engine/docs/GUI.md
 [verbindlicher Arbeitsplan](../../engine/docs/MIGRATION_PLAN.md) und
 [nächster Agentenauftrag](../../engine/docs/NEXT_AGENT_TASK.md) liegen in der Engine.
 
+Die aktive BGA-GUI verwendet inzwischen Protokoll 3. Der aktuelle Pin enthält
+die englische grafische Oberfläche mit mittigem Menschen, festen Farbspalten,
+Wunderproduktion und zentrierter Hochkant-Hand; die [GUI-Anleitung](../../engine/docs/GUI.md)
+beschreibt den aktuellen Start und die Bedienung. Die Legacy-Ansicht bleibt historisch.
+
 ## Bestehenden Stand verwenden
 
 ```sh

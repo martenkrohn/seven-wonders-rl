@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import shutil
 import time
 from collections import OrderedDict
@@ -492,7 +493,9 @@ def main(argv=None):
                 if not (output / 'latest.pt').is_file():
                     raise ValueError('Resume requires latest.pt with phase runtime state')
                 old_manifest = json.loads((output / 'manifest.json').read_text())
-                if old_manifest['engine_sha256'] != file_hash(Path(__file__).resolve().parents[3] / 'build/7Wonders'):
+                engine_binary = os.environ.get('SEVENWONDERS_LEGACY_ENGINE',
+                                               Path(__file__).resolve().parents[3] / 'build/7Wonders')
+                if old_manifest['engine_sha256'] != file_hash(engine_binary):
                     raise ValueError('Resume engine changed; preserve this run and start a new phase')
                 load_model(output / 'latest.pt')
                 saved_config = json.loads((output / 'config.json').read_text())

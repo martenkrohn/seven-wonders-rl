@@ -89,6 +89,20 @@ The package declares Python >=3.10; Python 3.12 is the tested baseline. Dependen
 Clone with `git clone --recurse-submodules` or initialize the submodule as above.
 See the [engine workflow](docs/guides/ENGINE.md) for separate development and updates.
 
+For the optional English desktop GUI, install Tk support and the GUI dependency,
+then launch a human game with two bots from the repository root:
+
+```sh
+python -m pip install -e './engine[gui]'
+python engine/Game.py 2 --engine build/7Wonders
+```
+
+The human sits between the labeled neighbors. Full portrait hand cards use a
+separate confirmation step; built effects appear in compact color columns,
+including the wonder's starting production. The required artwork is included
+with the engine.
+See the [GUI guide](engine/docs/GUI.md) and [design audit](docs/reference/GUI_DESIGN_REUSE_AUDIT.md).
+
 ## Run the checks
 
 From the repository root, with the environment active:
