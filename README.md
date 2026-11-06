@@ -4,6 +4,15 @@
 reinforcement learning project built with Python, PyTorch and Gymnasium, using
 a separately maintained C++ simulator for **7 Wonders: Second Edition (2020)**.
 
+## Work in progress
+
+With the environment and training infrastructure in place, I am now running
+longer self-play experiments. The focus is to find out whether the agent improves
+consistently and learns to combine the game's mechanics into strong, coherent
+strategies—from resource planning and card drafting to adapting to its neighbors.
+These runs will help establish how far the current setup can go; playing strength
+and strategic depth are still being evaluated.
+
 ## What I built
 
 - A **Gymnasium decision environment** with legal offered options, real follow-up
