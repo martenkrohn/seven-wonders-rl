@@ -4,17 +4,6 @@
 reinforcement learning project built with Python, PyTorch and Gymnasium, using
 a separately maintained C++ simulator for **7 Wonders: Second Edition (2020)**.
 
-[**Explore the evaluation dashboard →**](https://martenkrohn.github.io/seven-wonders-rl/)
-· [Training](TRAINING.md) · [Method & results](docs/results/README.md) · [Documentation](docs/README.md)
-
-[![Second Edition evaluation dashboard: 1,080 games, score sources and table positions](docs/assets/evaluation.png)](https://martenkrohn.github.io/seven-wonders-rl/)
-
-The interesting challenge is planning with hidden information: cards circulate
-between players, early choices affect later possibilities, and two opponents
-change as the learner improves. This project explores how to represent what an
-agent can legitimately know, learn against frozen predecessors and evaluate
-progress without confusing a changing opponent pool with a better policy.
-
 ## What I built
 
 - A **Gymnasium decision environment** with legal offered options, real follow-up
@@ -33,22 +22,6 @@ My maintained [engine fork](https://github.com/martenkrohn/seven-wonders-engine)
 provides the Second Edition rules, protocol and GUI; this repository contains
 the RL system. [Origin and contribution boundary](docs/ORIGIN.md) distinguish
 inherited work from downstream extensions. Development uses coding assistants.
-
-## Current evidence
-
-The public example evaluates the **196,608-decision snapshot** on **1,080 completed
-games over 40 engine-seed blocks**, against three frozen same-run policies, all
-nine ordered opponent pairs and all three seats:
-
-| Mean own VP | Mean margin to strongest rival | Shared win rate | Failed games |
-| --- | --- | --- | --- |
-| 46.61 | −2.80 VP | 41.9% | 0 / 1,080 |
-
-This is a development-panel result, **not a general playing-strength claim**.
-The dashboard shows uncertainty and provenance. It is a saved evaluation, not the
-latest local training state. Historical protocol-2 experiments demonstrated
-learning, but their results do not transfer to the new agent. See
-[results and limitations](docs/results/README.md).
 
 ## Design decisions
 
